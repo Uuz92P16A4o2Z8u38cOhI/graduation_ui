@@ -1,0 +1,68 @@
+/*全局*/
+.login-checkbox .el-checkbox .el-checkbox__label{
+  font-size: 14px !important;
+  margin: 0 12px;
+}
+
+.login-box .el-input__inner {
+  width: 100% !important;
+  height: 50px !important;
+  border-radius: 36px !important;
+  border: 1px solid #3bbad6 !important;
+  font-size: 22px !important;
+  margin: 10px 0 !important;
+  padding-left: 60px;
+}
+.login-box .el-input__prefix .el-input__icon {
+  font-size: 25px;
+}
+.login-box .el-icon-user:before {
+  position: relative;
+  left: 15px;
+  top: 3px;
+}
+.login-box .el-icon-key:before {
+  position: relative;
+  left: 15px;
+  top: 3px;
+}
+.login-box .el-input__suffix .el-icon-view {
+  position: relative;
+  font-size: 24px;
+  left: -12px;
+  top: 3px;
+}
+
+/*header-bar设置**************************/
+.el-row {
+  margin-bottom: 4px;
+}
+.el-col {
+}
+
+/*aside-bar设置*************************************/
+.aside-bar{
+  height: calc(100vh - 88px);
+  width: 220px;
+  background-color: #df87fa;
+}
+/*footer-bar设置*************************************/
+.footer-bar{
+  line-height: 20px;
+  background-color: #6f30fa;
+}
+/*index设置****************************************************/
+a {
+  text-decoration: none;
+}
+.el-container {
+}
+.el-header {
+  padding: 0;
+  height: 88px !important;
+}
+.el-footer{
+  padding: 0;
+}
+
+
