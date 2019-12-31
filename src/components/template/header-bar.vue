@@ -2,8 +2,11 @@
   <div class="header-bar">
     <el-row>
       <el-col :span="6">
-        <div class="index-logo"></div>
-        <!--<div class="index-title">高校学院级教师基础信息管理系统</div>-->
+        <div class="index-logo">
+          <img src="./../../assets/logo.png" alt="logo" />
+          <!-- <div class="index-logo-pic"></div> -->
+          <span class="index-title">高校学院级教师基础信息管理系统</span>
+        </div>
       </el-col>
       <el-col :span="12">
         <div class="menu">
@@ -29,11 +32,19 @@
   .header-bar{
 
   }
+  .index-logo-pic {
+    width: 50px;
+    background-image: url("");
+  }
   .el-col div{
     min-height: 88px;
   }
   .header-bar .index-logo{
     background-color: aquamarine;
+  }
+  .header-bar .index-logo img{
+    height: 80px;
+    width: 80px;
   }
   .header-bar .menu{
     background-color: aliceblue;
@@ -43,7 +54,6 @@
   }
   .index-title{
     font-size: 25px;
-    display: flex;
     margin: 8px;
   }
 </style>

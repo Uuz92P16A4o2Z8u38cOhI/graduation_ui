@@ -1,43 +1,65 @@
 <template>
-  <li>
-        <span @click="toggle">
-            {{ data.name }}
-        </span>
-    <ul v-show="open" v-if="hasChild">
-      <menu-tree v-for="(item, index) in data.children" :data="item" :key="index"></menu-tree>
-    </ul>
-  </li>
+  <div>
+    <el-menu>
+      <el-submenu :index="item.path" v-for="item in menuList" :key="item.id">
+        <template slot="title">
+          <i :class="item.domIcon"></i>
+          <span slot="title">{{item.name}}</span>
+        </template>
+
+        <el-menu-item :index="subItem.path" v-for="subItem in item.children" :key="subItem.id">
+          <template slot="title">
+            <i :class="subItem.domIcon"></i>
+            <span slot="title">{{subItem.name}}</span>
+          </template>
+        </el-menu-item>
+      </el-submenu>
+
+      <!-- <div v-for="item in menuList" :key="item">
+        <div v-if="item.children === null">
+          <el-menu-item>
+            <template slot="title">
+              <i :class="subItem.domIcon"></i>
+              <span slot="title">{{subItem.name}}</span>
+            </template>
+          </el-menu-item>
+        </div>
+        <div v-else>
+          <el-submenu>
+            <el-menu-item>
+              <template slot="title">
+                <i :class="subItem.domIcon"></i>
+                <span slot="title">{{subItem.name}}</span>
+              </template>
+            </el-menu-item>
+            <menu-tree></menu-tree>
+          </el-submenu>
+        </div>
+      </div> -->
+    </el-menu>
+  </div>
 </template>
 
 <script>
-    export default {
-      name: "menu-tree",
-      props: {
-        data: {
-          type: Object, //校验父组件传过来的数据是佛正确
-          required: true //是否为必传数据
-        }
-      },
-      data() {
-        return {
-          open: false
-        }
-      },
-      computed: {
-        hasChild() {
-          return this.data.children && this.data.children.length //判断当前子组件有没有数据
-        }
-      },
-      methods: {
-        toggle() {
-          if(this.hasChild) {
-            this.open = !this.open
-          }
-        }
-      }
+export default {
+  name: 'menu-tree',
+  data() {
+    return {
+      menuList: []
     }
+  },
+  mounted() {
+    this.init()
+  },
+  methods: {
+    async init() {
+      const res = await this.$http.post('qc/menutreeService/menuInfo')
+      this.menuList = res.data
+    }
+  },
+  created() {}
+}
 </script>
-
+ 
 <style scoped>
-
 </style>

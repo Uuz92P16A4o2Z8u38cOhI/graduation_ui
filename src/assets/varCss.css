@@ -1,4 +1,9 @@
 /*全局*/
+html,body,#app{
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
 .login-checkbox .el-checkbox .el-checkbox__label{
   font-size: 14px !important;
   margin: 0 12px;
@@ -45,6 +50,9 @@
   height: calc(100vh - 88px);
   width: 220px;
   background-color: #df87fa;
+}
+.el-aside{
+  width: 220px !important;
 }
 /*footer-bar设置*************************************/
 .footer-bar{

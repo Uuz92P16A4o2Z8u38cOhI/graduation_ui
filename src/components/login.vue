@@ -10,7 +10,12 @@
           <el-input placeholder="用户名" prefix-icon="el-icon-user" v-model="loginForm.username"></el-input>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input placeholder="密码" prefix-icon="el-icon-key" v-model="loginForm.password" show-password></el-input>
+          <el-input
+            placeholder="密码"
+            prefix-icon="el-icon-key"
+            v-model="loginForm.password"
+            show-password
+          ></el-input>
         </el-form-item>
 
         <div class="login-checkbox">
@@ -20,9 +25,8 @@
           </el-checkbox-group>
         </div>
         <div>
-         <!-- <el-button class="login-btn" @click="submitForm('loginForm')">登陆</el-button>-->
+          <!-- <el-button class="login-btn" @click="submitForm('loginForm')">登陆</el-button>-->
           <el-button class="login-btn" @click="login">登陆</el-button>
-
         </div>
         <a href="#">忘记密码？</a>
       </el-form>
@@ -31,43 +35,45 @@
 </template>
 
 <script>
-  export default {
-    name :"login",
-    data() {
-      return {
-        loginForm:{
-          username:'',
-          password:''
-        },
-        checkList:[],
-        rules: {
-          username: [
-            {required: true, message: '请输入用户名', trigger: 'blur'}
-          ],
-          password: [
-            {required: true, message: '请输入密码', trigger: 'blur'}
-          ]
-        }
-      }
-    },
-    methods:{
-      login(){
-        this.$router.replace({name :'index'})
+import { async } from 'q'
+export default {
+  name: 'login',
+  data() {
+    return {
+      loginForm: {
+        username: '',
+        password: ''
       },
-      submitForm(formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            this.login();
-          } else {
-            return false;
-          }
-        });
+      checkList: [],
+      rules: {
+        username: [
+          { required: true, message: '请输入用户名', trigger: 'blur' }
+        ],
+        password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
       }
     }
+  },
+  methods: {
+    login() {
+      this.$router.replace({ name: 'index' })
+    },
+    submitForm(formName) {
+      this.$refs[formName].validate(async valid => {
+        if (valid) {
+          const { data: res } = this.$http.post('', this.loginForm)
+          if (res) return this.$message.error('登陆失败')
+          window.sessionStorage.setItem('token', res.data.token)
+          this.login()
+        } else {
+          return false
+        }
+      })
+    }
   }
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  @import "./../assets/css/login.css";
+@import './../assets/css/login.css';
 </style>

@@ -1,15 +1,14 @@
 <template>
-    <div class="aside-bar">
-
-    </div>
+  <div class="aside-bar">
+    <menu-tree></menu-tree>
+  </div>
 </template>
 
 <script>
-    export default {
-      name: "aside-bar"
-    }
+export default {
+  name: 'aside-bar'
+}
 </script>
 
 <style scoped>
-
 </style>

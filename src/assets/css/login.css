@@ -1,6 +1,10 @@
 *{
   text-align: center;
 }
+.login{
+  height: 100%;
+  background-image: linear-gradient(-135deg, #b5eff7 0%, #52e7d3 100%);
+}
 .title{
   font-size: 32px;
   font-weight: bold;
@@ -21,6 +25,7 @@
 }
 
 .login-box{
+  background-image: linear-gradient(-135deg, #ddf0f8 0%, #b4d5d6 100%);
   position: absolute;
   top: 50%;
   left: 50%;
