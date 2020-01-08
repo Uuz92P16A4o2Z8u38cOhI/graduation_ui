@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import login from '@/components/login'
 import index from '@/components/index'
+import noError from '@/components/noError'
 
 
 Vue.use(Router);
@@ -10,7 +11,8 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      redirect: '/login'
+      name: 'index',
+      component: index
     },
     {
       path: '/login',
@@ -18,9 +20,9 @@ const router = new Router({
       component: login
     },
     {
-      path: '/index',
-      name: 'index',
-      component: index
+      path: '/404',
+      name: 'noError',
+      component: noError
     }
   ]
 })

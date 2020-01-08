@@ -4,14 +4,17 @@
       <el-header>
         <header-bar />
       </el-header>
+
       <el-container>
         <el-aside>
           <aside-bar />
         </el-aside>
+
         <el-main>
           <router-view />
         </el-main>
       </el-container>
+
       <!--<el-footer style="height: auto">
         <footer-bar></footer-bar>
       </el-footer>-->
@@ -27,9 +30,9 @@ export default {
     return {
     }
   },
-  
+
   methods: {
-    
+
     logout() {
       window.sessionStorage.clear()
       this.$router.push('/login')

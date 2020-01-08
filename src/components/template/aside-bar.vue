@@ -1,6 +1,6 @@
 <template>
   <div class="aside-bar">
-    <menu-tree></menu-tree>
+
   </div>
 </template>
 
