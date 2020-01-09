@@ -49,15 +49,11 @@ html,body,#app{
 .aside-bar{
   height: calc(100vh - 88px);
   width: 220px;
-  background-color: #df87fa;
 }
-.el-aside{
-  width: 220px !important;
-}
+
 /*footer-bar设置*************************************/
 .footer-bar{
   line-height: 20px;
-  background-color: #6f30fa;
 }
 /*index设置****************************************************/
 a {
@@ -67,7 +63,7 @@ a {
 }
 .el-header {
   padding: 0;
-  height: 88px !important;
+  height: 60px !important;
 }
 .el-footer{
   padding: 0;

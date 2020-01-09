@@ -1,5 +1,9 @@
 *{
-  text-align: center;
+  /*text-align: center;*/
+  height: 100%;
+}
+.el-aside{
+  /*width: 220px !important;*/
 }
 
 

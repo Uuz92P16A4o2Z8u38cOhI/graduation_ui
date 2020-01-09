@@ -11,14 +11,14 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/qc': {
+     /* '/qc': {
         target:'http://192.168.1.108:9099',
         secure: false,
         changeOrigin: true,
         pathRewrite: {
           '^/qc': '/qc'
         }
-      },
+      },*/
     },
 
     // Various Dev Server settings
@@ -29,7 +29,7 @@ module.exports = {
     notifyOnErrors: true,
     poll: false, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-
 
-    
+
     /**
      * Source Maps
      */

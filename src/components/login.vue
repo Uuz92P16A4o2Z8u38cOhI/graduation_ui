@@ -5,7 +5,7 @@
       <div class="title">高校学院级教师基础信息管理系统</div>
     </div>
     <div class="login-box">
-      <el-form ref="form" :model="loginForm" :rules="rules" label-width="0px">
+      <el-form ref="loginForm" :model="loginForm" :rules="rules" label-width="0px">
         <el-form-item prop="username">
           <el-input placeholder="用户名" prefix-icon="el-icon-user" v-model="loginForm.username"/>
         </el-form-item>
@@ -62,11 +62,13 @@ export default {
         if (valid) {
           const { data: res } = this.$http.post('', this.loginForm)
           if (res) return this.$message.error('登陆失败')
-          Cookies.set('token', res.data.token) // 放置token到Cookie
+          Cookies.set('token', 1111) // 放置token到Cookie
+          // window.sessionStorage.setItem('token','111')
           window.sessionStorage.setItem('user', this.loginForm.username)
           this.login()
           this.loading = false
         } else {
+          this.loading = false
           return false
         }
       })

@@ -4,7 +4,7 @@ import asideBar from "./aside-bar"
 
 
 const Template = {
-  install (Vue) {
+  install(Vue) {
     Vue.component('header-bar', headerBar);
     Vue.component('footer-bar', footerBar);
     Vue.component("aside-bar", asideBar);

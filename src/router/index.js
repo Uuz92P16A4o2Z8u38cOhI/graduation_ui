@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import Cookies from "js-cookie"
 import login from '@/components/login'
 import index from '@/components/index'
 import noError from '@/components/noError'
@@ -27,12 +28,13 @@ const router = new Router({
   ]
 })
 
-/* router.beforeEach((to, from, next) => {
+router.beforeEach((to, from, next) => {
   if (to.path === '/login') return next()
-  const tokenString = window.sessionStorage.getItem("token")
+  // const tokenString = window.sessionStorage.getItem("token")
+  const tokenString = Cookies.get("token")
   if (!tokenString) return next('/login')
   next()
-}) */
+})
 
 
 export default router

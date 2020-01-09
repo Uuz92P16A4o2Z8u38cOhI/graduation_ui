@@ -1,16 +1,16 @@
 <template>
   <div class="app">
     <el-container>
-      <el-header>
-        <header-bar />
-      </el-header>
+      <el-aside :width="collapse?'65px':'220px'" >
+        <aside-bar @myCollapse="collapseEvent"/>
+      </el-aside>
 
-      <el-container>
-        <el-aside>
-          <aside-bar />
-        </el-aside>
+      <el-container >
+        <el-header>
+          <header-bar />
+        </el-header>
 
-        <el-main>
+        <el-main style="background: #665456">
           <router-view />
         </el-main>
       </el-container>
@@ -23,19 +23,26 @@
 </template>
 
 <script>
+  import Cookies from "js-cookie"
 export default {
   name: 'index',
   components: {},
   data() {
     return {
+      collapse: false,
     }
   },
-
   methods: {
 
     logout() {
       window.sessionStorage.clear()
+      Cookies.clear()
       this.$router.push('/login')
+    },
+
+    collapseEvent(val){
+      this.collapse = val
+      console.log(val)
     }
   }
 }
