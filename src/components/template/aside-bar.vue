@@ -1,21 +1,22 @@
 <template>
     <div class="aside-bar menu-bar-container">
       <!-- logo -->
-      <div class="logo" :class="collapse?'menu-bar-collapse-width':'menu-bar-width'" @click="isCollapsed" >
+      <div class="logo" :class="collapse?'menu-bar-collapse-width':'menu-bar-width'" @click="onCollapsed" >
         <img v-if="collapse" src="@/assets/logo.png" alt="折叠" />
         <div class="title">{{collapse?'':appName}}</div>
       </div>
       <!-- 导航菜单 -->
       <el-menu ref="navmenu" default-active="1" :class="collapse?'menu-bar-collapse-width':'menu-bar-width'"
-        :collapse="collapse" :collapse-transition="false" :unique-opened="true" background-color="#296983">
+        :collapse="collapse" :collapse-transition="false" :unique-opened="true"  >
         <!-- 导航菜单树组件，动态加载菜单 -->
-        <menu-tree v-for="item in menuList" :key="item.id" :menu="item" />
+        <menu-tree v-for="item in navTree" :key="item.id" :menu="item" />
       </el-menu>
     </div>
 </template>
 
 <script>
 import MenuTree from '@/components/template/menu-tree'
+import {mapState} from 'vuex'
 export default {
   name: 'aside-bar',
   components: {
@@ -24,35 +25,73 @@ export default {
   data(){
     return {
       appName: '高校学院级教师基础信息管理系统',
-      collapse: false,
       menuList:[],
     }
   },
-  computed: {},
+  computed: {
+    ...mapState({
+      collapse : state => state.app.collapse,
+      navTree : state => state.menu.navTree,
+    }),
+    mainTabs: {
+      get () { return this.$store.state.tab.mainTabs },
+      set (val) { this.$store.commit('updateMainTabs', val) }
+    },
+    mainTabsActiveName: {
+      get () { return this.$store.state.tab.mainTabsActiveName },
+      set (val) { this.$store.commit('updateMainTabsActiveName', val) }
+    }
+  },
   watch: {
-
+    $route: 'handleRoute'
   },
   created() {
-
+    this.handleRoute(this.$route)
   },
   mounted() {
-    this.getMenu();
+    if (this.navTree.length  === 0){
+      this.getMenu();
+    }
   },
   methods: {
-    isCollapsed() {
+    onCollapsed: function() {
+      this.$store.commit('onCollapse');
+    },
+    /*isCollapsed() {
       this.collapse = !this.collapse
       this.$emit("myCollapse",this.collapse)
-    },
+    },*/
     getMenu(){
-      this.$http.get("/static/menu.json").then((res)=>{
-        this.menuList = res.data.data;
-        console.log(res.data);
+      this.$http.get("http://localhost:9050/menuTree/menuInfo").then((res)=>{
+        this.menuList = res.data;
+        this.$store.commit('setNavTree', res.data)
+        //console.log(res.data);
       }).catch ((err)=>{
         console.log(err);
         this.$message.error('菜单请求失败')
       })
-    }
+    },
 
+
+    // 路由操作处理
+    handleRoute (route) {
+      // tab标签页选中, 如果不存在则先添加
+      var tab = this.mainTabs.filter(item => item.name === route.name)[0]
+      if (!tab) {
+        tab = {
+          name: route.name,
+          title: route.name,
+          icon: route.meta.icon
+        }
+        this.mainTabs = this.mainTabs.concat(tab)
+      }
+      this.mainTabsActiveName = tab.name
+      // 切换标签页时同步更新高亮菜单
+      if(this.$refs.navmenu != null) {
+        this.$refs.navmenu.activeIndex = '' + route.meta.index
+        this.$refs.navmenu.initOpenedMenu()
+      }
+    }
   }
 }
 </script>
@@ -79,7 +118,7 @@ export default {
   top: 0;
   height: 60px;
   line-height: 60px;
-  background: #644c2e;
+  background: rgb(144,147,154);
   cursor: pointer;
 }
 .menu-bar-container .menu-bar-width {

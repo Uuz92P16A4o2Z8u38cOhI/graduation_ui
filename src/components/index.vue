@@ -2,16 +2,16 @@
   <div class="app">
     <el-container>
       <el-aside :width="collapse?'65px':'220px'" >
-        <aside-bar @myCollapse="collapseEvent"/>
+        <aside-bar/>
       </el-aside>
 
       <el-container >
         <el-header>
-          <header-bar />
+          <header-bar/>
         </el-header>
 
-        <el-main style="background: #665456">
-          <router-view />
+        <el-main >
+          <main-content/>
         </el-main>
       </el-container>
 
@@ -23,27 +23,26 @@
 </template>
 
 <script>
-  import Cookies from "js-cookie"
+  import {mapState} from 'vuex'
 export default {
   name: 'index',
   components: {},
   data() {
     return {
-      collapse: false,
+
     }
   },
   methods: {
-
-    logout() {
-      window.sessionStorage.clear()
-      Cookies.clear()
-      this.$router.push('/login')
-    },
-
-    collapseEvent(val){
+    //父传子 折叠
+    /*collapseEvent(val){
       this.collapse = val
       console.log(val)
-    }
+    }*/
+  },
+  computed : {
+    ...mapState({
+      collapse : state => state.app.collapse
+    })
   }
 }
 </script>
@@ -51,4 +50,8 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 @import './../assets/css/index.css';
+  .el-main{
+    position: relative;
+    padding: 0;
+  }
 </style>

@@ -2,7 +2,7 @@
   "name": "graduation_ui",
   "version": "1.0.0",
   "description": "my graduation project(Vue+ElementUI)",
-  "author": "NotFount-404-E <2546615650@qq.com>",
+  "author": "hyl <2546615650@qq.com>",
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
@@ -15,7 +15,8 @@
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
     "js-cookie": "^2.2.0",
-    "vue-i18n": "^8.7.0"
+    "vue-i18n": "^8.7.0",
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

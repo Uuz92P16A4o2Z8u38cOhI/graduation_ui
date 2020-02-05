@@ -3,6 +3,7 @@ import App from './App'
 import router from './router/index'
 import ElementUI from 'element-ui'
 import axios from 'axios'
+import store from './store'
 import global from '@/utils/global'
 import 'element-ui/lib/theme-chalk/index.css'
 import './assets/varCss.css'    //全局css
@@ -27,6 +28,7 @@ Vue.use(Template);
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 });

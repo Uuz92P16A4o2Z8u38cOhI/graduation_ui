@@ -60,8 +60,8 @@ export default {
       this.loading = true
       this.$refs[formName].validate(async valid => {
         if (valid) {
-          const { data: res } = this.$http.post('', this.loginForm)
-          if (res) return this.$message.error('登陆失败')
+          /*const { data: res } = this.$http.post('', this.loginForm)
+          if (res) return this.$message.error('登陆失败')*/
           Cookies.set('token', 1111) // 放置token到Cookie
           // window.sessionStorage.setItem('token','111')
           window.sessionStorage.setItem('user', this.loginForm.username)

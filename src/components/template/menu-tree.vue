@@ -13,24 +13,28 @@
 </template>
 
 <script>
+  import  '@/assets/icon/menu/iconfont.css'
 import { getIFrameUrl, getIFramePath } from '@/utils/iframe'
 export default {
   name: 'MenuTree',
   props: {
     menu: {
       type: Object,
-      required: true
+      required: true,
     }
   },
   methods: {
     handleRoute(menu) {
       // 如果是嵌套页面，转换成iframe的path
-      let path = getIFramePath(menu.url)
+      let path = getIFramePath(menu.path)
       if (!path) {
-        path = menu.url
+        path = menu.path
       }
+      /*if(path.startsWith("/service/")){
+        this.$router.push('/service/index')
+      }*/
       // 通过菜单URL跳转至指定路由
-      this.$router.push('/' + path)
+      this.$router.push(path)
     }
   }
 }
