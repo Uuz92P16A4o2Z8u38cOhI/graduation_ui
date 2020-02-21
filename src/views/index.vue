@@ -1,6 +1,7 @@
 <template>
     <div>
-      <h1 style="text-align: center">欢迎使用高校学院级教师基础信息管理系统</h1>
+      <!--<h1 style="text-align: center">欢迎使用高校学院级教师基础信息管理系统</h1>-->
+      <textNeon style="text-align: center"/>
       <h2>系统简介</h2>
       在高校日常管理过程中，教师经常被要求重复性填写繁琐的Word或Excel格式的个人信息表格，
       通常这些信息包括个人基础信息、受教育情况、工作情况、家庭情况、教学活动相关信息、科研活动相关信息、获奖信息等。
@@ -20,12 +21,65 @@
           <h3>{{ item }}</h3>
         </el-carousel-item>
       </el-carousel>
+      <!--<div>
+        组件
+        <aList/>
+        <backButton/>
+        <checkList/>
+        <contact/>
+        <frostedGlass/>
+        <glassLightButton/>
+        <hdialog/>
+        <lineButton/>
+        <linesButton/>
+        <loadingDot/>
+        <loadingMoon/>
+        <scene/>
+        <showJson/>
+        <snowBack/>
+        <textNeon/>
+        <textScreen/>
+      </div>-->
     </div>
 </template>
 
 <script>
+  import aList from '@/components/template/h/aList'
+  import backButton from '@/components/template/h/backButton'
+  import checkList from '@/components/template/h/checkList'
+  import contact from '@/components/template/h/contact'
+  import frostedGlass from '@/components/template/h/frostedGlass'
+  import glassLightButton from '@/components/template/h/glassLightButton'
+  import hdialog from '@/components/template/h/hdialog'
+  import lineButton from '@/components/template/h/lineButton'
+  import linesButton from '@/components/template/h/linesButton'
+  import loadingDot from '@/components/template/h/loadingDot'
+  import loadingMoon from '@/components/template/h/loadingMoon'
+  import scene from '@/components/template/h/scene'
+  import showJson from '@/components/template/h/showJson'
+  import snowBack from '@/components/template/h/snowBack'
+  import textNeon from '@/components/template/h/textNeon'
+  import textScreen from '@/components/template/h/textScreen'
   export default {
     name: 'home',
+    components:{
+      aList,
+      backButton,
+      checkList,
+      contact,
+      frostedGlass,
+      glassLightButton,
+      hdialog,
+      lineButton,
+      linesButton,
+      loadingDot,
+      loadingMoon,
+      scene,
+      showJson,
+      snowBack,
+      textNeon,
+      textScreen,
+    },
     data()  {
         return  {
           news:[],

@@ -5,7 +5,7 @@
       <el-row :gutter="12">
         <el-col :span="8" v-for="item in unitList" :key="item.id">
           <el-card shadow="hover" @click="drawer = true">
-            <img src="@/assets/icon/unit/cuit_jsj.jpg" class="image" @click="drawer = true">
+            <img :src="item.icon" class="image" @click="drawer = true">
             <span class="title" @click="drawer = true" >{{item.name}}</span>
           </el-card>
         </el-col>

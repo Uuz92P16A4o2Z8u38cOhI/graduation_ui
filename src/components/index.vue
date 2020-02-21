@@ -24,6 +24,9 @@
 
 <script>
   import {mapState} from 'vuex'
+  import Cookies from 'js-cookie'
+  import qs from 'qs'
+  import router from '../router'
 export default {
   name: 'index',
   components: {},
@@ -31,6 +34,14 @@ export default {
     return {
 
     }
+  },
+  beforeCreate() {
+    const token = Cookies.get('access_token')
+    this.$http.post('http://client:secret@localhost:9055/oauth/check_token?token='+token).then((res) => {}).catch ((err)=>{
+      console.log(err)
+      this.$message.error('用户身份错误 请重新登陆！')
+      router.push('/login')
+    })
   },
   methods: {
     //父传子 折叠
@@ -41,7 +52,7 @@ export default {
   },
   computed : {
     ...mapState({
-      collapse : state => state.app.collapse
+      collapse : state => state.app.collapse,
     })
   }
 }

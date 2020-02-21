@@ -58,14 +58,24 @@
       </div>
     </el-dialog>
 
+
+    <el-dialog title="个人中心" :visible.sync="dialogVisible" width="80%" :before-close="handleClose" :close-on-click-modal="false"
+               :modal="false">
+      <setting/>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
   import Cookies from 'js-cookie'
+  import setting from '@/components/template/personal/setting'
 
   export default {
     name: 'persion-info',
+    components : {
+        setting
+    },
     props: {
       user: {
         type: Object,
@@ -79,6 +89,7 @@
     },
     data() {
       return {
+        dialogVisible: false,
         size: 'small',
         updatePwdDialogVisible: false,
         updatePwdLoading: false,
@@ -102,13 +113,21 @@
     },
     methods: {
       logout() {
+        this.$http.post('http://localhost:9055/logout')
         window.sessionStorage.clear()
-        Cookies.remove('token')
+        Cookies.remove('access_token')
         this.$router.push('/login')
       },
       // 打开个人中心
       openPersonCenter() {
-        alert('待开发')
+        this.dialogVisible = true
+      },
+      handleClose(done) {
+        this.$confirm('确认关闭？')
+          .then(_ => {
+            done();
+          })
+          .catch(_ => {});
       },
       // 打开修改密码对话框
       openUpdatePasswordDialog() {

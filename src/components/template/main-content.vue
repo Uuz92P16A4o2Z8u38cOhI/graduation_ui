@@ -6,7 +6,7 @@
                v-model="mainTabsActiveName" :closable="true" type="card"
                @tab-click="selectedTabHandle" @tab-remove="removeTabHandle">
         <el-dropdown class="tabs-tools" :show-timeout="0" trigger="hover">
-          <div style="font-size:20px;width:50px;text-align: center"><i class="el-icon-arrow-down"/></div>
+          <div style="font-size:20px; width:50px; text-align: center;"><i class="el-icon-arrow-down"/></div>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item @click.native="tabsCloseCurrentHandle">关闭当前标签</el-dropdown-item>
             <el-dropdown-item @click.native="tabsCloseOtherHandle">关闭其它标签</el-dropdown-item>
@@ -14,8 +14,7 @@
             <el-dropdown-item @click.native="tabsRefreshCurrentHandle">刷新当前标签</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <el-tab-pane v-for="item in mainTabs"
-                     :key="item.name" :label="item.title" :name="item.name">
+        <el-tab-pane v-for="item in mainTabs" :key="item.name" :label="item.title" :name="item.name">
           <span slot="label"><i :class="item.icon"/> {{item.title}} </span>
         </el-tab-pane>
       </el-tabs>
@@ -120,7 +119,7 @@
     line-height: 40px;
     font-size: 14px;
     background: rgb(255, 253, 255);
-    border-color: rgba(200, 206, 206, 0.5);
+    border-color: rgba(31, 206, 65, 0.5);
     border-bottom-width: 1px;
     border-bottom-style: solid;
   }
@@ -162,4 +161,5 @@
   .position-collapse-left {
     left: 65px;
   }
+
 </style>

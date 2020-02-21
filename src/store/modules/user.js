@@ -1,9 +1,12 @@
+import Cookies from 'js-cookie'
+
 export default {
     state: {
-        perms: [],  // 用户权限标识集合
+      token: Cookies.get("access_token")?Cookies.get("access_token"):'', //jwt
+      perms: [],  // 用户权限标识集合
     },
     getters: {
-   
+
     },
     mutations: {
         setPerms(state, perms){  // 用户权限标识集合

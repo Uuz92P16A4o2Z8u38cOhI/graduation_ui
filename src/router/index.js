@@ -224,10 +224,15 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   if (to.path === '/login') return next()
   // const tokenString = window.sessionStorage.getItem("token")
-  const tokenString = Cookies.get("token")
-  const userName = window.sessionStorage.getItem('user')
-  if (!tokenString)
+  const tokenString = Cookies.get("access_token")
+  if(!tokenString)
     return next('/login')
+  else {
+    /*this.$http.post('http://client:secret@localhost:9055/oauth/check_token', { token: tokenString }).then((res) => {
+      console.log(res)
+    })*/
+    next()
+  }
   next()
 })
 

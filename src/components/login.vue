@@ -10,20 +10,18 @@
           <el-input placeholder="用户名" prefix-icon="el-icon-user" v-model="loginForm.username"/>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input
-            placeholder="密码"
-            prefix-icon="el-icon-key"
-            v-model="loginForm.password"
-            show-password
-          />
+          <el-input placeholder="密码" prefix-icon="el-icon-key" v-model="loginForm.password" show-password/>
+        </el-form-item>
+        <el-form-item prop="remember" style="margin: -20px 0 0; text-align: left; padding-left: 50px">
+          <el-switch v-model="loginForm.remember" id="remember" name="remember" active-text="记住密码"></el-switch>
         </el-form-item>
 
-        <div class="login-checkbox">
+        <!--<div class="login-checkbox">
           <el-checkbox-group v-model="checkList">
             <el-checkbox label="记住账号"/>
             <el-checkbox label="记住密码"/>
           </el-checkbox-group>
-        </div>
+        </div>-->
         <div>
            <el-button class="login-btn" @click="submitForm('loginForm')" :loading="loading">登陆</el-button>
           <!--<el-button class="login-btn" @click="login" :loading="loading">登陆</el-button>-->
@@ -36,6 +34,7 @@
 
 <script>
   import Cookies from "js-cookie"
+  import qs from 'qs'
 export default {
   name: 'login',
   data() {
@@ -43,9 +42,13 @@ export default {
       loading: false,
       loginForm: {
         username: '',
-        password: ''
+        password: '',
+        grant_type: 'password',
+        client_id: "client",
+        client_secret: "secret",
+        remember : false,
       },
-      checkList: [],
+      // checkList: [],
       rules: {
         username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
         password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
@@ -60,13 +63,21 @@ export default {
       this.loading = true
       this.$refs[formName].validate(async valid => {
         if (valid) {
-          /*const { data: res } = this.$http.post('', this.loginForm)
-          if (res) return this.$message.error('登陆失败')*/
-          Cookies.set('token', 1111) // 放置token到Cookie
-          // window.sessionStorage.setItem('token','111')
-          window.sessionStorage.setItem('user', this.loginForm.username)
-          this.login()
-          this.loading = false
+          this.$http.post('http://localhost:9055/oauth/token',qs.stringify(this.loginForm),{
+            headers:{'Content-Type': "application/x-www-form-urlencoded"}
+          }).then((res)=>{
+            // if (res.data) return this.$message.error('登陆失败')
+            //Cookies.set('token', 1111) // 放置token到Cookie
+            Cookies.set('access_token',res.data.access_token)
+            // window.sessionStorage.setItem('token','111')
+            // window.sessionStorage.setItem('user', this.loginForm.username)
+            this.login()
+            this.loading = false
+          }).catch ((err)=>{
+            console.log(err);
+            this.$message.error('用户名或密码错误   登陆失败！')
+            this.loading = false
+          })
         } else {
           this.loading = false
           return false

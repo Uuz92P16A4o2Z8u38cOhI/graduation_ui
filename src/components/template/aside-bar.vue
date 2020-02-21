@@ -62,7 +62,7 @@ export default {
       this.$emit("myCollapse",this.collapse)
     },*/
     getMenu(){
-      this.$http.get("http://localhost:9050/menuTree/menuInfo").then((res)=>{
+      this.$http.get("http://localhost:9050/api/ui/menuTree/menuInfo").then((res)=>{
         this.menuList = res.data;
         this.$store.commit('setNavTree', res.data)
         //console.log(res.data);
