@@ -106,6 +106,7 @@
     left: 0;
     right: 0;
     bottom: 0;
+    background: #f0f2f5;
   }
 
   .main-container .tabs {
@@ -151,7 +152,7 @@
     left: 1px;
     right: 1px;
     bottom: 1px;
-    padding: 1px;
+    padding: 20px;
   }
 
   .position-left {

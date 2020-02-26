@@ -43,7 +43,8 @@
           .catch(_ => {});
       },
       getAllUnit(){
-        this.$http.get('http://127.0.0.1:9000/api/ui/teachUnit/queryAll/10621').then((res)=>{
+        const id = 10621
+        this.$http.get(this.global.baseUrl +'UI/api/ui/teachUnit/queryAll/'+ id).then((res)=>{
           this.unitList = res.data;
           //console.log(res.data);
         }).catch (err => {

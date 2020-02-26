@@ -113,7 +113,9 @@
     },
     methods: {
       logout() {
-        this.$http.post('http://localhost:9055/logout')
+        this.$http.post('http://localhost:9055/logout').then((res)=>{
+          console.log(res.data)
+        })
         window.sessionStorage.clear()
         Cookies.remove('access_token')
         this.$router.push('/login')

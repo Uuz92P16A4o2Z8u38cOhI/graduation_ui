@@ -35,6 +35,7 @@
 <script>
   import Cookies from "js-cookie"
   import qs from 'qs'
+  import router from '../router'
 export default {
   name: 'login',
   data() {
@@ -57,31 +58,43 @@ export default {
   },
   methods: {
     login() {
-      this.$router.push('/')
+      this.$http.post('http://127.0.0.1:9055/user/login', qs.stringify(this.loginForm),{
+        headers:{'Content-Type': "application/x-www-form-urlencoded"}
+      }).then((res)=>{
+        console.log(res.data)
+        if (res.data.code === 401){
+          this.$message.error("用户名或密码错误！")
+        }
+      }).catch(err => {
+        this.loading = false
+      })
     },
     submitForm(formName) {
       this.loading = true
       this.$refs[formName].validate(async valid => {
         if (valid) {
-          this.$http.post('http://localhost:9055/oauth/token',qs.stringify(this.loginForm),{
-            headers:{'Content-Type': "application/x-www-form-urlencoded"}
-          }).then((res)=>{
-            // if (res.data) return this.$message.error('登陆失败')
-            //Cookies.set('token', 1111) // 放置token到Cookie
-            Cookies.set('access_token',res.data.access_token)
-            // window.sessionStorage.setItem('token','111')
-            // window.sessionStorage.setItem('user', this.loginForm.username)
-            this.login()
-            this.loading = false
-          }).catch ((err)=>{
-            console.log(err);
-            this.$message.error('用户名或密码错误   登陆失败！')
-            this.loading = false
-          })
+          this.login()
+          this.getToken()
+          this.loading = false
         } else {
           this.loading = false
           return false
         }
+      })
+    },
+    getToken() {
+      //获取授权码
+      this.$http.post(this.global.baseUrl+'OAUTH/oauth/token',qs.stringify(this.loginForm),{
+        headers:{'Content-Type': "application/x-www-form-urlencoded"}
+      }).then((res)=>{
+        // if (res.data) return this.$message.error('登陆失败')
+        Cookies.set('access_token',res.data.access_token)
+        // window.sessionStorage.setItem('user', this.loginForm.username)
+        this.$router.push('/')
+      }).catch ((err)=>{
+        console.log(err);
+        // this.$message.error('用户身份出错   请重新登陆！')
+        this.$router.push("/login")
       })
     }
   }

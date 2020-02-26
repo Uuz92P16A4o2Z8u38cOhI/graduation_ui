@@ -17,6 +17,8 @@
 <script>
 import MenuTree from '@/components/template/menu-tree'
 import {mapState} from 'vuex'
+import Cookies from 'js-cookie'
+import router from '../../router'
 export default {
   name: 'aside-bar',
   components: {
@@ -62,10 +64,12 @@ export default {
       this.$emit("myCollapse",this.collapse)
     },*/
     getMenu(){
-      this.$http.get("http://localhost:9050/api/ui/menuTree/menuInfo").then((res)=>{
+      // const userId = this.$store.state.user.userId
+      // console.log("http://localhost:9000/OAUTH/api/oauth/menu/menuInfo/"+userId)
+      this.$http.get("http://localhost:9000/UI/api/ui/menuTree/menuInfo").then((res)=>{
         this.menuList = res.data;
         this.$store.commit('setNavTree', res.data)
-        //console.log(res.data);
+        // console.log(res.data);
       }).catch ((err)=>{
         console.log(err);
         this.$message.error('菜单请求失败')
