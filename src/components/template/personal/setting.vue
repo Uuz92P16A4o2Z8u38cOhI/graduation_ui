@@ -57,7 +57,7 @@
         return isLt2M;
       },
       uploadFile(file){
-        this.$http.post('http://127.0.0.1:8888/api/fastdfs/upload/upload', {
+        this.$http.post('http://127.0.0.1:8888/api/fastdfs/upload/upload-', {
           file,
         },{
           headers : {
