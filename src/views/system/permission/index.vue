@@ -1,10 +1,11 @@
 <template>
   <div class="permissionContain">
     <div class="container">
-      <searchItem @searchList="searchItems" @insertList="addItems"></searchItem>
+      <searchItem @searchList="searchItems" @insertList="addItems" @multipleDeleteButton="multipleDelete"></searchItem>
     </div>
     <div class="container">
-      <el-table ref="tableData" :data="tableData"  @selection-change="handleSelectionChange" :header-cell-style="{'color': 'rgb(144,147,154)','border-bottom': '1px rgb(103, 194, 58) solid','background-color': '#F5F7FA'}">
+      <el-table ref="tableData" :data="tableData"  @selection-change="handleSelectionChange" v-loading="loading" empty-text="暂无数据"
+                :header-cell-style="{'color': 'rgb(144,147,154)','border-bottom': '1px rgb(103, 194, 58) solid','background-color': '#F5F7FA'}">
         <el-table-column type="selection"  align='center' width="60px">
         </el-table-column>
         <el-table-column prop="name" label="名称"  align='center' sortable show-overflow-tooltip>
@@ -21,8 +22,8 @@
         </el-table-column>
         <el-table-column label="操作" align='center' width="300px">
           <template slot-scope="scope">
-            <el-button size="mini" type="warning" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-            <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+            <el-button size="mini" icon="el-icon-edit" type="warning" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+            <el-button size="mini" icon="el-icon-delete" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -39,7 +40,7 @@
           :total="pageInfo.total">
         </el-pagination>
       </div>
-      <permissionDialog :dialogInfo="dialogInfo" @closeDialog="hideDialog"/>
+      <permissionDialog :dialogInfo="dialogInfo" @closeDialog="hideDialog" @refreshTable="getData"/>
     </div>
   </div>
 </template>
@@ -55,12 +56,16 @@
     },
     data() {
       return {
+        loading : true,
         tableData: [],
         search_data:{
+          id: '',
           name:'',
           enname:'',
           url:'',
-          description :''
+          description :'',
+          created : '',
+          updated : '',
         },
         pageInfo : {
           total: 0,
@@ -73,7 +78,8 @@
           show : false,
           row: {},
         },
-        multipleSelection: []
+        multipleSelection: [],
+        multipleSelectionArray : []
       }
     },
     mounted() {
@@ -88,7 +94,6 @@
       //多选
       handleSelectionChange(val) {
         this.multipleSelection = val;
-        console.log(this.multipleSelection)
       },
       //编辑
       handleEdit(index, row) {
@@ -103,7 +108,34 @@
       },
       //删除
       handleDelete(index, row) {
-        console.log(index, row);
+        this.$http.delete(this.global.baseUrl + 'SYS/api/sys/permission/deletePermission/' + row.id).then((res)=>{
+          if (res.data.code === 200){
+            this.$message.success(res.data.message)
+            this.getData()
+          }else {
+            this.$message.error(res.data.message)
+          }
+        })
+      },
+      //批量删除
+      multipleDelete(){
+        this.multipleSelectionArray = []
+        this.multipleSelection.forEach(v => {
+          this.multipleSelectionArray.push(v.id)
+        })
+        if (this.multipleSelectionArray.length === 0){
+          this.$message.error("请选择需要删除的数据！")
+        }else {
+          this.$http.post(this.global.baseUrl + 'SYS/api/sys/permission/multipleDeletePermission',
+            this.multipleSelectionArray).then((res) => {
+            if (res.data.code === 200) {
+              this.$message.success(res.data.message)
+              this.getData()
+            } else {
+              this.$message.error(res.data.message)
+            }
+          })
+        }
       },
       // 上下分页
       handleCurrentChange(val) {
@@ -123,11 +155,13 @@
 
       //加载数据
       getData() {
+        this.loading = true
         this.$http.post(this.global.baseUrl + 'SYS/api/sys/permission/allPermission/' + this.pageInfo.pageNum + "/" + this.pageInfo.pageSize,
           this.search_data).then((res) => {
             this.tableData = res.data.data.list;
             this.pageInfo.total = res.data.data.total;
         })
+        this.loading = false
       }
     }
   }

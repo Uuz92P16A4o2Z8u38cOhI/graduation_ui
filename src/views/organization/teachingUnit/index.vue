@@ -12,11 +12,7 @@
       </el-row>
     </div>
 
-    <el-drawer
-      title="内容"
-      :visible.sync="drawer"
-      :before-close="handleClose"
-      size="50%">
+    <el-drawer title="内容" :visible.sync="drawer" :before-close="handleClose" size="50%">
     </el-drawer>
   </div>
 </template>

@@ -8,9 +8,6 @@
           <el-input v-model="search_data.enname" placeholder="英文名称"  ></el-input>
         </el-form-item>
         <el-form-item label="">
-          <el-input v-model="search_data.url" placeholder="授权路径" ></el-input>
-        </el-form-item>
-        <el-form-item label="">
           <el-input v-model="search_data.description" placeholder="备注" ></el-input>
         </el-form-item>
         <el-form-item label="">
@@ -34,11 +31,10 @@
         search_data:{
           name:'',
           enname:'',
-          url:'',
           description :''
         },
         dialogInfo: {
-          title : '新增资源',
+          title : '新增角色',
           type : 'add',
           show : true,
           row: {},
@@ -54,7 +50,7 @@
       //新增按钮
       insertData(){
         this.dialogInfo.show = true
-        this.dialogInfo.title = '新增资源'
+        this.dialogInfo.title = '新增角色'
         this.dialogInfo.type = 'add'
         this.dialogInfo.rows = {}
         this.$emit('insertList',this.dialogInfo)

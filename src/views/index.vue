@@ -21,7 +21,7 @@
           <h3>{{ item }}</h3>
         </el-carousel-item>
       </el-carousel>
-      <!--<div>
+      <div>
         组件
         <aList/>
         <backButton/>
@@ -39,7 +39,7 @@
         <snowBack/>
         <textNeon/>
         <textScreen/>
-      </div>-->
+      </div>
     </div>
 </template>
 

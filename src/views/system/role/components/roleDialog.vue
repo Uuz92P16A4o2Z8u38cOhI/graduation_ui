@@ -9,9 +9,6 @@
         <el-form-item prop="enname" label="英文名称:">
           <el-input v-model="form.enname" ></el-input>
         </el-form-item>
-        <el-form-item prop='url'  label="url:">
-          <el-input v-model="form.url"></el-input>
-        </el-form-item>
         <el-form-item prop='description' label="备注:">
           <el-input v-model="form.description" type="textarea"></el-input>
         </el-form-item>
@@ -27,7 +24,7 @@
 
 <script>
   export default {
-    name: 'permissionDialog',
+    name: 'roleDialog',
     props: {
       dialogInfo: Object
     },
@@ -39,7 +36,6 @@
           id : '',
           name: '',
           enname: '',
-          url: '',
           description : '',
           created : '',
           updated : '',
@@ -51,9 +47,6 @@
           ],
           enname   : [
             { required: true, message:'英文名不能为空！',trigger: 'blur'}
-          ],
-          url   : [
-            { required: true, message:'资源路径不能为空！',trigger: 'blur'}
           ],
         },
       }
