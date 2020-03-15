@@ -67,5 +67,6 @@ export default {
   .el-main{
     position: relative;
     padding: 0;
+    background: #f0f2f5;
   }
 </style>

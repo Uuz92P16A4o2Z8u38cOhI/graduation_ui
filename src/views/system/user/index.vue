@@ -1,23 +1,34 @@
 <template>
   <div class="userContain">
     <div class="container">
-      <searchItem></searchItem>
+      <searchItem @searchList="searchItems" @insertList="addItems" @multipleDeleteButton="multipleDelete"></searchItem>
     </div>
     <div class="container">
-      <el-table ref="tableData" :data="tableData"  @selection-change="handleSelectionChange" :header-cell-style="{'color': 'rgb(144,147,154)','border-bottom': '1px rgb(103, 194, 58) solid','background-color': '#F5F7FA'}">
+      <el-table ref="tableData" :data="tableData"  @selection-change="handleSelectionChange" v-loading="loading" empty-text="暂无数据"
+                :header-cell-style="{'color': 'rgb(144,147,154)','border-bottom': '1px rgb(103, 194, 58) solid','background-color': '#F5F7FA'}">
         <el-table-column type="selection"  align='center' width="60px">
         </el-table-column>
         <el-table-column prop="username" label="用户名"  align='center' sortable show-overflow-tooltip>
-
         </el-table-column>
-        <el-table-column prop="phone" label="电话" width="120" align='center' sortable show-overflow-tooltip>
+        <el-table-column prop="phone" label="电话" width="120"  sortable show-overflow-tooltip>
         </el-table-column>
         <el-table-column prop="email" label="邮箱" align='center' sortable show-overflow-tooltip>
         </el-table-column>
+        <el-table-column prop="created" label="创建时间" align='center' sortable show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column prop="updated" label="更新时间" align='center' sortable show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column label="角色管理" align='center' width="100px">
+          <template slot-scope="scope">
+            <span @click="handleRole(scope.$index, scope.row)" style="color: #0acffe; font-size: 24px; cursor:pointer">
+              <i class="el-icon-more-outline"></i>
+            </span>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" align='center' width="300px">
           <template slot-scope="scope">
-            <el-button size="mini" type="warning" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-            <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+            <el-button size="mini" icon="el-icon-edit" type="warning" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+            <el-button size="mini" icon="el-icon-delete" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -34,63 +45,140 @@
           :total="pageInfo.total">
         </el-pagination>
       </div>
+      <userDialog :dialogInfo="dialogInfo" @closeDialog="hideDialog" @refreshTable="getData"/>
+      <drawer :drawer=drawerShow @closeDrawer="closeDrawer"></drawer>
     </div>
-
   </div>
 </template>
 
 <script>
   import searchItem from './components/searchItem'
-  import pageInfo from './components/pageInfo'
+  import userDialog from './components/userDialog'
+  import drawer from './components/drawer'
   export default {
     name: 'user',
     components: {
-      pageInfo,
-      searchItem
+      searchItem,
+      userDialog,
+      drawer,
     },
     data() {
       return {
+        drawerShow: false,
+        loading : true,
         tableData: [],
+        search_data:{
+          id: '',
+          username:'',
+          phone:'',
+          email:'',
+          created : '',
+          updated : '',
+        },
         pageInfo : {
           total: 0,
           pageNum: 1,
           pageSize: 10,
         },
-        multipleSelection: []
+        dialogInfo: {
+          title : '',
+          type : '',
+          show : false,
+          row: {},
+        },
+        multipleSelection: [],
+        multipleSelectionArray : []
       }
     },
     mounted() {
       this.getData()
     },
     methods: {
+      //查询表单数据
+      searchItems(ev){
+        this.search_data=ev
+        this.getData()
+      },
+      //多选
       handleSelectionChange(val) {
         this.multipleSelection = val;
-        console.log(this.multipleSelection)
+      },
+      //查看角色资源
+      handleRole(index, row){
+        this.drawerShow = true
+        console.log(index,row)
       },
       //编辑
       handleEdit(index, row) {
-        console.log(index, row);
+        this.dialogInfo.show = true
+        this.dialogInfo.type = 'edit'
+        this.dialogInfo.title = '编辑资源'
+        this.dialogInfo.row = row
+      },
+      //新增
+      addItems(ev){
+        this.dialogInfo = ev
       },
       //删除
       handleDelete(index, row) {
-        console.log(index, row);
+        this.$http.delete(this.global.baseUrl + 'SYS/api/sys/user/deleteUser/' + row.id).then((res)=>{
+          if (res.data.code === 200){
+            this.$message.success(res.data.message)
+            this.getData()
+          }else {
+            this.$message.error(res.data.message)
+          }
+        })
+      },
+      //批量删除
+      multipleDelete(){
+        this.multipleSelectionArray = []
+        this.multipleSelection.forEach(v => {
+          this.multipleSelectionArray.push(v.id)
+        })
+        if (this.multipleSelectionArray.length === 0){
+          this.$message.error("请选择需要删除的数据！")
+        }else {
+          this.$http.post(this.global.baseUrl + 'SYS/api/sys/user/multipleDeleteUser',
+            this.multipleSelectionArray).then((res) => {
+            if (res.data.code === 200) {
+              this.$message.success(res.data.message)
+              this.getData()
+            } else {
+              this.$message.error(res.data.message)
+            }
+          })
+        }
       },
       // 上下分页
-      handleCurrentChange(val){
-        this.pageInfo.pageNumber = val;
+      handleCurrentChange(val) {
+        this.pageInfo.pageNum = val;
         this.getData()
       },
       // 每页显示多少条
-      handleSizeChange(val){
+      handleSizeChange(val) {
         this.pageInfo.pageSize = val;
-        this.getData();
+        this.getData()
+      },
+      //隐藏dialog
+      hideDialog(){
+        this.dialogInfo.show = false
+        this.dialogInfo.row = {}
+      },
+      //关闭drawer
+      closeDrawer(){
+        this.drawerShow = false
       },
 
       //加载数据
-      getData(){
-        this.$http.get(this.global.baseUrl + 'SYS/api/sys/user/allUser/'+this.pageInfo.pageNum +"/"+ this.pageInfo.pageSize ).then((res)=>{
-          this.tableData = res.data;
+      getData() {
+        this.loading = true
+        this.$http.post(this.global.baseUrl + 'SYS/api/sys/user/allUser/' + this.pageInfo.pageNum + "/" + this.pageInfo.pageSize,
+          this.search_data).then((res) => {
+          this.tableData = res.data.data.list;
+          this.pageInfo.total = res.data.data.total;
         })
+        this.loading = false
       }
     }
   }

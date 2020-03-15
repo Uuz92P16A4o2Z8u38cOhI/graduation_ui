@@ -51,7 +51,7 @@ const router = new Router({
           path: 'basicInformation',
           component : BasicInformation,
           meta:{
-            icon: 'iconfont icon-jcxx-nor',
+            icon: 'el-icon-postcard',
           }
         },
         {
@@ -63,7 +63,7 @@ const router = new Router({
           }
         },
         {
-          name: '受教育情况',
+          name: '教育情况',
           path: 'education',
           component : Education,
           meta:{
@@ -99,7 +99,7 @@ const router = new Router({
           path: 'work',
           component : Work,
           meta:{
-            icon: 'iconfont icon-gongzuo',
+            icon: 'el-icon-monitor',
           }
         },
         {

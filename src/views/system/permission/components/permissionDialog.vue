@@ -4,16 +4,16 @@
     <div class="form">
       <el-form ref="form" :model="form" :rules="form_rules" v-loading="loading" label-width="120px" style="margin:10px;width:auto;">
         <el-form-item prop='name' label="名称:">
-          <el-input type="text" v-model="form.name"></el-input>
+          <el-input type="text" v-model="form.name" clearable></el-input>
         </el-form-item>
         <el-form-item prop="enname" label="英文名称:">
-          <el-input v-model="form.enname" ></el-input>
+          <el-input v-model="form.enname" clearable></el-input>
         </el-form-item>
         <el-form-item prop='url'  label="url:">
-          <el-input v-model="form.url"></el-input>
+          <el-input v-model="form.url" clearable></el-input>
         </el-form-item>
         <el-form-item prop='description' label="备注:">
-          <el-input v-model="form.description" type="textarea"></el-input>
+          <el-input v-model="form.description" type="textarea" ></el-input>
         </el-form-item>
 
         <el-form-item  class="bottom_right">

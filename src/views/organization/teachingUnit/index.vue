@@ -1,11 +1,17 @@
 <template>
-  <div>
-    教学单位
+  <div class="unit">
+    <span class="title"><i class="iconfont icon-jiaoxuedanwei" style="font-size: 24px" />教学单位 </span>
+
     <div class="content">
       <el-row :gutter="12">
         <el-col :span="8" v-for="item in unitList" :key="item.id">
           <el-card shadow="hover" @click="drawer = true">
-            <img :src="item.icon" class="image" @click="drawer = true">
+            <el-image :src="item.icon" alt class="image" @click="drawer = true">
+              <div slot="error" class="image-slot">
+                <i class="el-icon-picture-outline" style="font-size: 50px"></i>
+              </div>
+            </el-image>
+            <!-- <img :src="item.icon" class="image" @click="drawer = true"> -->
             <span class="title" @click="drawer = true" >{{item.name}}</span>
           </el-card>
         </el-col>
@@ -53,6 +59,10 @@
 </script>
 
 <style scoped>
+  .unit .title{
+    font-size: 24px;
+    font-weight: bold;
+  }
   .el-card{
     margin: 10px 2px;
     /*text-align: center;*/
@@ -60,14 +70,16 @@
   .content{
     margin: 20px 30px;
   }
-  .image {
+  .content .image {
     height: 50px;
+    width: 50px;
     display: inline-block;
     cursor: pointer;
   }
-  .title{
+  .content .title{
+    display: inline-block;
     font-weight: bold;
-    font-size: 30px;
+    font-size: 24px;
     cursor: pointer;
   }
 </style>

@@ -31,7 +31,10 @@
         </el-menu-item>
         <el-menu-item index="5" v-popover:popover-personal>
           <!-- 用户信息 -->
-          <span class="user-info"><img src="@/assets/avatar.jpg" />{{user.name}}</span>
+          <span class="user-info">
+            <img src="" />
+            {{user.name}}
+          </span>
           <el-popover ref="popover-personal" placement="bottom-end" trigger="click" :visible-arrow="false">
             <person-info :user="user"/>
           </el-popover>

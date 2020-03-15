@@ -2,7 +2,12 @@
   <div class="personal-panel">
     <div class="personal-desc">
       <div class="avatar-container">
-        <img class="avatar" :src="require('@/assets/avatar.jpg')" alt="头像"/>
+<!--        <img class="avatar" src="" alt="头像"/>-->
+        <el-image class="avatar" src="" alt>
+          <div slot="error" class="image-slot">
+            <i class="el-icon-picture-outline" style="font-size: 80px"></i>
+          </div>
+        </el-image>
       </div>
       <div class="name-role">
         <span class="sender">{{ 'user.nickName' }} - {{ 'user.role' }}</span>
@@ -38,7 +43,7 @@
       退出登录
     </div>
     <!--修改密码界面-->
-    <el-dialog title="修改密码" width="40%" :visible.sync="updatePwdDialogVisible" :close-on-click-modal="false"
+    <el-dialog title="修改密码" width="30%" :visible.sync="updatePwdDialogVisible" :close-on-click-modal="false"
                :modal="false">
       <el-form :model="updatePwdDataForm" label-width="100px" :rules="updatePwdDataFormRules" ref="updatePwdDataForm"
                :size="size">
@@ -88,6 +93,25 @@
       }
     },
     data() {
+      let validateNewpassword = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入新密码'));
+        } else {
+          if (this.updatePwdDataForm.comfirmPassword !== '') {
+            this.$refs.updatePwdDataForm.validateField('comfirmPassword');
+          }
+          callback();
+        }
+      };
+      let validateSurepassword = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入确认密码'));
+        } else if (value !== this.updatePwdDataForm.newPassword) {
+          callback(new Error('两次输入密码不一致!'));
+        } else {
+          callback();
+        }
+      };
       return {
         dialogVisible: false,
         size: 'small',
@@ -103,10 +127,10 @@
             { required: true, message: '请输入原密码', trigger: 'blur' }
           ],
           newPassword: [
-            { required: true, message: '请输入新密码', trigger: 'blur' }
+            { required: true, validator:validateNewpassword, trigger: 'blur' },
           ],
           comfirmPassword: [
-            { required: true, message: '请确认密码', trigger: 'blur' }
+            { required: true, validator:validateSurepassword, trigger: 'blur' },
           ]
         }
       }

@@ -6,12 +6,12 @@
                v-model="mainTabsActiveName" :closable="true" type="card"
                @tab-click="selectedTabHandle" @tab-remove="removeTabHandle">
         <el-dropdown class="tabs-tools" :show-timeout="0" trigger="hover">
-          <div style="font-size:20px; width:50px; text-align: center;"><i class="el-icon-arrow-down"/></div>
+          <div style="font-size:20px; width:50px; text-align: center;"><i class="el-icon-more-outline"/></div>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item @click.native="tabsCloseCurrentHandle">关闭当前标签</el-dropdown-item>
-            <el-dropdown-item @click.native="tabsCloseOtherHandle">关闭其它标签</el-dropdown-item>
-            <el-dropdown-item @click.native="tabsCloseAllHandle">关闭全部标签</el-dropdown-item>
-            <el-dropdown-item @click.native="tabsRefreshCurrentHandle">刷新当前标签</el-dropdown-item>
+            <el-dropdown-item @click.native="tabsCloseCurrentHandle">关闭当前</el-dropdown-item>
+            <el-dropdown-item @click.native="tabsCloseOtherHandle">关闭其它</el-dropdown-item>
+            <el-dropdown-item @click.native="tabsCloseAllHandle">关闭全部</el-dropdown-item>
+            <el-dropdown-item @click.native="tabsRefreshCurrentHandle">刷新当前</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
         <el-tab-pane v-for="item in mainTabs" :key="item.name" :label="item.title" :name="item.name">
@@ -106,7 +106,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: #f0f2f5;
+    /*background: #f0f2f5;*/
   }
 
   .main-container .tabs {

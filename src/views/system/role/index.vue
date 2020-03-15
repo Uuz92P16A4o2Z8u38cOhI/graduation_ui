@@ -46,7 +46,7 @@
         </el-pagination>
       </div>
       <roleDialog :dialogInfo="dialogInfo" @closeDialog="hideDialog" @refreshTable="getData"/>
-      <drawer :drawer=drawerShow ></drawer>
+      <drawer :drawer=drawerShow @closeDrawer="closeDrawer"></drawer>
     </div>
   </div>
 </template>
@@ -123,7 +123,7 @@
       },
       //删除
       handleDelete(index, row) {
-        this.$http.delete(this.global.baseUrl + 'SYS/api/sys/permission/deletePermission/' + row.id).then((res)=>{
+        this.$http.delete(this.global.baseUrl + 'SYS/api/sys/role/deleteRole/' + row.id).then((res)=>{
           if (res.data.code === 200){
             this.$message.success(res.data.message)
             this.getData()
@@ -141,7 +141,7 @@
         if (this.multipleSelectionArray.length === 0){
           this.$message.error("请选择需要删除的数据！")
         }else {
-          this.$http.post(this.global.baseUrl + 'SYS/api/sys/permission/multipleDeletePermission',
+          this.$http.post(this.global.baseUrl + 'SYS/api/sys/role/multipleDeleteRole',
             this.multipleSelectionArray).then((res) => {
             if (res.data.code === 200) {
               this.$message.success(res.data.message)
@@ -167,11 +167,15 @@
         this.dialogInfo.show = false
         this.dialogInfo.row = {}
       },
+      //关闭drawer
+      closeDrawer(){
+        this.drawerShow = false
+      },
 
       //加载数据
       getData() {
         this.loading = true
-        this.$http.post(this.global.baseUrl + 'SYS/api/sys/permission/allPermission/' + this.pageInfo.pageNum + "/" + this.pageInfo.pageSize,
+        this.$http.post(this.global.baseUrl + 'SYS/api/sys/role/allRole/' + this.pageInfo.pageNum + "/" + this.pageInfo.pageSize,
           this.search_data).then((res) => {
           this.tableData = res.data.data.list;
           this.pageInfo.total = res.data.data.total;

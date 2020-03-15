@@ -5,6 +5,11 @@ export default {
       token: Cookies.get("access_token")?Cookies.get("access_token"):'', //jwt
       perms: [],  // 用户权限标识集合
       userId: '', //用户id
+      userName:'',
+      schoolIcon:'',
+      blog : '',
+      avatar :'',
+      loginTime : '',
     },
     getters: {
 

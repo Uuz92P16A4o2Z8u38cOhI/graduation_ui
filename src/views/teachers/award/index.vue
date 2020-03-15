@@ -1,38 +1,55 @@
 <template>
-  <div>
-    这是获奖信息页面
-    <div class="block">
-      <i class="el-icon-sort" @click="changeReverse" />
-      <el-timeline :reverse="reverse">
-        <el-timeline-item timestamp="2018/4/12" placement="top" >
-          <el-card>
-            <h4>更新 Github 模板</h4>
-            <p>王小虎 提交于 2018/4/12 20:46</p>
+  <div class="award" >
+    <span class="title"><i class="iconfont icon-huojiang" style="font-size: 24px"></i>获奖信息 <span style="font-style: oblique; font-weight: initial ">Awards Information</span></span>
+
+    <div class="award-content">
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-card shadow="hover" class="mgb20" style="">
+            <div slot="header" class=" header-title">
+              <span class="title">学术荣誉</span>
+            </div>
+            <el-collapse v-model="activeName" accordion>
+              <el-collapse-item title="荣誉名称" name="1" >
+                <div >荣誉详情</div>
+              </el-collapse-item>
+            </el-collapse>
           </el-card>
-        </el-timeline-item>
-        <el-timeline-item timestamp="2018/4/3" placement="top">
-          <el-card>
-            <h4>更新 Github 模板</h4>
-            <p>王小虎 提交于 2018/4/3 20:46</p>
+        </el-col>
+        <el-col :span="12">
+          <el-card shadow="hover" class="mgb20" style="">
+            <div slot="header" class="clearfix header-title">
+              <span class="title">科研奖励</span>
+            </div>
+
           </el-card>
-        </el-timeline-item>
-        <el-timeline-item timestamp="2018/4/2" placement="top">
-          <el-card>
-            <h4>更新 Github 模板</h4>
-            <p>王小虎 提交于 2018/4/2 20:46</p>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="24">
+          <el-card shadow="hover" class="mgb20" style="">
+            <div slot="header" class="clearfix header-title">
+              <span class="title"> 其他获奖</span>
+            </div>
+
           </el-card>
-        </el-timeline-item>
-      </el-timeline>
+        </el-col>
+      </el-row>
     </div>
+    <list></list>
   </div>
 </template>
 
 <script>
+  import list from './components/list'
   export default {
     name: 'award',
+    components:{
+      list,
+    },
     data(){
       return {
-        reverse: false,
+        activeName: [1],
       }
     },
     methods : {
@@ -45,5 +62,17 @@
 </script>
 
 <style scoped>
-
+ .award .title{
+   font-size: 24px;
+   font-weight: bold;
+ }
+ .award .mgb20 {
+   margin-bottom: 20px;
+ }
+ .award .award-content{
+   margin: 10px 0;
+ }
+  .award .award-content .title{
+    font-size: 20px;
+  }
 </style>

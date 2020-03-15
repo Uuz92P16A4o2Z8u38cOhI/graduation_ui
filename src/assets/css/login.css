@@ -51,9 +51,11 @@
 .login-checkbox{
   padding: 0 12px 10px;
 }
-.login-box a{
+.login-box .newPassword{
   text-decoration-line: none;
   float: right;
+  color: #1f54fc;
+  cursor: pointer;
 }
 
 

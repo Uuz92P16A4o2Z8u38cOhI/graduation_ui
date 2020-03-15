@@ -2,16 +2,16 @@
     <div class="search_container">
       <el-form :inline="true" :model='search_data' :rules="rules" ref="search_data" class="search-form">
         <el-form-item label="">
-          <el-input v-model="search_data.name" placeholder="名称" ></el-input>
+          <el-input v-model="search_data.name" placeholder="名称" clearable></el-input>
         </el-form-item>
         <el-form-item label="">
-          <el-input v-model="search_data.enname" placeholder="英文名称"  ></el-input>
+          <el-input v-model="search_data.enname" placeholder="英文名称"  clearable></el-input>
         </el-form-item>
         <el-form-item label="">
-          <el-input v-model="search_data.url" placeholder="授权路径" ></el-input>
+          <el-input v-model="search_data.url" placeholder="授权路径" clearable></el-input>
         </el-form-item>
         <el-form-item label="">
-          <el-input v-model="search_data.description" placeholder="备注" ></el-input>
+          <el-input v-model="search_data.description" placeholder="备注" clearable></el-input>
         </el-form-item>
         <el-form-item label="">
           <el-button type="primary" size ="mini" icon="el-icon-search" @click="searchData()">查询</el-button>
