@@ -10,6 +10,7 @@
       <div class="border-left"></div>
     </div>
     <span class="btn-text">Start</span>
+
   </button>
 </template>
 

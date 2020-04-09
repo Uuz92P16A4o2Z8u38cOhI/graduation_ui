@@ -236,5 +236,28 @@ router.beforeEach((to, from, next) => {
   next()
 })
 
+/*Vue.prototype.$http.interceptors.response.use(response =>{
+  console.log(response)
+  return response
+}, error => {
+  if (error && error.response) {
+    switch (error.response.status) {
+      case 403:
+        router.push({ name: '' })
+        break;
+      case 404:
+        router.push({ name: '' })
+        break;
+      case 500:
+        router.push({ name: '' })
+        break;
+
+      default:
+        error.message = `连接出错(${error.response.status})!`;
+    }
+  }
+  return Promise.reject(error);
+})*/
+
 
 export default router

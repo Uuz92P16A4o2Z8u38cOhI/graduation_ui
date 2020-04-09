@@ -10,6 +10,7 @@ export default {
       blog : '',
       avatar :'',
       loginTime : '',
+      nickName: '',
     },
     getters: {
 
@@ -20,6 +21,24 @@ export default {
         },
       setUserId(state,userId){
           state.userId = userId;
+      },
+      setUserName(state,userName){
+        state.userName = userName;
+      },
+      setSchoolIcon(state,schoolIcon){
+        state.schoolIcon = schoolIcon;
+      },
+      setBlog(state,blog){
+        state.blog = blog;
+      },
+      setAvatar(state,avatar){
+        state.avatar = avatar;
+      },
+      setLoginTime(state,loginTime){
+        state.loginTime = loginTime;
+      },
+      setNickName(state,NickName){
+        state.NickName = NickName;
       }
     },
     actions: {

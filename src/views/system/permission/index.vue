@@ -16,9 +16,9 @@
         </el-table-column>
         <el-table-column prop="description" label="备注" align='center' sortable show-overflow-tooltip>
         </el-table-column>
-        <el-table-column prop="created" label="创建时间" align='center' sortable show-overflow-tooltip>
+        <el-table-column prop="created" label="创建时间" align='center' :formatter="formatCreatedDate" sortable show-overflow-tooltip>
         </el-table-column>
-        <el-table-column prop="updated" label="更新时间" align='center' sortable show-overflow-tooltip>
+        <el-table-column prop="updated" label="更新时间" align='center' :formatter="formatUpdateDate" sortable show-overflow-tooltip>
         </el-table-column>
         <el-table-column label="操作" align='center' width="300px">
           <template slot-scope="scope">
@@ -159,10 +159,31 @@
         this.$http.post(this.global.baseUrl + 'SYS/api/sys/permission/allPermission/' + this.pageInfo.pageNum + "/" + this.pageInfo.pageSize,
           this.search_data).then((res) => {
             this.tableData = res.data.data.list;
-            this.pageInfo.total = res.data.data.total;
+            this.pageInfo.total = parseInt(res.data.data.total);
         })
         this.loading = false
-      }
+      },
+      //时间格式化
+      formatCreatedDate(row, column) {
+        let date = new Date(parseInt(row.created));
+        let Y = date.getFullYear() + '-';
+        let M = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) + '-' : date.getMonth() + 1 + '-';
+        let D = date.getDate() < 10 ? '0' + date.getDate() + ' ' : date.getDate() + ' ';
+        let h = date.getHours() < 10 ? '0' + date.getHours() + ':' : date.getHours() + ':';
+        let m = date.getMinutes()  < 10 ? '0' + date.getMinutes() + ':' : date.getMinutes() + ':';
+        let s = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds();
+        return Y + M + D + h + m + s;
+      },
+      formatUpdateDate(row, column) {
+        let date = new Date(parseInt(row.updated));
+        let Y = date.getFullYear() + '-';
+        let M = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) + '-' : date.getMonth() + 1 + '-';
+        let D = date.getDate() < 10 ? '0' + date.getDate() + ' ' : date.getDate() + ' ';
+        let h = date.getHours() < 10 ? '0' + date.getHours() + ':' : date.getHours() + ':';
+        let m = date.getMinutes()  < 10 ? '0' + date.getMinutes() + ':' : date.getMinutes() + ':';
+        let s = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds();
+        return Y + M + D + h + m + s;
+      },
     }
   }
 </script>

@@ -117,13 +117,14 @@ export default {
   },
   methods: {
     login() {
-      this.$http.post('http://127.0.0.1:9055/user/login', qs.stringify(this.loginForm),{
+      this.$http.post(this.global.baseUrl + 'OAUTH/user/login', qs.stringify(this.loginForm),{
         headers:{'Content-Type': "application/x-www-form-urlencoded"}
       }).then((res)=>{
         console.log(res.data)
-        if (res.data.code === 401){
+        if (res.data.code === 401 || res.data.msg === "登录失败"){
           this.$message.error("用户名或密码错误！")
         }
+        this.$store.commit('setLoginTime', res.data.data.loginTime)
       }).catch(err => {
         this.loading = false
       })
@@ -146,13 +147,12 @@ export default {
       this.$http.post(this.global.baseUrl+'OAUTH/oauth/token',qs.stringify(this.loginForm),{
         headers:{'Content-Type': "application/x-www-form-urlencoded"}
       }).then((res)=>{
-        // if (res.data) return this.$message.error('登陆失败')
         Cookies.set('access_token',res.data.access_token)
+        // this.$store.commit('setUserId',1)
         // window.sessionStorage.setItem('user', this.loginForm.username)
         this.$router.push('/')
       }).catch ((err)=>{
         console.log(err);
-        // this.$message.error('用户身份出错   请重新登陆！')
         this.$router.push("/login")
       })
     },

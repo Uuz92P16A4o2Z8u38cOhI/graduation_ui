@@ -14,9 +14,9 @@
         </el-table-column>
         <el-table-column prop="email" label="邮箱" align='center' sortable show-overflow-tooltip>
         </el-table-column>
-        <el-table-column prop="created" label="创建时间" align='center' sortable show-overflow-tooltip>
+        <el-table-column prop="created" label="创建时间" align='center' :formatter="formatCreatedDate" sortable show-overflow-tooltip>
         </el-table-column>
-        <el-table-column prop="updated" label="更新时间" align='center' sortable show-overflow-tooltip>
+        <el-table-column prop="updated" label="更新时间" align='center' :formatter="formatUpdateDate" sortable show-overflow-tooltip>
         </el-table-column>
         <el-table-column label="角色管理" align='center' width="100px">
           <template slot-scope="scope">
@@ -46,7 +46,7 @@
         </el-pagination>
       </div>
       <userDialog :dialogInfo="dialogInfo" @closeDialog="hideDialog" @refreshTable="getData"/>
-      <drawer :drawer=drawerShow @closeDrawer="closeDrawer"></drawer>
+      <drawer :drawer=drawerShow @closeDrawer="closeDrawer" :userId="onUserId"></drawer>
     </div>
   </div>
 </template>
@@ -64,6 +64,7 @@
     },
     data() {
       return {
+        onUserId : 0,
         drawerShow: false,
         loading : true,
         tableData: [],
@@ -107,6 +108,7 @@
       handleRole(index, row){
         this.drawerShow = true
         console.log(index,row)
+        this.onUserId = parseInt(row.id)
       },
       //编辑
       handleEdit(index, row) {
@@ -169,17 +171,37 @@
       closeDrawer(){
         this.drawerShow = false
       },
-
       //加载数据
       getData() {
         this.loading = true
         this.$http.post(this.global.baseUrl + 'SYS/api/sys/user/allUser/' + this.pageInfo.pageNum + "/" + this.pageInfo.pageSize,
           this.search_data).then((res) => {
           this.tableData = res.data.data.list;
-          this.pageInfo.total = res.data.data.total;
+          this.pageInfo.total = parseInt(res.data.data.total);
         })
         this.loading = false
-      }
+      },
+      //时间格式化
+      formatCreatedDate(row, column) {
+        let date = new Date(parseInt(row.created));
+        let Y = date.getFullYear() + '-';
+        let M = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) + '-' : date.getMonth() + 1 + '-';
+        let D = date.getDate() < 10 ? '0' + date.getDate() + ' ' : date.getDate() + ' ';
+        let h = date.getHours() < 10 ? '0' + date.getHours() + ':' : date.getHours() + ':';
+        let m = date.getMinutes()  < 10 ? '0' + date.getMinutes() + ':' : date.getMinutes() + ':';
+        let s = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds();
+        return Y + M + D + h + m + s;
+      },
+      formatUpdateDate(row, column) {
+        let date = new Date(parseInt(row.updated));
+        let Y = date.getFullYear() + '-';
+        let M = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) + '-' : date.getMonth() + 1 + '-';
+        let D = date.getDate() < 10 ? '0' + date.getDate() + ' ' : date.getDate() + ' ';
+        let h = date.getHours() < 10 ? '0' + date.getHours() + ':' : date.getHours() + ':';
+        let m = date.getMinutes()  < 10 ? '0' + date.getMinutes() + ':' : date.getMinutes() + ':';
+        let s = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds();
+        return Y + M + D + h + m + s;
+      },
     }
   }
 </script>

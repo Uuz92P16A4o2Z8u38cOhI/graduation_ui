@@ -5,7 +5,7 @@
       <el-menu  class="el-menu-demo" text-color="#fff" background-color="rgb(144,147,154)"
                 active-text-color="#ffd04b" mode="horizontal" >
         <el-menu-item index="1" @click="$router.push('/')"><i class="iconfont icon-zhuye" style="color: #ffffff"/></el-menu-item>
-        <el-menu-item index="2" @click="openLink(user.blog)"><i class="iconfont icon-zhuye" style="color: #ffffff"/></el-menu-item>
+        <el-menu-item index="2" @click="openLink(blog)"><i class="iconfont icon-zhuye" style="color: #ffffff"/></el-menu-item>
       </el-menu>
     </span>
     <!-- 工具栏 -->
@@ -32,11 +32,12 @@
         <el-menu-item index="5" v-popover:popover-personal>
           <!-- 用户信息 -->
           <span class="user-info">
-            <img src="" />
-            {{user.name}}
+            <img :src="avatar" />
+            {{userName}} {{nickName}}
           </span>
           <el-popover ref="popover-personal" placement="bottom-end" trigger="click" :visible-arrow="false">
-            <person-info :user="user"/>
+            <person-info />
+<!--            <person-info :user="user" />-->
           </el-popover>
         </el-menu-item>
       </el-menu>
@@ -45,6 +46,7 @@
 </template>
 
 <script>
+  import {mapState} from 'vuex'
   import personInfo from '@/components/template/personal/person-info'
 export default {
   name: 'header-bar',
@@ -53,11 +55,6 @@ export default {
   },
   data() {
     return {
-      user: {
-        name : '云龙',
-        avatar: '@/assets/avatar.jpg',
-        blog: 'https://www.baidu.com'
-      },
 
     }
   },
@@ -69,10 +66,36 @@ export default {
         window.open(url)
       }
 
-    }
+    },
+    init(){
+      this.$http.get(this.global.baseUrl+'UI/api/ui/basicInfo/queryInitInfo/'+this.$store.state.user.userId).then((res)=>{
+        this.$store.commit('setUserName', res.data.data.name)
+        this.$store.commit('setSchoolIcon', res.data.data.icon)
+        this.$store.commit('setBlog', res.data.data.blog)
+        this.$store.commit('setAvatar', res.data.data.avatatUrl)
+        this.$store.commit('setNickName', res.data.data.nickName)
+      }).catch((err)=>{
+        console.log(err)
+        this.$message.error('信息初始化失败！')
+      })
+    },
+
+
+
+
   },
-  mounted() {},
-  computed: {}
+  mounted() {
+    this.init()
+  },
+  computed: {
+    ...mapState({
+      blog : state => state.user.blog,
+      userName : state => state.user.userName,
+      avatar : state => state.user.avatar,
+      loginTime : state => state.user.loginTime,
+      nickName : state => state.user.nickName,
+    })
+  }
 }
 </script>
 

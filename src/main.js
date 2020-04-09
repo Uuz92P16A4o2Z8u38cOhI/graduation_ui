@@ -11,14 +11,46 @@ import './assets/varCss.css'    //全局css
 import Template from './components/template'   //引入自定义标签组件
 
  // axios.defaults.baseURL = 'http://127.0.0.1:9000/'
- axios.interceptors.request.use(config => {
+
+Vue.prototype.$http = axios
+Vue.prototype.global = global // 挂载全局配置模块
+
+//请求拦截器
+axios.interceptors.request.use(config => {
   if (Cookies.get('access_token'))
     config.headers.Authorization = 'Bearer ' + Cookies.get('access_token')
   return config;
 })
+//响应拦截器
+/*axios.interceptors.response.use(response =>{
+  console.log(response)
+  return response
+}, error => {
+  if (error && error.response) {
+    switch (error.response.status) {
+      case 401:
+        router.push({ path: '*', name: 'noError' , component: noError})
+        console.log("未认证")
+        break;
+      case 403:
+        router.push({ name: 'noError' })
+        console.log("未授权")
+        break;
+      case 404:
+        router.push({ name: 'noError' })
+        console.log("为找到该页面")
+        break;
+      case 500:
+        router.push({ name: 'noError' })
+        console.log("服务器错误")
+        break;
 
-Vue.prototype.$http = axios
-Vue.prototype.global = global // 挂载全局配置模块
+      default:
+        error.message = `连接出错(${error.response.status})!`;
+    }
+  }
+  return Promise.reject(error);
+})*/
 
 Vue.use(ElementUI);
 

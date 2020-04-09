@@ -1,11 +1,11 @@
 <template>
   <div class="teach">
     <span class="title"><i class="el-icon-reading" style="font-size: 24px" />教学活动 <span style="font-style: oblique; font-weight: initial ">Teaching Activities</span> </span>
-    <div class="research block">
+    <div class="teach block">
       <span class="title">教学研究</span>
 
     </div>
-    <div class="resources block">
+    <div class="teach block">
       <span class="title">教学资源</span>
 
     </div>
@@ -42,7 +42,7 @@
         </el-tab-pane>
       </el-tabs>
     </div>
-    <div class="results block">
+    <div class="teach block">
       <span class="title">教学成果</span>
 
     </div>

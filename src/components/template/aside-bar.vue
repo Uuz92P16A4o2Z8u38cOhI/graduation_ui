@@ -2,7 +2,7 @@
     <div class="aside-bar menu-bar-container">
       <!-- logo -->
       <div class="logo" :class="collapse?'menu-bar-collapse-width':'menu-bar-width'" @click="onCollapsed" >
-        <img v-if="collapse" src="@/assets/logo.png" alt="折叠" />
+        <img v-if="collapse" :src="schoolIcon" alt="折叠" />
         <div class="title">{{collapse?'':appName}}</div>
       </div>
       <!-- 导航菜单 -->
@@ -32,6 +32,7 @@ export default {
   },
   computed: {
     ...mapState({
+      schoolIcon : state => state.user.schoolIcon,
       collapse : state => state.app.collapse,
       navTree : state => state.menu.navTree,
     }),
@@ -51,9 +52,10 @@ export default {
     this.handleRoute(this.$route)
   },
   mounted() {
-    if (this.navTree.length  === 0){
+    /*if (this.navTree.length  === 0){
       this.getMenu();
-    }
+    }*/
+    this.getMenu();
   },
   methods: {
     onCollapsed: function() {
@@ -64,9 +66,8 @@ export default {
       this.$emit("myCollapse",this.collapse)
     },*/
     getMenu(){
-      // const userId = this.$store.state.user.userId
-      // console.log("http://localhost:9000/OAUTH/api/oauth/menu/menuInfo/"+userId)
-      this.$http.get("http://localhost:9000/UI/api/ui/menuTree/menuInfo").then((res)=>{
+      this.$http.post(this.global.baseUrl+"SYS/api/sys/menu/menuInfo/"+this.$store.state.user.userId).then((res)=>{
+      /*this.$http.get(this.global.baseUrl+"UI/api/ui/menuTree/menuInfo").then((res)=>{*/
         this.menuList = res.data;
         this.$store.commit('setNavTree', res.data)
         // console.log(res.data);

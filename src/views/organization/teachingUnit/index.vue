@@ -47,7 +47,7 @@
       getAllUnit(){
         const id = 10621
         this.$http.get(this.global.baseUrl +'UI/api/ui/teachUnit/queryAll/'+ id).then((res)=>{
-          this.unitList = res.data;
+          this.unitList = res.data.data;
           //console.log(res.data);
         }).catch (err => {
           console.log(err);

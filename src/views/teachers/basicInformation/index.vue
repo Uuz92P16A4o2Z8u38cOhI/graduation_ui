@@ -4,25 +4,25 @@
       <el-col :span="8">
         <el-card shadow="hover" class="mgb20" style="">
           <div class="user-info">
-            <el-image src="" class="user-avator" alt >
+            <el-image :src="info.avatatUrl" class="user-avator" alt >
               <div slot="error" class="image-slot">
                 <i class="el-icon-picture-outline" style="font-size: 120px"></i>
               </div>
             </el-image>
             <div class="user-info-cont">
-              <div class="user-info-name">姓名</div>
+              <div class="user-info-name">{{info.name}}</div>
               <div>
-                <span>硕士生导师</span><br/>
-                <span>性别:</span>
-                <span>年龄:</span>
+                <span>{{info.jobTitle}}&nbsp;&nbsp;&nbsp;{{info.degree}}&nbsp;&nbsp;&nbsp;{{info.position}}</span><br/>
+                <span>性别: {{info.sex}}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                <span>年龄: {{info.age}}</span>
               </div>
             </div>
           </div>
 
           <div class="info">
-            <span class="el-icon-date">&nbsp;出生日期：</span><br/>
-            <span>政治面貌:</span><br/>
-            <span>籍贯:</span>
+            <span class="el-icon-date">&nbsp;出生日期：&nbsp;{{timestamp2Date(info.birthday)}}</span><br/>
+            <span>政治面貌:&nbsp;{{info.politicalStatus}}</span><br/>
+            <span>籍贯:&nbsp;{{info.hometown}}</span>
           </div>
 
         </el-card>
@@ -32,15 +32,15 @@
             <span>个人信息</span>
           </div>
           <div class="link">
-            <span class="name">学院 <span>船舶工程学院</span></span>
+            <span class="name">学院 <span>{{info.department}}</span></span>
             <el-divider></el-divider>
-            <span class="name">学位 <span></span></span>
+            <span class="name">学位 <span>{{info.degree}}</span></span>
             <el-divider></el-divider>
-            <span class="name">职称 <span></span></span>
+            <span class="name">职称 <span>{{info.position}}</span></span>
             <el-divider></el-divider>
-            <span class="name">职务 <span></span></span>
+            <span class="name">职务 <span>{{info.jobTitle}}</span></span>
             <el-divider></el-divider>
-            <span class="name">学科 <span></span></span>
+            <span class="name">学科 <span>{{info.subject}}</span></span>
             <el-divider></el-divider>
           </div>
         </el-card>
@@ -50,13 +50,13 @@
             <span>联系方式</span>
           </div>
           <div class="link">
-            <span class="el-icon-phone-outline name">电话 <span></span></span>
+            <span class="el-icon-phone-outline name">电话 <span>{{info.phone}}</span></span>
             <el-divider></el-divider>
-            <span class="el-icon-message name">邮箱 <span></span></span>
+            <span class="el-icon-message name">邮箱 <span>{{info.email}}</span></span>
             <el-divider></el-divider>
-            <span class="el-icon-printer name">传真 <span></span></span>
+            <span class="el-icon-printer name">传真 <span>{{info.fax}}</span></span>
             <el-divider></el-divider>
-            <span class="el-icon-location-information name">地址 <span></span></span>
+            <span class="el-icon-location-information name">地址 <span>{{info.address}}</span></span>
             <el-divider></el-divider>
           </div>
         </el-card>
@@ -68,7 +68,7 @@
               <span>个人简介</span>
             </div>
             <div class="personal-profile">
-              张鲁，博士，副研究员，硕士生导师。主要研究领域：多自由度磁悬浮平面电机及相关技术、直线电机及相关技术、磁悬浮相关技术、高速电机系统等；在《IEEE Transactions on Magnetics》、《Journal of Applied Physics》、《Energies》、《中国电机工程学报》、《电工技术学报》等国内外学术刊物上发表论文40余篇，其中SCI/EI检索28篇；获授权国家发明专利36项；美国发明专利2项；获教育部技术发明二等奖1项；以负责人或主要参与人身份主持、参与国家自然科学基金、国家自然科学基金重点项目、国家科技重大专项、中国博士后基金特别资助项目、中国博士后基金面上项目、黑龙江省自然科学基金等项目20多项。
+              {{info.introduction}}
               <br/>
               <br/>
             </div>
@@ -78,7 +78,7 @@
               <span>研究领域</span>
             </div>
             <div class="personal-profile">
-
+                {{info.researchAreas}}
               <br/>
               <br/>
             </div>
@@ -94,9 +94,32 @@
     name: 'basicInformation',
     data() {
       return {
-        user:'',
-
+        info:{},
       }
+    },
+    mounted() {
+      this.init()
+    },
+    methods:{
+      init(){
+        this.$http.get(this.global.baseUrl+'UI/api/ui/basicInfo/queryByPeopleId/'+this.$store.state.user.userId).then((res)=>{
+          // console.log(res.data)
+          this.info = res.data.data
+        })
+      },
+
+
+      //时间格式化
+      timestamp2Date(timestamp) {
+        var date = new Date(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+        var Y = date.getFullYear() + '-';
+        var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+        var D = (date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate()) + ' ';
+        /*var h = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':';
+        var m = (date.getMinutes() <10 ? '0' + date.getMinutes() : date.getMinutes()) + ':';
+        var s = (date.getSeconds() <10 ? '0' + date.getSeconds() : date.getSeconds());*/
+        return Y+M+D;
+      },
     }
   }
 </script>

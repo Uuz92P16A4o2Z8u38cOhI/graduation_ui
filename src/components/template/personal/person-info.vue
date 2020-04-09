@@ -3,19 +3,19 @@
     <div class="personal-desc">
       <div class="avatar-container">
 <!--        <img class="avatar" src="" alt="头像"/>-->
-        <el-image class="avatar" src="" alt>
+        <el-image class="avatar" :src="avatar" alt>
           <div slot="error" class="image-slot">
             <i class="el-icon-picture-outline" style="font-size: 80px"></i>
           </div>
         </el-image>
       </div>
       <div class="name-role">
-        <span class="sender">{{ 'user.nickName' }} - {{ 'user.role' }}</span>
+        <span class="sender"> {{userName}} </span>
       </div>
       <div class="registe-info">
           <span class="registe-info">
             <li class="el-icon-timer"/>
-            {{ '登录时间' }}
+            {{timestamp2Date(loginTime)}}
           </span>
       </div>
     </div>
@@ -64,7 +64,8 @@
     </el-dialog>
 
 
-    <el-dialog title="个人中心" :visible.sync="dialogVisible" width="80%" :before-close="handleClose" :close-on-click-modal="false"
+    <el-dialog title="个人中心" :visible.sync="dialogVisible" width="80%"
+               :before-close="handleClose" :close-on-click-modal="false"
                :modal="false">
       <setting/>
     </el-dialog>
@@ -73,6 +74,7 @@
 </template>
 
 <script>
+  import {mapState} from 'vuex'
   import Cookies from 'js-cookie'
   import setting from '@/components/template/personal/setting'
 
@@ -82,7 +84,7 @@
         setting
     },
     props: {
-      user: {
+      /*user: {
         type: Object,
         default: {
           nickName: 'admin',
@@ -90,7 +92,7 @@
           role: '超级管理员',
           registeInfo: '注册时间：2018-12-25 '
         }
-      }
+      }*/
     },
     data() {
       let validateNewpassword = (rule, value, callback) => {
@@ -135,10 +137,19 @@
         }
       }
     },
+    computed: {
+      ...mapState({
+        userName : state => state.user.userName,
+        nickName : state => state.user.nickName,
+        avatar : state => state.user.avatar,
+        loginTime : state => state.user.loginTime,
+      })
+    },
     methods: {
       logout() {
         this.$http.post('http://localhost:9055/logout').then((res)=>{
           console.log(res.data)
+          this.$message.success('成功退出')
         })
         window.sessionStorage.clear()
         Cookies.remove('access_token')
@@ -187,11 +198,20 @@
             })
           }
         })
-      }
-    },
-    // 时间格式化
-    dateFormat(date) {
-      return format(date)
+      },
+
+
+      //时间格式化
+      timestamp2Date(timestamp) {
+        var date = new Date(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+        var Y = date.getFullYear() + '-';
+        var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+        var D = (date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate()) + ' ';
+        var h = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':';
+        var m = (date.getMinutes() <10 ? '0' + date.getMinutes() : date.getMinutes()) + ':';
+        var s = (date.getSeconds() <10 ? '0' + date.getSeconds() : date.getSeconds());
+        return Y+M+D+h+m+s;
+      },
     },
     mounted() {
     }

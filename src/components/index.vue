@@ -29,17 +29,19 @@
   import router from '../router'
 export default {
   name: 'index',
-  components: {},
+  components: {
+  },
   data() {
     return {
 
     }
   },
-  beforeCreate() {
+  created() {
     const token = Cookies.get('access_token')
     this.$http.post('http://client:secret@localhost:9055/oauth/check_token', qs.stringify({"token" : token})).then((res) => {
       const userInfo = JSON.parse(res.data.user_name)
       this.$store.commit('setUserId',userInfo.id)
+      // window.localStorage.setItem('userId',userInfo.id)
     }).catch ((err)=>{
       console.log(err)
       this.$message.error('用户身份错误 请重新登陆！')
