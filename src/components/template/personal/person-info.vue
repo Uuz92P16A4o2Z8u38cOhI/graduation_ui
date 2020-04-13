@@ -19,11 +19,11 @@
           </span>
       </div>
     </div>
-    <div class="personal-relation">
+    <!--<div class="personal-relation">
       <span class="relation-item el-icon-user">联系人</span>
       <span class="relation-item el-icon-chat-dot-round">群组</span>
       <span class="relation-item el-icon-news">动态</span>
-    </div>
+    </div>-->
     <div class="main-operation">
         <span class="main-operation-item" @click="openPersonCenter">
             <el-button size="small" icon="el-icon-setting"> 个人中心</el-button>
@@ -32,12 +32,12 @@
           <el-button size="small" icon="el-icon-help"> 修改密码</el-button>
         </span>
     </div>
-    <div class="other-operation">
+    <!--<div class="other-operation">
       <div class="other-operation-item" @click="">
         <li class="el-icon-edit-outline"/>
         备忘笔记
       </div>
-    </div>
+    </div>-->
     <div class="personal-footer" @click="logout">
       <li class="el-icon-switch-button"/>
       退出登录

@@ -44,9 +44,9 @@
               <span>基本信息</span>
             </div>
             <div class="link">
-              <span class="name">家庭人口 <span>{{familyBase.population}}</span></span>
+              <div style="display: flex"><span class="name" style="width: 100px">家庭人口 </span><span>{{familyBase.population}}</span></div>
               <el-divider></el-divider>
-              <span class="name">家庭地址 <span>{{familyBase.address}}</span></span>
+              <div style="display: flex"><span class="name" style="width: 100px">家庭地址 </span><span>{{familyBase.address}}</span></div>
               <el-divider></el-divider>
 
             </div>

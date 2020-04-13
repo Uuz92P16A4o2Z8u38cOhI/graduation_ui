@@ -91,7 +91,7 @@
 
 <style scoped>
   .setting{
-    height: 500px;
+    height: 450px;
   }
   .base{
     display: flex;

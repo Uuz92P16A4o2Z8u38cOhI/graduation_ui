@@ -11,8 +11,8 @@
     <!-- 工具栏 -->
     <span class="toolbar">
       <el-menu class="el-menu-demo"  text-color="#ffd04b" background-color="rgb(144,147,154)" mode="horizontal">
-        <el-menu-item index="3" v-popover:popover-message>
-          <!-- 我的私信 -->
+        <!--<el-menu-item index="3" v-popover:popover-message>
+          &lt;!&ndash; 我的私信 &ndash;&gt;
           <el-badge :value="5" :max="99" class="badge">
             <li style="color:#fff;" class="el-icon-message"/>
           </el-badge>
@@ -21,14 +21,14 @@
           </el-popover>
         </el-menu-item>
         <el-menu-item index="4" v-popover:popover-notice>
-          <!-- 系统通知 -->
+          &lt;!&ndash; 系统通知 &ndash;&gt;
           <el-badge :value="4" :max="99" class="badge">
             <li style="color:#fff;" class="el-icon-bell"/>
           </el-badge>
           <el-popover ref="popover-notice" placement="bottom-end" trigger="click">
 
           </el-popover>
-        </el-menu-item>
+        </el-menu-item>-->
         <el-menu-item index="5" v-popover:popover-personal>
           <!-- 用户信息 -->
           <span class="user-info">
