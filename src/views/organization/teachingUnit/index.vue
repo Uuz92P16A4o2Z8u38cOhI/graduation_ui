@@ -6,7 +6,7 @@
       <el-row :gutter="12">
         <el-col :span="8" v-for="item in unitList" :key="item.id">
           <el-card shadow="hover" @click="drawer = true">
-            <el-image :src="item.icon" alt class="image" @click="drawer = true">
+            <el-image :src='item.icon' alt class="image" @click="drawer = true">
               <div slot="error" class="image-slot">
                 <i class="el-icon-picture-outline" style="font-size: 50px"></i>
               </div>
@@ -49,6 +49,11 @@
         this.$http.get(this.global.baseUrl +'UI/api/ui/teachUnit/queryAll/'+ id).then((res)=>{
           this.unitList = res.data.data;
           //console.log(res.data);
+          for(var i = 0; i < this.unitList.length; i++){
+            if (this.unitList[i].icon !== null && this.unitList[i].icon !== ''){
+              this.unitList[i].icon = this.global.imgUrl + this.unitList[i].icon
+            }
+          }
         }).catch (err => {
           console.log(err);
           this.$message.eerror("请求出现错误");

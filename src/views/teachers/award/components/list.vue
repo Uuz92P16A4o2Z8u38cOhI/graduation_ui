@@ -6,23 +6,24 @@
         <i class="el-icon-medal" style="font-size: 20px"/>
         <span class="title">荣誉称号：</span>
       </div>
+      <div v-if=" honoraryTitle == null || honoraryTitle.length == 0" style="text-align: center"> <span >暂无数据</span></div>
       <div class="area el-scrollbar">
-        <div class="item" v-for="item in honorData" :key="item.id">
+        <div class="item" v-for="item in honoraryTitle" :key="item.id">
 
         </div>
       </div>
     </el-card>
 
-    <el-card class="box-card">
+    <el-card class="box-card" v-if="honorWall !== null && honorWall.length !== 0">
       <div slot="header" class="clearfix">
         <i class="el-icon-medal-1" style="font-size: 20px"/>
         <span class="title">荣誉墙：</span>
       </div>
       <div class="carousel">
         <el-carousel indicator-position="outside" >
-          <el-carousel-item v-for="item in trophyList" :key="item">
-            <h3>{{ item }}</h3>
-
+          <el-carousel-item v-for="item in honorWall" :key="item">
+            <h3>{{ item.itemName }}</h3>
+            <span>{{item.itemContent}}</span>
           </el-carousel-item>
         </el-carousel>
       </div>
@@ -34,10 +35,10 @@
 
   export default {
     name:'list',
+    props:['honoraryTitle' , 'honorWall'],
     data() {
       return {
-        honorData:[],
-        trophyList:[1,2,3],
+
       };
     }
   }

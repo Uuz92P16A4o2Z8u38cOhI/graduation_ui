@@ -77,6 +77,8 @@
             <div slot="header" class="clearfix header-title">
               <span>研究领域</span>
             </div>
+            <div style="background: #000000">
+            </div>
             <div class="personal-profile">
                 {{info.researchAreas}}
               <br/>
@@ -90,8 +92,12 @@
 </template>
 
 <script>
+  import glassLightButton from '../../../components/template/h/glassLightButton'
   export default {
     name: 'basicInformation',
+    components: {
+      glassLightButton
+    },
     data() {
       return {
         info:{},

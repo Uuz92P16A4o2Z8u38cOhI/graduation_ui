@@ -1,12 +1,39 @@
 <template>
-  <button class="btn btn-primary btn-ghost btn-shine">
-    hover me
+  <button class="btn btn-primary btn-ghost btn-shine"
+          :value="content"
+          :class="{disabled: !canClick}"
+          @click="setTime">
   </button>
 </template>
 
 <script>
   export default {
-    name: 'glassLightButton'
+    name: 'glassLightButton',
+    data () {
+      return{
+        content: '获取手机验证码', // 按钮里显示的内容
+        totalTime: 90, // 记录具体倒计时时间
+        canClick: true // 添加canClick
+      }
+    },
+    methods:{
+      // 验证码读秒
+      setTime () {
+        if (!this.canClick) return // 如果是false 直接return出去
+        this.canClick = false
+        this.content = this.totalTime + 's后重新发送'
+        let clock = window.setInterval(() => {
+          this.totalTime--
+          this.content = this.totalTime + 's后重新发送'
+          if (this.totalTime < 0) {
+            window.clearInterval(clock)
+            this.content = '重新发送验证码'
+            this.totalTime = 90
+            this.canClick = true // 这里重新开启
+          }
+        }, 1000)
+      }
+    }
   }
 </script>
 

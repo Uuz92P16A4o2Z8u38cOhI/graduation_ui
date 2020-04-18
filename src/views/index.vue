@@ -39,6 +39,7 @@
         <snowBack/>
         <textNeon/>
         <textScreen/>
+        <check-button/>
       </div>
     </div>
 </template>
@@ -60,6 +61,7 @@
   import snowBack from '@/components/template/h/snowBack'
   import textNeon from '@/components/template/h/textNeon'
   import textScreen from '@/components/template/h/textScreen'
+  import checkButton from '../components/template/hyl/button/checkButton'
   export default {
     name: 'home',
     components:{
@@ -79,6 +81,7 @@
       snowBack,
       textNeon,
       textScreen,
+      checkButton,
     },
     data()  {
         return  {

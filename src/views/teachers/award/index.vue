@@ -9,9 +9,10 @@
             <div slot="header" class=" header-title">
               <span class="title">学术荣誉</span>
             </div>
+            <div v-if=" academicHonorsList == null || academicHonorsList.length == 0" style="text-align: center"> <span >暂无数据</span></div>
             <el-collapse v-model="activeName" accordion>
-              <el-collapse-item title="荣誉名称" name="1" >
-                <div >荣誉详情</div>
+              <el-collapse-item :title="item.itemName" :name="item.id" v-for="item in academicHonorsList" :key="item.id">
+                <div >{{item.itemContent}}</div>
               </el-collapse-item>
             </el-collapse>
           </el-card>
@@ -21,7 +22,12 @@
             <div slot="header" class="clearfix header-title">
               <span class="title">科研奖励</span>
             </div>
-
+            <div>
+              <div v-if=" scientificAwardsList == null || scientificAwardsList.length == 0" style="text-align: center"> <span >暂无数据</span></div>
+              <ol>
+                <li v-for="item in scientificAwardsList"><span class="name">{{item.itemName}}</span><span class="content">{{item.itemContent}}</span></li>
+              </ol>
+            </div>
           </el-card>
         </el-col>
       </el-row>
@@ -31,12 +37,20 @@
             <div slot="header" class="clearfix header-title">
               <span class="title"> 其他获奖</span>
             </div>
-
+            <div>
+              <div v-if=" otherAwardsList == null || otherAwardsList.length == 0" style="text-align: center"> <span >暂无数据</span></div>
+              <ol>
+                <li v-for="item in otherAwardsList"><span class="name">{{item.itemName}}</span><span class="content">{{item.itemContent}}</span></li>
+              </ol>
+            </div>
           </el-card>
         </el-col>
       </el-row>
     </div>
-    <list></list>
+    <div v-if="(honoraryTitleList !== null && honoraryTitleList.length !== 0)||(honorWallList !== null && honorWallList.length !== 0)">
+      <list :honoraryTitle="honoraryTitleList" :honorWall="honorWallList"></list>
+    </div>
+<!--    -->
   </div>
 </template>
 
@@ -50,11 +64,30 @@
     data(){
       return {
         activeName: [1],
+        academicHonorsList: [],
+        scientificAwardsList: [],
+        otherAwardsList: [],
+        honoraryTitleList: [],
+        honorWallList: [],
       }
+    },
+    mounted() {
+      this.getInitInfo()
     },
     methods : {
       changeReverse(){
         this.reverse = !this.reverse;
+      },
+      getInitInfo(){
+        this.$http.post(this.global.baseUrl + 'UI/api/ui/awards/initInfo/' + this.$store.state.user.userId).then(res =>{
+          console.log(res.data.data)
+          const infoData = res.data.data
+          this.academicHonorsList = infoData.academicHonorsList;
+          this.scientificAwardsList = infoData.scientificAwardsList;
+          this.otherAwardsList = infoData.otherAwardsList;
+          this.honoraryTitleList = infoData.honoraryTitleList;
+          this.honorWallList = infoData.honorWallList;
+        })
       }
     }
 
