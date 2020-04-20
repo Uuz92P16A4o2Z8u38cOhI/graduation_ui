@@ -1,8 +1,8 @@
 <template>
     <div>
       <!--<h1 style="text-align: center">欢迎使用高校学院级教师基础信息管理系统</h1>-->
-      <textNeon style="text-align: center"/>
-      <h2>系统简介</h2>
+      <textNeon style="text-align: center; margin: 300px;"/>
+      <!--<h2>系统简介</h2>
       在高校日常管理过程中，教师经常被要求重复性填写繁琐的Word或Excel格式的个人信息表格，
       通常这些信息包括个人基础信息、受教育情况、工作情况、家庭情况、教学活动相关信息、科研活动相关信息、获奖信息等。
       一方面，重复填写这些信息增加了教师的工作量；另一方面，这些信息需要根据实际情况进行更新。<br/>
@@ -20,8 +20,8 @@
         <el-carousel-item v-for="item in titles" :key="item">
           <h3>{{ item }}</h3>
         </el-carousel-item>
-      </el-carousel>
-      <div>
+      </el-carousel>-->
+      <!--<div>
         组件
         <aList/>
         <backButton/>
@@ -40,7 +40,7 @@
         <textNeon/>
         <textScreen/>
         <check-button/>
-      </div>
+      </div>-->
     </div>
 </template>
 

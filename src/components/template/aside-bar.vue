@@ -1,12 +1,12 @@
 <template>
-    <div class="aside-bar menu-bar-container">
+    <div class="aside-bar menu-bar-container" >
       <!-- logo -->
-      <div class="logo" :class="collapse?'menu-bar-collapse-width':'menu-bar-width'" @click="onCollapsed" >
+      <div class="logo" :class="collapse?'menu-bar-collapse-width':'menu-bar-width'" @click="onCollapsed" :style="{'background-color': themeColor}">
         <img v-if="collapse" :src="schoolIcon" alt="折叠" />
         <div class="title">{{collapse?'':appName}}</div>
       </div>
       <!-- 导航菜单 -->
-      <el-menu ref="navmenu" default-active="1" :class="collapse?'menu-bar-collapse-width':'menu-bar-width'"
+      <el-menu ref="navmenu" default-active="1" :class="collapse?'menu-bar-collapse-width':'menu-bar-width'" :style="{'background-color': themeColor}"
         :collapse="collapse" :collapse-transition="false" :unique-opened="true"  >
         <!-- 导航菜单树组件，动态加载菜单 -->
         <menu-tree v-for="item in navTree" :key="item.id" :menu="item" />
@@ -35,6 +35,7 @@ export default {
       schoolIcon : state => state.user.schoolIcon,
       collapse : state => state.app.collapse,
       navTree : state => state.menu.navTree,
+      themeColor : state => state.app.themeColor,
     }),
     mainTabs: {
       get () { return this.$store.state.tab.mainTabs },
@@ -55,6 +56,7 @@ export default {
     /*if (this.navTree.length  === 0){
       this.getMenu();
     }*/
+    this.schoolInfo();
     this.getMenu();
   },
   methods: {
@@ -65,6 +67,14 @@ export default {
       this.collapse = !this.collapse
       this.$emit("myCollapse",this.collapse)
     },*/
+    schoolInfo(){
+      this.$http.post(this.global.baseUrl + 'UI/api/ui/basicInfo/querySchoolInfo/' + this.$store.state.user.userId).then(res=>{
+        this.$store.commit('setSchoolIcon', this.global.imgUrl + res.data.data.icon)
+      }).catch(err=>{
+        console.log(err);
+        this.$message.error('学校信息获取失败')
+      })
+    },
     getMenu(){
       this.$http.post(this.global.baseUrl+"SYS/api/sys/menu/menuInfo/"+this.$store.state.user.userId).then((res)=>{
       /*this.$http.get(this.global.baseUrl+"UI/api/ui/menuTree/menuInfo").then((res)=>{*/
@@ -123,7 +133,7 @@ export default {
   top: 0;
   height: 60px;
   line-height: 60px;
-  background: rgb(144,147,154);
+  /*background: rgb(144,147,154);*/
   cursor: pointer;
 }
 .menu-bar-container .menu-bar-width {

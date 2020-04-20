@@ -33,14 +33,15 @@
         <div class="pwdarea">
           <p class="title">修改密码</p>
           <el-form class="form"  :model="pwdForm" :rules="pwdRules" ref="pwdForm" label-width="100px">
-            <el-form-item label="原密码" prop="password">
-              <el-input type="password" v-model="pwdForm.password" auto-complete="off" size="mini" placeholder="请输入原密码"></el-input>
-            </el-form-item>
             <el-form-item label="新密码" prop="newpassword">
               <el-input type="password" v-model="pwdForm.newpassword" auto-complete="off" size="mini" placeholder="请输入新密码"></el-input>
             </el-form-item>
             <el-form-item label="确认新密码" prop="surepassword">
               <el-input type="password" v-model="pwdForm.surepassword" auto-complete="off" size="mini" placeholder="请输入确认新密码"></el-input>
+            </el-form-item>
+            <el-form-item label="邮箱验证码" prop="password">
+              <el-input type="password" v-model="pwdForm.password" auto-complete="off" size="mini" placeholder="邮箱验证码" style="width: 50%"></el-input>
+              <check-button />
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="submitPasswordForm('pwdForm')">提交</el-button>
@@ -58,8 +59,10 @@
   import Cookies from "js-cookie"
   import qs from 'qs'
   import router from '../router'
+  import CheckButton from './template/hyl/button/checkButton'
 export default {
   name: 'login',
+  components: { CheckButton },
   data() {
     // validateField:对部分表单字段进行校验的方法
     let validateNewpassword = (rule, value, callback) => {
@@ -104,7 +107,7 @@ export default {
       },
       pwdRules: {
         password: [
-          { required: true, message: '请输入原密码', trigger: 'blur' },
+          { required: true, message: '验证码 不能为空！', trigger: 'blur' },
         ],
         newpassword: [
           { required: true, validator:validateNewpassword, trigger: 'blur' },
@@ -180,4 +183,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 @import './../assets/css/login.css';
+.el-form-item__label{
+  font-size: 24px !important;
+}
 </style>

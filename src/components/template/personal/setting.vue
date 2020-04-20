@@ -7,7 +7,7 @@
             <span style="font-size: 18px">上传头像</span>
             <el-upload
               class="avatar-uploader"
-              action="http://127.0.0.1:8888/api/fastdfs/upload/upload"
+              :action="this.global.baseUrl + 'FASTDFS/api/fastdfs/upload/upload'"
               name="dropFile"
               :show-file-list="false"
               :on-success="handleAvatarSuccess"
@@ -15,15 +15,18 @@
               <img v-if="avatar" :src="avatar" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"/>
             </el-upload>
+            <!--<el-button type="primary" size="small" @click="submitUpload">确定上传</el-button>-->
           </div>
 
           <div class="upDown">
             <el-card style="display: flex">
               <div class="operating" v-for="item in upDownData">
                 <el-tag effect="dark" type="success">{{item.title}}</el-tag>
+
                 <el-tooltip class="item" effect="light" content="上传excel" placement="top">
                   <span @click="uploadExcel(item.type)"><line-button>上传</line-button></span>
                 </el-tooltip>
+
                 <el-tooltip class="item" effect="light" content="下载excel" placement="top">
                   <span @click="downloadExcel(item.type)"><line-button style="color: #0acffe">下载</line-button></span>
                 </el-tooltip>
@@ -37,7 +40,7 @@
         </div>
       </el-tab-pane>
       <el-tab-pane label="主题设置" name="theme">
-        <el-color-picker v-model="color" show-alpha></el-color-picker>
+        <el-color-picker v-model="color" show-alpha ></el-color-picker>
 
       </el-tab-pane>
     </el-tabs>
@@ -60,17 +63,22 @@
         upDownData:[{title : "基础信息", type : "BasicInfo"},{title : "教育情况", type : "Education"},{title : "工作情况", type : "Work"},
           {title : "家庭情况", type : "Family"},{title : "教学活动", type : "Teaching"},{title : "科研活动", type : "Research"},{title : "获奖信息", type : "Awards"}],
 
-
-        color: 'rgba(19, 206, 102, 0.8)',
+        color: '',
       };
+    },
+    watch:{
+      color(val){
+        this.$store.commit('setThemeColor', val)
+      }
     },
     computed: {
       ...mapState({
         avatar : state => state.user.avatar,
+        themeColor : state => state.app.themeColor,
       })
     },
     created() {
-
+      this.color = this.themeColor
     },
     methods: {
       handleClose(done) {
@@ -85,6 +93,7 @@
       },
       handleAvatarSuccess(res, file) {
         this.imageUrl = URL.createObjectURL(file.raw);
+        console.log(this.imageUrl)
       },
       beforeAvatarUpload(file) {
         // const isJPG = file.type === 'image/jpeg';
@@ -97,9 +106,12 @@
         }
         return isLt2M;
       },
-      uploadFile(file){
-        this.$http.post('http://127.0.0.1:8888/api/fastdfs/upload/upload-', {
-          file,
+      submitUpload(){
+
+      },
+      uploadFile(){
+        this.$http.post(this.global.baseUrl + 'FASTDFS/api/fastdfs/upload/upload', {
+          dropFile,
         },{
           headers : {
             'Content-Type': 'multipart/form-data'
@@ -109,10 +121,14 @@
         }).catch(_ => {});
       },
       //上传excel
-      uploadExcel(type){
-        this.$http.post(this.global.baseUrl + 'UI/api/ui/easyPoi/importExcel/' + type +"/" + this.$store.state.user.userId).then(res=>{
-
-
+      uploadExcel(type,dropFile){
+        this.$http.post(this.global.baseUrl + 'UI/api/ui/easyPoi/importExcel/' + type +"/" + this.$store.state.user.userId, {
+          dropFile,
+        },{
+          headers : {
+            'Content-Type': 'multipart/form-data'
+          }
+        }).then(res=>{
           console.log(res)
         })
       },
@@ -135,11 +151,12 @@
       downloadModelExcel(type){
         this.$http.post(this.global.baseUrl + 'UI/api/ui/Poi/exportModelExcel/' + type +"/" + this.$store.state.user.userId,{},{responseType:'blob'}).then(res=>{
           var blob = new Blob([res.data])
+          console.log(res)
           var downloadElement = document.createElement('a');
           var href = window.URL.createObjectURL(blob); //创建下载的链接
           downloadElement.href = href;
-          // const filename = decodeURI(res.headers['content-disposition'].split(';')[1].split('=')[1])
-          downloadElement.download = 'filename.xlsx'; //下载后文件名
+          const filename = decodeURI(res.headers['content-disposition'].split(';')[1].split('=')[1])
+          downloadElement.download = filename; //下载后文件名
           document.body.appendChild(downloadElement);
           downloadElement.click(); //点击下载
           document.body.removeChild(downloadElement); //下载完成移除元素

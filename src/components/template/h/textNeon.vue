@@ -22,8 +22,8 @@
 
   .neon {
     color: #cce7f8;
-    font-size: 2.5rem;
-    font-family: 'Pacifico', cursive;
+    font-size: 3rem;
+    /*font-family: 'Pacifico', cursive;*/
     text-transform: uppercase;
     animation: shining 0.1s alternate infinite;
   }

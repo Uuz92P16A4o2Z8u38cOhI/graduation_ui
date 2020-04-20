@@ -1,8 +1,8 @@
 <template>
-  <div class="header-bar">
+  <div class="header-bar" :style="{'background-color': themeColor}">
     <!-- 导航菜单 -->
     <span class="navbar">
-      <el-menu  class="el-menu-demo" text-color="#fff" background-color="rgb(144,147,154)"
+      <el-menu  class="el-menu-demo" text-color="#fff" :background-color="this.themeColor"
                 active-text-color="#ffd04b" mode="horizontal" >
         <el-menu-item index="1" @click="$router.push('/')"><i class="iconfont icon-zhuye" style="color: #ffffff"/></el-menu-item>
         <el-menu-item index="2" @click="openLink(blog)"><i class="iconfont icon-zhuye" style="color: #ffffff"/></el-menu-item>
@@ -10,7 +10,7 @@
     </span>
     <!-- 工具栏 -->
     <span class="toolbar">
-      <el-menu class="el-menu-demo"  text-color="#ffd04b" background-color="rgb(144,147,154)" mode="horizontal">
+      <el-menu class="el-menu-demo"  text-color="#ffd04b" :background-color="this.themeColor" mode="horizontal">
         <!--<el-menu-item index="3" v-popover:popover-message>
           &lt;!&ndash; 我的私信 &ndash;&gt;
           <el-badge :value="5" :max="99" class="badge">
@@ -72,7 +72,7 @@ export default {
         this.$store.commit('setUserName', res.data.data.name)
         this.$store.commit('setSchoolIcon', res.data.data.icon)
         this.$store.commit('setBlog', res.data.data.blog)
-        this.$store.commit('setAvatar', res.data.data.avatatUrl)
+        this.$store.commit('setAvatar', this.global.imgUrl + res.data.data.avatatUrl)
         this.$store.commit('setNickName', res.data.data.nickName)
       }).catch((err)=>{
         console.log(err)
@@ -94,6 +94,7 @@ export default {
       avatar : state => state.user.avatar,
       loginTime : state => state.user.loginTime,
       nickName : state => state.user.nickName,
+      themeColor : state => state.app.themeColor,
     })
   }
 }
@@ -109,7 +110,7 @@ export default {
   line-height: 60px;
   border-left-width: 1px;
   border-left-style: solid;
-  background-color: rgb(144, 147, 154);
+  /*background-color: rgb(144, 147, 154);*/
 }
 .hamburg {
   float: left;
