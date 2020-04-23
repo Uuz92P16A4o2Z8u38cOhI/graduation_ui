@@ -36,6 +36,7 @@ export default {
       collapse : state => state.app.collapse,
       navTree : state => state.menu.navTree,
       themeColor : state => state.app.themeColor,
+      userId : state => state.user.userId
     }),
     mainTabs: {
       get () { return this.$store.state.tab.mainTabs },
@@ -47,7 +48,13 @@ export default {
     }
   },
   watch: {
-    $route: 'handleRoute'
+    $route: 'handleRoute',
+    userId(val){
+      if (typeof (val) !== "undefined"){
+        this.schoolInfo();
+        this.getMenu();
+      }
+    }
   },
   created() {
     this.handleRoute(this.$route)
@@ -56,8 +63,8 @@ export default {
     /*if (this.navTree.length  === 0){
       this.getMenu();
     }*/
-    this.schoolInfo();
-    this.getMenu();
+    // this.schoolInfo();
+    // this.getMenu();
   },
   methods: {
     onCollapsed: function() {

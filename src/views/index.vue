@@ -21,26 +21,26 @@
           <h3>{{ item }}</h3>
         </el-carousel-item>
       </el-carousel>-->
-      <!--<div>
-        组件
-        <aList/>
-        <backButton/>
-        <checkList/>
-        <contact/>
-        <frostedGlass/>
-        <glassLightButton/>
-        <hdialog/>
-        <lineButton/>
-        <linesButton/>
-        <loadingDot/>
-        <loadingMoon/>
-        <scene/>
-        <showJson/>
-        <snowBack/>
-        <textNeon/>
-        <textScreen/>
-        <check-button/>
-      </div>-->
+        <!--<div>
+          组件
+          <aList/>
+          <backButton/>
+          <checkList/>
+          <contact/>
+          <frostedGlass/>
+          <glassLightButton/>
+          <hdialog/>
+          <lineButton/>
+          <linesButton/>
+          <loadingDot/>
+          <loadingMoon/>
+          <scene/>
+          <showJson/>
+          <snowBack/>
+          <textNeon/>
+          <textScreen/>
+          <check-button/>
+        </div>-->
     </div>
 </template>
 

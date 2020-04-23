@@ -5,7 +5,7 @@
       <el-menu  class="el-menu-demo" text-color="#fff" :background-color="this.themeColor"
                 active-text-color="#ffd04b" mode="horizontal" >
         <el-menu-item index="1" @click="$router.push('/')"><i class="iconfont icon-zhuye" style="color: #ffffff"/></el-menu-item>
-        <el-menu-item index="2" @click="openLink(blog)"><i class="iconfont icon-zhuye" style="color: #ffffff"/></el-menu-item>
+        <el-menu-item index="2" @click="openLink(blog)"><i class="el-icon-table-lamp" style="color: #ffffff"/></el-menu-item>
       </el-menu>
     </span>
     <!-- 工具栏 -->
@@ -84,8 +84,15 @@ export default {
 
 
   },
+  watch: {
+    userId(val){
+      if (typeof (val) !== "undefined"){
+        this.init()
+      }
+    }
+  },
   mounted() {
-    this.init()
+    // this.init()
   },
   computed: {
     ...mapState({
@@ -95,6 +102,7 @@ export default {
       loginTime : state => state.user.loginTime,
       nickName : state => state.user.nickName,
       themeColor : state => state.app.themeColor,
+      userId : state => state.user.userId,
     })
   }
 }

@@ -12,6 +12,12 @@
         <el-form-item prop='description' label="备注:">
           <el-input v-model="form.description" type="textarea"></el-input>
         </el-form-item>
+        <el-form-item prop='type' label="类型:">
+          <el-select v-model="form.type" placeholder="请选择类型">
+            <el-option label="资源角色" value="0"></el-option>
+            <el-option label="菜单角色" value="1"></el-option>
+          </el-select>
+        </el-form-item>
 
         <el-form-item  class="bottom_right">
           <el-button @click="closeDialog">取 消</el-button>
@@ -39,6 +45,7 @@
           description : '',
           created : '',
           updated : '',
+          type: '',
         },
 
         form_rules: {
@@ -95,6 +102,7 @@
             }else{  //新增
               this.$http.post(this.global.baseUrl + 'SYS/api/sys/role/insertRole',
                 this.form).then((res)=>{
+                  console.log(this.form)
                 if (res.data.code === 200) {
                   this.$message.success(res.data.message)
                   this.loading = false

@@ -41,4 +41,8 @@ export default {
 </script>
 
 <style scoped>
+  i{
+    color: #de0d08;
+    font-size: 18px;
+  }
 </style>

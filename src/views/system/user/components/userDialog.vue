@@ -106,7 +106,7 @@
       }
     },
     methods : {
-        closeDialog(){
+      closeDialog(){
           this.$emit('closeDialog');
       },
       onSubmit(form){
@@ -140,6 +140,9 @@
                   this.$message.error(res.data.message)
                   this.loading = false
                 }
+              }).catch(err=>{
+                this.$message.error('新增用户失败,请检查用户名、电话、邮箱是否已经使用过！')
+                this.loading = false
               })
             }
 

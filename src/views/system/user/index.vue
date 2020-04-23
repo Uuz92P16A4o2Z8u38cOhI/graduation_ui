@@ -107,7 +107,7 @@
       //查看角色资源
       handleRole(index, row){
         this.drawerShow = true
-        console.log(index,row)
+        // console.log(index,row)
         this.onUserId = parseInt(row.id)
       },
       //编辑

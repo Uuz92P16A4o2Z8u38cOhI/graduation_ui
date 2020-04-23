@@ -18,6 +18,8 @@
         </el-table-column>
         <el-table-column prop="updated" label="更新时间" align='center' :formatter="formatUpdateDate" sortable show-overflow-tooltip>
         </el-table-column>
+        <el-table-column prop="type" label="类型" align='center'  sortable show-overflow-tooltip>
+        </el-table-column>
         <el-table-column label="资源管理" align='center' width="100px">
           <template slot-scope="scope">
             <span @click="handleRole(scope.$index, scope.row)" style="color: #0acffe; font-size: 24px; cursor:pointer">
@@ -46,7 +48,7 @@
         </el-pagination>
       </div>
       <roleDialog :dialogInfo="dialogInfo" @closeDialog="hideDialog" @refreshTable="getData"/>
-      <drawer :drawer=drawerShow @closeDrawer="closeDrawer"></drawer>
+      <drawer :drawer=drawerShow @closeDrawer="closeDrawer" :userId="onUserId" :type="onType"></drawer>
     </div>
   </div>
 </template>
@@ -65,6 +67,8 @@
     },
     data() {
       return {
+        onType: 0,
+        onUserId : 0,
         drawerShow: false,
         loading : true,
         tableData: [],
@@ -76,6 +80,7 @@
           description :'',
           created : '',
           updated : '',
+          type: '',
         },
         pageInfo : {
           total: 0,
@@ -109,6 +114,8 @@
       handleRole(index, row){
         this.drawerShow = true
         console.log(index,row)
+        this.onUserId = parseInt(row.id)
+        this.onType = parseInt(row.type)
       },
       //编辑
       handleEdit(index, row) {

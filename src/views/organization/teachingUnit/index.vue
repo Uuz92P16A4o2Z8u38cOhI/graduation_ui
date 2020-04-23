@@ -38,7 +38,7 @@
     },
     methods: {
       handleClose(done) {
-        this.$confirm('还有未保存的工作哦确定关闭吗？')
+        this.$confirm('确定关闭吗？')
           .then(_ => {
             done();
           })

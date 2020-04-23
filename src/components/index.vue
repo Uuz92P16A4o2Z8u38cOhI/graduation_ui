@@ -37,18 +37,24 @@ export default {
     }
   },
   created() {
-    const token = Cookies.get('access_token')
-    this.$http.post('http://client:secret@localhost:9055/oauth/check_token', qs.stringify({"token" : token})).then((res) => {
-      const userInfo = JSON.parse(res.data.user_name)
-      this.$store.commit('setUserId',userInfo.id)
-      // window.localStorage.setItem('userId',userInfo.id)
-    }).catch ((err)=>{
-      console.log(err)
-      this.$message.error('用户身份错误 请重新登陆！')
-      router.push('/login')
-    })
+    this.oauth()
+  },
+  mounted() {
   },
   methods: {
+    oauth(){
+      const token = Cookies.get('access_token')
+      // http://client:secret@localhost:9055/oauth/check_token
+      this.$http.post(this.global.baseUrl + 'OAUTH/oauth/check_token', qs.stringify({"token" : token})).then((res) => {
+        const userInfo = JSON.parse(res.data.user_name)
+        this.$store.commit('setUserId',userInfo.id)
+        // window.localStorage.setItem('userId',userInfo.id)
+      }).catch ((err)=>{
+        console.log(err)
+        this.$message.error('用户身份错误 请重新登陆！')
+        router.push('/login')
+      })
+    },
     //父传子 折叠
     /*collapseEvent(val){
       this.collapse = val
