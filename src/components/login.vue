@@ -23,33 +23,38 @@
           </el-checkbox-group>
         </div>-->
         <div>
-           <el-button class="login-btn" @click="submitForm('loginForm')" :loading="loading">登陆</el-button>
+           <el-button class="login-btn" @click="submitForm('loginForm')" @keyup.enter.native="submitForm('loginForm')" :loading="loading">登陆</el-button>
           <!--<el-button class="login-btn" @click="login" :loading="loading">登陆</el-button>-->
         </div>
       </el-form>
 
-      <span @click="dialogVisible =true" class="newPassword">忘记密码？</span>
-      <el-dialog :visible.sync="dialogVisible" :before-close="handleClose" width="30%">
-        <div class="pwdarea">
-          <p class="title">修改密码</p>
-          <el-form class="form"  :model="pwdForm" :rules="pwdRules" ref="pwdForm" label-width="100px">
-            <el-form-item label="新密码" prop="newpassword">
-              <el-input type="password" v-model="pwdForm.newpassword" auto-complete="off" size="mini" placeholder="请输入新密码"></el-input>
-            </el-form-item>
-            <el-form-item label="确认新密码" prop="surepassword">
-              <el-input type="password" v-model="pwdForm.surepassword" auto-complete="off" size="mini" placeholder="请输入确认新密码"></el-input>
-            </el-form-item>
-            <el-form-item label="邮箱验证码" prop="password">
-              <el-input type="password" v-model="pwdForm.password" auto-complete="off" size="mini" placeholder="邮箱验证码" style="width: 50%"></el-input>
-              <check-button />
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="submitPasswordForm('pwdForm')">提交</el-button>
-              <el-button @click="resetForm('pwdForm')">重置</el-button>
-            </el-form-item>
-          </el-form>
-        </div>
-      </el-dialog>
+      <div class="changepwd" >
+        <span @click="dialogVisible =true" class="newPassword">忘记密码？</span>
+        <el-dialog :visible.sync="dialogVisible" :before-close="handleClose" width="30%">
+          <div class="pwdarea">
+            <p class="title">修改密码</p>
+            <el-form class="form"  :model="pwdForm" :rules="pwdRules" ref="pwdForm" label-width="100px">
+              <el-form-item label="新密码" prop="newpassword">
+                <el-input type="password" v-model="pwdForm.newpassword" auto-complete="off" size="mini" placeholder="请输入新密码"></el-input>
+              </el-form-item>
+              <el-form-item label="确认新密码" prop="surepassword">
+                <el-input type="password" v-model="pwdForm.surepassword" auto-complete="off" size="mini" placeholder="请输入确认新密码"></el-input>
+              </el-form-item>
+              <el-form-item label="邮箱" prop="email">
+                <el-input type="email" v-model="pwdForm.email" auto-complete="off" size="mini" placeholder="请输入用户邮箱号"></el-input>
+              </el-form-item>
+              <el-form-item label="邮箱验证码" prop="password">
+                <el-input type="password" v-model="pwdForm.password" auto-complete="off" size="mini" placeholder="邮箱验证码" style="width: 50%"></el-input>
+                <span @click="sendEmail"><check-button /></span>
+              </el-form-item>
+              <el-form-item>
+                <el-button round type="primary" @click="submitPasswordForm('pwdForm')" class="re-button">提交</el-button>
+                <el-button round @click="resetForm('pwdForm')" class="re-button">重置</el-button>
+              </el-form-item>
+            </el-form>
+          </div>
+        </el-dialog>
+      </div>
 
     </div>
   </div>
@@ -84,6 +89,18 @@ export default {
         callback();
       }
     };
+    let validateEmail = (rule, value, callback) => {
+      if(value === ''){
+        callback(new Error('请输入邮箱~'));
+        return;
+      }
+      let emailRegex = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+      if (!emailRegex.test(value)) {
+        callback(new Error('邮箱格式不正确！'))
+      } else {
+        callback();
+      }
+    };
     return {
       loading: false,
       loginForm: {
@@ -99,6 +116,7 @@ export default {
         password : '',
         newpassword : '',
         surepassword : '',
+        email: '',
       },
       // checkList: [],
       rules: {
@@ -106,6 +124,9 @@ export default {
         password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
       },
       pwdRules: {
+        email: [
+          { required: true, validator:validateEmail, trigger: 'blur' },
+        ],
         password: [
           { required: true, message: '验证码 不能为空！', trigger: 'blur' },
         ],
@@ -169,10 +190,25 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
+    sendEmail(){
+      this.$http.post(this.global.baseUrl + 'FASTDFS/api/fastdfs/email/codeEmail/' + this.pwdForm.email).then(res => {
+        console.log(res)
+        this.$message.success("邮件已发送，请注意查收！")
+      }).catch(error=>{
+        this.$message.error("验证码发送失败：" + error)
+      })
+    },
     submitPasswordForm(formName) {
-      this.$refs[formName].validate((valid) => {
+      this.loading = true
+        this.$refs[formName].validate((valid) => {
         if (valid) {
-
+          this.$http.post(this.global.baseUrl + 'SYS/api/sys/user/updatePasswordByEmail', this.pwdForm).then((res)=>{
+            console.log(res)
+            this.$message.info(res.data.message)
+            this.loading = false
+          }).catch(err => {
+            this.loading = false
+          })
         }
       });
     },

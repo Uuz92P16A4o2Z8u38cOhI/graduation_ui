@@ -3,7 +3,7 @@
 }
 .login{
   height: 100%;
-  background-image: linear-gradient(-135deg, #b5eff7 0%, #52e7d3 100%);
+  background-image: linear-gradient(-135deg, #c3ecff 0%, #76ffd4 100%);
 }
 .title{
   font-size: 32px;
@@ -25,7 +25,7 @@
 }
 
 .login-box{
-  background-image: linear-gradient(-135deg, #ddf0f8 0%, #b4d5d6 100%);
+  background-image: linear-gradient(-135deg, #9cf8ba 0%, #efffde 100%);
   position: absolute;
   top: 50%;
   left: 50%;
@@ -54,9 +54,23 @@
 .login-box .newPassword{
   text-decoration-line: none;
   float: right;
-  color: #1f54fc;
+  color: #ff0000;
   cursor: pointer;
 }
+
+.re-button{
+  float: left;
+  margin-left: 80px;
+}
+
+.pwdarea{
+  padding: 0;
+  background-image: linear-gradient(-135deg, #9cf8ba 0%, #efffde 100%);
+  border: solid #3bbad6;
+  border-radius: 30px;
+  box-shadow: #3bbad6 3px 6px;
+}
+
 
 
 

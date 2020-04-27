@@ -1,5 +1,5 @@
 <template>
-  <div class="personal-panel">
+  <div class="personal-panel" :style="{'background-color': this.$store.state.app.themeColor}">
     <div class="personal-desc">
       <div class="avatar-container">
 <!--        <img class="avatar" src="" alt="头像"/>-->
@@ -38,7 +38,7 @@
         备忘笔记
       </div>
     </div>-->
-    <div class="personal-footer" @click="logout">
+    <div class="personal-footer" @click="logout" style="color: #ffffff">
       <li class="el-icon-switch-button"/>
       退出登录
     </div>

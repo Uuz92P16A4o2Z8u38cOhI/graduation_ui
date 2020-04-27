@@ -41,10 +41,12 @@
           <textScreen/>
           <check-button/>
         </div>-->
+      <!--<test/>-->
     </div>
 </template>
 
 <script>
+  import test from '../components/template/hyl/upload/img/test'
   import aList from '@/components/template/h/aList'
   import backButton from '@/components/template/h/backButton'
   import checkList from '@/components/template/h/checkList'
@@ -82,6 +84,7 @@
       textNeon,
       textScreen,
       checkButton,
+      test,
     },
     data()  {
         return  {

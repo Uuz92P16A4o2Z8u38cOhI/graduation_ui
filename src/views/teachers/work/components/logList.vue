@@ -87,6 +87,7 @@
 .logContainer .logArea{
   overflow: auto;
   height: 100%;
+  max-height: 470px;
 }
 
 .logContainer .item .title{

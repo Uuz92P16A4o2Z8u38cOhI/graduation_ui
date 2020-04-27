@@ -7,7 +7,7 @@
     name: 'checkButton',
     data () {
       return{
-        content: '获取手机验证码', // 按钮里显示的内容
+        content: '获取邮箱验证码', // 按钮里显示的内容
         totalTime: 90, // 记录具体倒计时时间
         canClick: true // 添加canClick
       }

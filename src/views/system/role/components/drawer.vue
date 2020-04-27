@@ -9,9 +9,13 @@
                 <template v-slot:name>更新角色资源</template>
               </button-dialog>
             </div>
-            <el-tree :data="roleResourceTree" show-checkbox default-expand-all node-key="id" :default-checked-keys="pIds"
-                     ref="resourceTree" highlight-current :props="defaultProps" empty-text="暂时无数据">
-            </el-tree>
+            <el-scrollbar>
+              <div style="max-height: 720px">
+                <el-tree :data="roleResourceTree" show-checkbox default-expand-all node-key="id" :default-checked-keys="pIds"
+                         ref="resourceTree" highlight-current :props="defaultProps" empty-text="暂时无数据">
+                </el-tree>
+              </div>
+            </el-scrollbar>
           </el-tab-pane>
           <el-tab-pane label="目录资源" v-if="type === 1">
             <div class="btn">
@@ -20,9 +24,13 @@
                 <template v-slot:name>更新角色菜单</template>
               </button-dialog>
             </div>
-            <el-tree :data="roleMenuTree" show-checkbox default-expand-all node-key="id" :default-checked-keys="mIds"
-                     ref="menuTree" highlight-current :props="defaultProps" empty-text="暂时无数据">
-            </el-tree>
+            <el-scrollbar>
+              <div style="max-height: 720px">
+                <el-tree :data="roleMenuTree" show-checkbox default-expand-all node-key="id" :default-checked-keys="mIds"
+                         ref="menuTree" highlight-current :props="defaultProps" empty-text="暂时无数据">
+                </el-tree>
+              </div>
+            </el-scrollbar>
           </el-tab-pane>
         </el-tabs>
       </el-drawer>
@@ -73,7 +81,6 @@
           this.roleMenuTree = res.data.data.sortMenuList
           this.mIds = res.data.data.mIds
           this.pIds = res.data.data.pIds
-          console.log(res.data.data)
         })
       },
       updateRolePermission(){

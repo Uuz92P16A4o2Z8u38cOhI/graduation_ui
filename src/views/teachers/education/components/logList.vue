@@ -7,22 +7,24 @@
       </div>
 
       <div class="logArea el-scrollbar">
-        <div class="item" v-for="i in versions">
-          <p class="timeArea">
-            <span class="title">上传时间：</span>
-            <span class="title time">{{timestamp2Date(i.uploadTime)}}</span>
-          </p>
-          <div class="versions">
-            <span class="title">版本号：</span>
-            <span class="title time">{{i.version}}</span>
+        <el-scrollbar>
+          <div class="item" v-for="i in versions">
+            <p class="timeArea">
+              <span class="title">上传时间：</span>
+              <span class="title time">{{timestamp2Date(i.uploadTime)}}</span>
+            </p>
+            <div class="versions">
+              <span class="title">版本号：</span>
+              <span class="title time">{{i.version}}</span>
+            </div>
+            <div class="operating">
+              <span class="title">操作：</span>
+              <span @click="view(i)"><line-button><div>查看</div></line-button></span>
+              <span><line-button style="color: #0acffe"><div>下载</div></line-button></span>
+            </div>
+            <el-divider/>
           </div>
-          <div class="operating">
-            <span class="title">操作：</span>
-            <span @click="view(i)"><line-button><div>查看</div></line-button></span>
-            <span><line-button style="color: #0acffe"><div>下载</div></line-button></span>
-          </div>
-          <el-divider/>
-        </div>
+        </el-scrollbar>
       </div>
 
   </el-card>
@@ -87,14 +89,14 @@
 .logContainer .logArea{
   overflow: auto;
   height: 100%;
+  max-height: 470px;
 }
-
 .logContainer .item .title{
   font-size: 16px;
 }
 
 .logContainer .item .time{
-  color:#87DE75;
+  color: #d2ce5e;
 }
 
 

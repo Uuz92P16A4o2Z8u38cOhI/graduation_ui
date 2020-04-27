@@ -6,8 +6,9 @@
         <div class="title">{{collapse?'':appName}}</div>
       </div>
       <!-- 导航菜单 -->
-      <el-menu ref="navmenu" default-active="1" :class="collapse?'menu-bar-collapse-width':'menu-bar-width'" :style="{'background-color': themeColor}"
-        :collapse="collapse" :collapse-transition="false" :unique-opened="true"  >
+      <el-menu ref="navmenu" default-active="1" :class="collapse?'menu-bar-collapse-width':'menu-bar-width'"
+               :background-color="themeColor" text-color="#ffffff" active-text-color="#ffd04b"
+               :collapse="collapse" :collapse-transition="false" :unique-opened="true"  >
         <!-- 导航菜单树组件，动态加载菜单 -->
         <menu-tree v-for="item in navTree" :key="item.id" :menu="item" />
       </el-menu>

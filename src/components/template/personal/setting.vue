@@ -6,16 +6,37 @@
           <div class="avatarUp">
             <span style="font-size: 18px">上传头像</span>
             <el-upload
+              ref="upload"
               class="avatar-uploader"
-              :action="this.global.baseUrl + 'FASTDFS/api/fastdfs/upload/upload'"
+              :action="this.global.baseUrl + 'UI/api/ui/basicInfo/uploadAvatar/' + this.$store.state.user.userId"
               name="dropFile"
+              :limit="1"
+              :auto-upload="false"
               :show-file-list="false"
+              :on-preview="handlePictureCardPreview"
               :on-success="handleAvatarSuccess"
               :before-upload="beforeAvatarUpload">
-              <img v-if="avatar" :src="avatar" class="avatar">
+              <img v-if="imageUrl" :src="imageUrl" class="avatar" >
               <i v-else class="el-icon-plus avatar-uploader-icon"/>
+              <div slot="file" slot-scope="{file}">
+                <img
+                  class="el-upload-list__item-thumbnail"
+                  :src="file.url" alt=""
+                >
+                <span class="el-upload-list__item-actions">
+                  <span
+                    class="el-upload-list__item-preview"
+                    @click="handlePictureCardPreview(file)"
+                  >
+                    <i class="el-icon-zoom-in"></i>
+                  </span>
+                </span>
+              </div>
             </el-upload>
-            <!--<el-button type="primary" size="small" @click="submitUpload">确定上传</el-button>-->
+            <el-dialog :visible.sync="dialogVisible">
+              <img width="100%" :src="dialogImageUrl" alt="">
+            </el-dialog>
+            <el-button type="primary" size="small" @click="submitUpload">确定上传</el-button>
           </div>
 
           <div class="upDown">
@@ -59,6 +80,8 @@
       return {
         activeName: 'info',
         imageUrl: '',
+        dialogImageUrl: '',
+        dialogVisible: false,
 
         upDownData:[{title : "基础信息", type : "BasicInfo"},{title : "教育情况", type : "Education"},{title : "工作情况", type : "Work"},
           {title : "家庭情况", type : "Family"},{title : "教学活动", type : "Teaching"},{title : "科研活动", type : "Research"},{title : "获奖信息", type : "Awards"}],
@@ -81,6 +104,10 @@
       this.color = this.themeColor
     },
     methods: {
+      handlePictureCardPreview(file) {
+        this.dialogImageUrl = file.url;
+        this.dialogVisible = true;
+      },
       handleClose(done) {
         this.$confirm('确认关闭？')
           .then(_ => {
@@ -89,11 +116,11 @@
           .catch(_ => {});
       },
       handleClick(tab, event) {
-        console.log(tab, event);
+        // console.log(tab, event);
       },
       handleAvatarSuccess(res, file) {
         this.imageUrl = URL.createObjectURL(file.raw);
-        console.log(this.imageUrl)
+        this.$message.success("头像上传成功")
       },
       beforeAvatarUpload(file) {
         // const isJPG = file.type === 'image/jpeg';
@@ -107,9 +134,9 @@
         return isLt2M;
       },
       submitUpload(){
-
+        this.$refs.upload.submit()
       },
-      uploadFile(){
+      /*uploadFile(){
         this.$http.post(this.global.baseUrl + 'FASTDFS/api/fastdfs/upload/upload', {
           dropFile,
         },{
@@ -119,7 +146,7 @@
         }).then((res)=>{
           console.log(res.data)
         }).catch(_ => {});
-      },
+      },*/
       //上传excel
       uploadExcel(type,dropFile){
         this.$http.post(this.global.baseUrl + 'UI/api/ui/easyPoi/importExcel/' + type +"/" + this.$store.state.user.userId, {

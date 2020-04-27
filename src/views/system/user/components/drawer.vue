@@ -7,21 +7,22 @@
             <template v-slot:name>更新用户角色</template>
           </button-dialog>
         </div>
-
-        <el-card class="card">
-          <el-tree :data="adminData" show-checkbox default-expand-all node-key="id"
-                   :default-checked-keys="checked" ref="adminTree" highlight-current :props="defaultProps"
-                   empty-text="没有可展示角色">
-          </el-tree>
-        </el-card>
-        <el-card class="card">
-          <el-tree :data="webData" show-checkbox default-expand-all node-key="id"
-                   :default-checked-keys="checked" ref="webTree" highlight-current :props="defaultProps"
-                   empty-text="没有可展示角色">
-          </el-tree>
-        </el-card>
-
-
+        <el-scrollbar>
+          <div style="max-height: 740px">
+            <el-card class="card">
+              <el-tree :data="adminData" show-checkbox default-expand-all node-key="id"
+                       :default-checked-keys="checked" ref="adminTree" highlight-current :props="defaultProps"
+                       empty-text="没有可展示角色">
+              </el-tree>
+            </el-card>
+            <el-card class="card">
+              <el-tree :data="webData" show-checkbox default-expand-all node-key="id"
+                       :default-checked-keys="checked" ref="webTree" highlight-current :props="defaultProps"
+                       empty-text="没有可展示角色">
+              </el-tree>
+            </el-card>
+          </div>
+        </el-scrollbar>
       </el-drawer>
     </div>
 </template>
