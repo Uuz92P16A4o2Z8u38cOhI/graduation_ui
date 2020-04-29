@@ -16,7 +16,7 @@
     </div>
 
     <div class="block">
-      <span class="title">论文成果</span>
+      <span class="title">科研论文</span>
       <div v-if="thesisResults == null || thesisResults.length == 0" style="text-align: center"> <span >暂无数据</span></div>
       <div>
         <ol class="items">

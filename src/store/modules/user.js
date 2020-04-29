@@ -7,6 +7,7 @@ export default {
       userId: '', //用户id
       userName:'',
       schoolIcon:'',
+      schoolName: '',
       blog : '',
       avatar :'',
       loginTime : '',
@@ -27,6 +28,9 @@ export default {
       },
       setSchoolIcon(state,schoolIcon){
         state.schoolIcon = schoolIcon;
+      },
+      setSchoolName(state,schoolName){
+        state.schoolName = schoolName;
       },
       setBlog(state,blog){
         state.blog = blog;

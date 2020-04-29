@@ -29,6 +29,9 @@ import Role from '@/views/system/role/index'
 import Permission from '@/views/system/permission/index'
 import Dict from '@/views/system/dictionary/index'
 import Log from '@/views/system/logging/index'
+//个人信息管理
+import Versions from '@/views/informationMaintenance/versions/index'
+import Info from '@/views/informationMaintenance/info/index'
 
 Vue.use(Router);
 
@@ -111,6 +114,28 @@ const router = new Router({
           }
         }
       ]
+    },
+    {
+      path: '/infoMaintenance',
+      name: '个人信息管理',
+      component: index,
+      children: [
+        {
+          path: 'info',
+          name: '信息管理',
+          component: Info,
+          meta: {
+            icon: 'el-icon-c-scale-to-original',
+          }
+        },
+        {
+          path: 'versions',
+          name: '版本管理',
+          component: Versions,
+          meta: {
+            icon: 'el-icon-edit-outline',
+          }
+        }]
     },
     {
       path: '/sys',

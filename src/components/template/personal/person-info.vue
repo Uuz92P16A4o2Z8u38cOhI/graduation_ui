@@ -13,8 +13,8 @@
         <span class="sender"> {{userName}} </span>
       </div>
       <div class="registe-info">
-          <span class="registe-info">
-            <li class="el-icon-timer"/>
+          <span class="registe-info" v-if="isNaN(loginTime)">
+            <li class="el-icon-timer" />
             {{timestamp2Date(loginTime)}}
           </span>
       </div>

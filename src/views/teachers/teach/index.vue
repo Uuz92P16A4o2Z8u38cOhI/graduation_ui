@@ -30,8 +30,16 @@
                       'border-bottom': '1px rgb(103, 194, 58) solid','background-color': '#d9f3fa'}" empty-text="暂无数据">
               <el-table-column prop="courseName" label="课程名称" align='center' sortable/>
               <el-table-column prop="schoolYear" label="学年" align='center' sortable/>
-              <el-table-column prop="semester" label="学期" align='center' sortable/>
-              <el-table-column prop="hours" label="学时" align='center' sortable/>
+              <el-table-column prop="semester" :formatter="term" label="学期" align='center' sortable/>
+              <el-table-column label="学时" align='center' >
+                <el-table-column  label="总学时" align='center' width="120" sortable>
+                  <template slot-scope="scope">
+                    <span style="color: red">{{scope.row.theoryHours + scope.row.practiceHours}}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column prop="theoryHours" label="理论学时" align='center' width="120" sortable/>
+                <el-table-column prop="practiceHours" label="实践学时" align='center' width="120" sortable/>
+              </el-table-column>
               <el-table-column prop="credit" label="学分" align='center' sortable/>
               <el-table-column prop="courseNum" label="课程号" align='center' sortable/>
             </el-table>
@@ -44,8 +52,16 @@
                       'border-bottom': '1px rgb(103, 194, 58) solid','background-color': '#d9f3fa'}" empty-text="暂无数据">
             <el-table-column prop="courseName" label="课程名称" align='center' sortable/>
             <el-table-column prop="schoolYear" label="学年" align='center' sortable/>
-            <el-table-column prop="semester" label="学期" align='center' sortable/>
-            <el-table-column prop="hours" label="学时" align='center' sortable/>
+            <el-table-column prop="semester" label="学期"  :formatter="term" align='center' sortable/>
+            <el-table-column label="学时" align='center' >
+              <el-table-column  label="总学时" align='center' width="120" sortable>
+                <template slot-scope="scope">
+                  <span style="color: red">{{scope.row.theoryHours + scope.row.practiceHours}}</span>
+                </template>
+              </el-table-column>
+              <el-table-column prop="theoryHours" label="理论学时" align='center' width="120" sortable/>
+              <el-table-column prop="practiceHours" label="实践学时" align='center' width="120" sortable/>
+            </el-table-column>
             <el-table-column prop="credit" label="学分" align='center' sortable/>
             <el-table-column prop="courseNum" label="课程号" align='center' sortable/>
           </el-table>
@@ -94,6 +110,13 @@
           this.resources = data.resources
           this.achievements = data.achievements
         })
+      },
+      term(val){
+        if (val.semester === 1){
+          return "第一学期"
+        }else {
+          return "第二学期"
+        }
       }
     }
   }

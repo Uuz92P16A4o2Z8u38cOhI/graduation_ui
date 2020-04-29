@@ -7,7 +7,7 @@
         <el-col :span="12">
           <el-card shadow="hover" class="mgb20" style="">
             <div slot="header" class=" header-title">
-              <span class="title">学术荣誉</span>
+              <span class="title">教学获奖</span>
             </div>
             <div v-if=" academicHonorsList == null || academicHonorsList.length == 0" style="text-align: center"> <span >暂无数据</span></div>
             <el-collapse v-model="activeName" accordion>
@@ -20,7 +20,7 @@
         <el-col :span="12">
           <el-card shadow="hover" class="mgb20" style="">
             <div slot="header" class="clearfix header-title">
-              <span class="title">科研奖励</span>
+              <span class="title">科研获奖</span>
             </div>
             <div>
               <div v-if=" scientificAwardsList == null || scientificAwardsList.length == 0" style="text-align: center"> <span >暂无数据</span></div>

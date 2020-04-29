@@ -51,7 +51,7 @@ export default {
         // window.localStorage.setItem('userId',userInfo.id)
       }).catch ((err)=>{
         console.log(err)
-        this.$message.error('用户身份错误 请重新登陆！')
+        this.$message.error('用户身份过期 请重新登陆！')
         router.push('/login')
       })
     },

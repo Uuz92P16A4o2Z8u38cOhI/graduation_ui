@@ -18,7 +18,7 @@
         </el-table-column>
         <el-table-column prop="updated" label="更新时间" align='center' :formatter="formatUpdateDate" sortable show-overflow-tooltip>
         </el-table-column>
-        <el-table-column prop="type" label="类型" align='center'  sortable show-overflow-tooltip>
+        <el-table-column prop="type" label="类型" :formatter="roleType" align='center'  sortable show-overflow-tooltip>
         </el-table-column>
         <el-table-column label="资源管理" align='center' width="100px">
           <template slot-scope="scope">
@@ -211,6 +211,13 @@
         let s = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds();
         return Y + M + D + h + m + s;
       },
+      roleType(val){
+        if (val.type === 0){
+          return "后端资源角色"
+        }else if(val.type === 1){
+          return "前端目录角色"
+        }
+      }
     }
   }
 </script>

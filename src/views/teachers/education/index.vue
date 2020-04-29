@@ -15,9 +15,11 @@
                   <el-collapse v-model="activeName" accordion>
                     <el-collapse-item  :name="item.id" class="collapse">
                       <template slot="title">
-                        {{item.schoole}} -- {{item.subject}}
+                        <i class="el-icon-school" style="color: #0acffe"></i> {{item.schoole}}
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <i class="el-icon-guide" style="color: green"></i>{{item.subject}}
                       </template>
-                      <div >起讫时间                             <span class="details">{{item.startTime}} -- {{item.endTime}}</span></div>
+                      <div >起讫时间                             <span class="details">{{timestamp2Date(item.startTime)}} -- {{timestamp2Date(item.endTime)}}</span></div>
                       <div style="background: #E9E9E9;">所学专业 <span class="details">{{item.subject}}</span></div>
                       <div >学习机构                             <span class="details">{{item.schoole}}</span></div>
                       <div style="background: #E9E9E9;">学历     <span class="details" style="margin-left: 75px">{{item.degree}}</span></div>
@@ -35,23 +37,78 @@
         </el-col>
       </el-row>
 
+      <el-dialog title="编辑受教育情况" :visible.sync="edit" width="70%" :before-close="handleClose">
+        <el-table ref="familyInfo" :data="familyInfo"  @selection-change="handleSelectionChange" v-loading="loading" empty-text="暂无数据"
+                  :header-cell-style="{'color': 'rgb(34,247,237)','border-bottom': '1px rgb(103, 194, 58) solid','background-color': '#c698fa','font-size': '20px'}">
+          <el-table-column  label="起讫时间" width="320" align="center">
+            <template slot-scope="scope">
+              <!--<el-date-picker v-model="scope.row.startTime+','+scope.row.endTime" type="monthrange" range-separator="至" start-placeholder="开始月份" end-placeholder="结束月份" :default-time="['00:00:00', '23:59:59']">
+              </el-date-picker>-->
+              <el-date-picker v-model="scope.row.startTime" type="month" placeholder="开始月份" style="width: 120px !important;">
+              </el-date-picker>
+              至
+              <el-date-picker v-model="scope.row.endTime" type="month" placeholder="结束月份"  style="width: 120px !important;">
+              </el-date-picker>
+            </template>
+          </el-table-column>
+          <el-table-column prop="schoole" label="学习机构" align="center">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.schoole"></el-input>
+            </template>
+          </el-table-column>
+          <el-table-column prop="subject" label="所学专业" align="center">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.subject"></el-input>
+            </template>
+          </el-table-column>
+          <el-table-column prop="degree" label="学历" align="center">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.degree"></el-input>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" align='center'>
+            <template slot-scope="scope">
+              <el-button size="mini" type="primary" icon="el-icon-edit" circle @click="handleEdit(scope.$index, scope.row)"></el-button>
+              <el-button size="mini" type="danger" icon="el-icon-delete" circle @click="handleDelete(scope.$index, scope.row)"></el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <div style="text-align: center">
+          <el-button size="mini" type="danger" icon="el-icon-plus" circle @click="handleInsert" style="float: left"></el-button>
+          <button-dialog @checkedRole="editInfo">
+            <template v-slot:title>确定修改教师受教育情况?</template>
+            <template v-slot:name>保存</template>
+          </button-dialog>
+        </div>
+      </el-dialog>
 
     </div>
+    <float-icons padding="10 10 60 10" class="icons-warp">
+      <div class="float">
+        <i class="el-icon-setting" @click="showEdit"></i>
+      </div>
+    </float-icons>
   </div>
 </template>
 
 <script>
+  import floatIcons from '../floatIcons'
   import {format} from '../../../utils/datetime'
   import list from "./components/logList";
   import linesButton from '@/components/template/hyl/button/linesButton'
+  import buttonDialog from '../../../components/template/hyl/button/buttonDialog'
   export default {
     name: 'education',
     components:{
       list,
       linesButton,
+      floatIcons,
+      buttonDialog,
     },
     data() {
       return {
+        loading: false,
+        edit:false,
         reverse: false,
         activeName: [0],
         familyInfo: [],
@@ -86,12 +143,43 @@
       timestamp2Date(timestamp) {
         var date = new Date(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
         var Y = date.getFullYear() + '-';
-        var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
-        var D = (date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate()) + ' ';
-        /*var h = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':';
+        var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1);
+        /*var D = (date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate()) + ' ';
+        var h = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':';
         var m = (date.getMinutes() <10 ? '0' + date.getMinutes() : date.getMinutes()) + ':';
         var s = (date.getSeconds() <10 ? '0' + date.getSeconds() : date.getSeconds());*/
-        return Y+M+D;
+        return Y+M;
+      },
+      handleClose(done) {
+        this.$confirm('确认关闭？')
+          .then(_ => {
+            done();
+          })
+          .catch(_ => {});
+      },
+      showEdit(){
+        this.edit = true
+      },
+      handleSelectionChange(val) {
+        this.multipleSelection = val;
+      },
+      showEdit(){
+        this.edit = true
+      },
+      editInfo(){
+        this.$message.success("修改了教师受教育情况！！")
+      },
+
+      //编辑
+      handleEdit(index, row) {
+        alert(row)
+      },
+      //删除
+      handleDelete(index, row) {
+        alert(row,index)
+      },
+      handleInsert() {
+        alert(1111)
       },
     }
   }
@@ -125,5 +213,17 @@
    margin: 30px 10px;
    background: #ffffff;
    border-radius: 3px;
+ }
+
+ .icons-warp{
+   cursor: pointer;
+   opacity: 0;
+ }
+ .icons-warp:hover{
+   opacity: 1;
+ }
+ .float i{
+   font-size: 40px;
+   background-color: rgba(0,0,0,0);
  }
 </style>
