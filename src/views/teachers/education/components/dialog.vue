@@ -3,16 +3,16 @@
     :close-on-press-escape='false' :modal-append-to-body="false" @close="closeDialog" width="30%">
     <div class="form">
       <el-form ref="form" :model="form" :rules="form_rules" v-loading="loading" label-width="120px" style="margin:10px;width:auto;">
-        <el-form-item prop='name' label="名称:">
+        <el-form-item prop='schoole' label="学习机构:">
           <el-input type="text" v-model="form.name" clearable></el-input>
         </el-form-item>
-        <el-form-item prop="enname" label="英文名称:">
+        <el-form-item prop="" label="所学专业:">
           <el-input v-model="form.enname" clearable></el-input>
         </el-form-item>
-        <el-form-item prop='description' label="备注:">
+        <el-form-item prop='description' label="学历:">
           <el-input v-model="form.description" type="textarea"></el-input>
         </el-form-item>
-        <el-form-item prop='type' label="类型:">
+        <el-form-item prop='type' label="起讫时间:">
           <el-select v-model="form.type" placeholder="请选择类型">
             <el-option label="资源角色" value="0"></el-option>
             <el-option label="菜单角色" value="1"></el-option>
@@ -38,15 +38,7 @@
       return {
         loading: false,
         isVisible: false,
-        form: {
-          id : '',
-          name: '',
-          enname: '',
-          description : '',
-          created : '',
-          updated : '',
-          type: '',
-        },
+        form: {},
 
         form_rules: {
           name   : [
@@ -85,7 +77,7 @@
         this.$refs[form].validate(async vaild =>{
           if (vaild){  //表单验证
             if(this.dialogInfo.type === 'edit'){  //编辑
-              this.$http.put(this.global.baseUrl + 'SYS/api/sys/role/updateRole',
+              this.$http.put(this.global.baseUrl + 'SYS/api/sys/role/updateRole1',
               this.form).then((res)=>{
                 if (res.data.code === 200){
                   this.$message.success(res.data.message)
@@ -100,7 +92,7 @@
               })
 
             }else{  //新增
-              this.$http.post(this.global.baseUrl + 'SYS/api/sys/role/insertRole',
+              this.$http.post(this.global.baseUrl + 'SYS/api/sys/role/insertRole1',
                 this.form).then((res)=>{
                   console.log(this.form)
                 if (res.data.code === 200) {

@@ -60,14 +60,22 @@
     </el-row>
 
     <div>
-      <el-dialog title="编辑工作情况" :visible.sync="edit" width="70%" :before-close="handleClose">
-        <div>
-            <span style="font-size: 18px">家庭人口</span>
-            <el-input-number v-model="familyBase.population" :min="1"  label="家庭人口"></el-input-number>
-            <span style="font-size: 18px">家庭地址</span>
-            <el-input v-model="familyBase.address"></el-input>
+      <el-dialog title="编辑家庭情况" :visible.sync="edit" width="70%" :before-close="handleClose">
+        <div style="text-align: center;display: flex" >
+          <el-form ref="familyBase" :model="familyBase" label-width="80px">
+            <el-form-item prop="population" label="家庭人口" style="margin: 0 10px">
+              <el-input-number v-model="familyBase.population" :min="1"  label="家庭人口"></el-input-number>
+            </el-form-item>
+            <el-form-item prop="address" label="家庭地址">
+              <el-input v-model="familyBase.address"></el-input>
+            </el-form-item>
+          </el-form>
+          <button-dialog @checkedRole="editInfo" style="margin: 10px">
+            <template v-slot:title>确定修改教师家庭情况?</template>
+            <template v-slot:name>保存</template>
+          </button-dialog>
         </div>
-        <el-table ref="members" :data="members"  @selection-change="handleSelectionChange" v-loading="loading" empty-text="暂无数据"
+        <el-table ref="members" :data="members"   v-loading="loading" empty-text="暂无数据"
                   :header-cell-style="{'color': 'rgb(247,50,98)','border-bottom': '1px rgb(103, 194, 58) solid','background-color': '#67fab4','font-size': '20px'}">
           <el-table-column prop="name"  label="姓名" align="center">
             <template slot-scope="scope">
@@ -84,7 +92,8 @@
           </el-table-column>
           <el-table-column prop="birth" label="出生日期" align="center">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.birth"></el-input>
+<!--              <el-input v-model="scope.row.birth"></el-input>-->
+              <el-date-picker v-model="scope.row.birth" type="date"  placeholder="选择日期" style="width: 100px"></el-date-picker>
             </template>
           </el-table-column>
           <el-table-column prop="job" label="工作单位" align="center">
@@ -125,11 +134,49 @@
         </el-table>
         <div style="text-align: center">
           <el-button size="mini" type="danger" icon="el-icon-plus" circle @click="handleInsert" style="float: left"></el-button>
-          <button-dialog @checkedRole="editInfo">
-            <template v-slot:title>确定修改教师工作情况?</template>
-            <template v-slot:name>保存</template>
-          </button-dialog>
         </div>
+
+        <el-dialog width="40%" title="添加" :visible.sync="innerVisible" append-to-body :before-close="handleClose">
+          <div class="form">
+            <el-form ref="members" :model="newMembers" v-loading="loading" label-width="120px" >
+              <el-form-item prop="name" label="姓名:">
+                <el-input v-model="newMembers.name" clearable></el-input>
+              </el-form-item>
+              <el-form-item prop="sex" label="性别:">
+                <el-select v-model="newMembers.sex" placeholder="请选择">
+                  <el-option  label="女" value="0"></el-option>
+                  <el-option  label="男" value="1"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item prop="birth" label="出生日期:">
+                <el-date-picker v-model="newMembers.birth" type="date"  placeholder="选择日期" ></el-date-picker>
+              </el-form-item>
+              <el-form-item prop='job' label="工作单位:">
+                <el-input v-model="newMembers.job" clearable></el-input>
+              </el-form-item>
+              <el-form-item prop='politicalStatus' label="政治面貌:">
+                <el-select v-model="newMembers.politicalStatus" placeholder="请选择">
+                  <el-option  label="无" value="0"></el-option>
+                  <el-option  label="团员" value="1"></el-option>
+                  <el-option  label="党员" value="2"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item prop='relation' label="关系:">
+                <el-input v-model="newMembers.relation"></el-input>
+              </el-form-item>
+              <el-form-item prop='email' label="邮箱:">
+                <el-input v-model="newMembers.email"></el-input>
+              </el-form-item>
+              <el-form-item prop='phone' label="电话:">
+                <el-input v-model="newMembers.phone"></el-input>
+              </el-form-item>
+
+              <el-form-item  class="bottom_right">
+                <el-button type="primary" @click='insertItem'>提  交</el-button>
+              </el-form-item>
+            </el-form>
+          </div>
+        </el-dialog>
       </el-dialog>
     </div>
 
@@ -154,10 +201,12 @@
     },
     data(){
       return{
+        innerVisible: false,
         loading: false,
         edit:false,
         familyBase: {},
         members:[],
+        newMembers:{},
       }
     },
     mounted() {
@@ -167,10 +216,47 @@
       getInitInfo(){
         this.$http.post(this.global.baseUrl + 'UI/api/ui/family/initInfo/' + this.$store.state.user.userId).then(res=>{
           // console.log(res.data.data)
-          this.familyBase = res.data.data.familyBase
-          this.members = res.data.data.members
+          if (res.data.data != null){
+            this.familyBase = res.data.data.familyBase
+            this.members = res.data.data.members
+          }else {
+            this.$message.warning("您未设置教师家庭情况信息")
+          }
+        }).catch(err=>{
+          this.$message.error("教师家庭情况信息获取失败")
         })
       },
+      editInfo(){
+        this.$http.post(this.global.baseUrl + 'UI/api/ui/family/insertOrUpdateBase/' + this.$store.state.user.userId,
+        this.familyBase).then(res=>{
+          this.$message.info(res.data.message)
+        })
+      },
+      insertItem(){
+        this.newMembers.birth = this.timestamp2Date(this.newMembers.birth)
+        this.$http.post(this.global.baseUrl + 'UI/api/ui/family/insertItem/' + this.familyBase.id,
+          this.newMembers).then(res=>{
+          this.getInitInfo()
+          this.$message.info(res.data.message)
+        })
+      },
+      //编辑
+      handleEdit(index, row) {
+        row.birth = this.timestamp2Date(row.birth)
+        this.$http.post(this.global.baseUrl + 'UI/api/ui/family/updateItem',
+          row).then(res=>{
+          this.getInitInfo()
+          this.$message.info(res.data.message)
+        })
+      },
+      //删除
+      handleDelete(index, row) {
+        this.$http.delete(this.global.baseUrl + 'UI/api/ui/family/deleteItem/' + row.id).then(res=>{
+          this.getInitInfo()
+          this.$message.info(res.data.message)
+        })
+      },
+
 
       //时间格式化
       timestamp2Date(timestamp) {
@@ -193,25 +279,8 @@
       showEdit(){
         this.edit = true
       },
-      handleSelectionChange(val) {
-        this.multipleSelection = val;
-      },
-      showEdit(){
-        this.edit = true
-      },
-      editInfo(){
-        this.$message.success("修改了教师工作情况！！")
-      },
-      //编辑
-      handleEdit(index, row) {
-        alert(row)
-      },
-      //删除
-      handleDelete(index, row) {
-        alert(row,index)
-      },
       handleInsert() {
-        alert(1111)
+        this.innerVisible = true
       },
     }
 

@@ -69,12 +69,16 @@ export default {
     },
     init(){
       this.$http.get(this.global.baseUrl+'UI/api/ui/basicInfo/queryInitInfo/'+this.$store.state.user.userId).then((res)=>{
-        this.$store.commit('setUserName', res.data.data.name)
-        this.$store.commit('setSchoolIcon', this.global.imgUrl + res.data.data.icon)
-        this.$store.commit('setSchoolName', res.data.data.school)
-        this.$store.commit('setBlog', res.data.data.blog)
-        this.$store.commit('setAvatar', this.global.imgUrl + res.data.data.avatatUrl)
-        this.$store.commit('setNickName', res.data.data.nickName)
+        if (res.data.data != null){
+          this.$store.commit('setUserName', res.data.data.name)
+          this.$store.commit('setSchoolIcon', this.global.imgUrl + res.data.data.icon)
+          this.$store.commit('setSchoolName', res.data.data.school)
+          this.$store.commit('setBlog', res.data.data.blog)
+          this.$store.commit('setAvatar', this.global.imgUrl + res.data.data.avatatUrl)
+          this.$store.commit('setNickName', res.data.data.nickName)
+        }else {
+          this.$message.warning(res.data.message)
+        }
       }).catch((err)=>{
         console.log(err)
         this.$message.error('信息初始化失败！')

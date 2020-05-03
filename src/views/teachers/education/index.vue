@@ -38,13 +38,13 @@
       </el-row>
 
       <el-dialog title="编辑受教育情况" :visible.sync="edit" width="70%" :before-close="handleClose">
-        <el-table ref="familyInfo" :data="familyInfo"  @selection-change="handleSelectionChange" v-loading="loading" empty-text="暂无数据"
+        <el-table ref="familyInfo" :data="familyInfo"  v-loading="loading" empty-text="暂无数据"  :highlight-current-row="true"
                   :header-cell-style="{'color': 'rgb(34,247,237)','border-bottom': '1px rgb(103, 194, 58) solid','background-color': '#c698fa','font-size': '20px'}">
           <el-table-column  label="起讫时间" width="320" align="center">
             <template slot-scope="scope">
               <!--<el-date-picker v-model="scope.row.startTime+','+scope.row.endTime" type="monthrange" range-separator="至" start-placeholder="开始月份" end-placeholder="结束月份" :default-time="['00:00:00', '23:59:59']">
               </el-date-picker>-->
-              <el-date-picker v-model="scope.row.startTime" type="month" placeholder="开始月份" style="width: 120px !important;">
+              <el-date-picker :disabled="scope.row.check" v-model="scope.row.startTime" type="month" placeholder="开始月份" style="width: 120px !important;">
               </el-date-picker>
               至
               <el-date-picker v-model="scope.row.endTime" type="month" placeholder="结束月份"  style="width: 120px !important;">
@@ -68,18 +68,46 @@
           </el-table-column>
           <el-table-column label="操作" align='center'>
             <template slot-scope="scope">
-              <el-button size="mini" type="primary" icon="el-icon-edit" circle @click="handleEdit(scope.$index, scope.row)"></el-button>
+              <el-button size="mini" type="primary" icon="el-icon-check" circle @click="handleEdit(scope.$index, scope.row)"></el-button>
               <el-button size="mini" type="danger" icon="el-icon-delete" circle @click="handleDelete(scope.$index, scope.row)"></el-button>
             </template>
           </el-table-column>
         </el-table>
         <div style="text-align: center">
           <el-button size="mini" type="danger" icon="el-icon-plus" circle @click="handleInsert" style="float: left"></el-button>
-          <button-dialog @checkedRole="editInfo">
+          <!--<button-dialog @checkedRole="editInfo">
             <template v-slot:title>确定修改教师受教育情况?</template>
             <template v-slot:name>保存</template>
-          </button-dialog>
+          </button-dialog>-->
         </div>
+
+        <el-dialog width="30%" title="添加" :visible.sync="innerVisible" append-to-body :before-close="handleClose">
+          <div class="form">
+            <el-form ref="form" :model="form" v-loading="loading" label-width="120px" style="margin:10px;width:auto;">
+              <el-form-item label="起讫时间:">
+                <el-date-picker  v-model="form.startTime" type="month" placeholder="开始月份" style="width: 120px !important;">
+                </el-date-picker>
+                至
+                <el-date-picker v-model="form.endTime" type="month" placeholder="结束月份"  style="width: 120px !important;">
+                </el-date-picker>
+              </el-form-item>
+
+              <el-form-item prop="schoole" label="学习机构:">
+                <el-input v-model="form.schoole" clearable></el-input>
+              </el-form-item>
+              <el-form-item prop='subject' label="所学专业:">
+                <el-input v-model="form.subject" clearable></el-input>
+              </el-form-item>
+              <el-form-item prop='degree' label="学历:">
+                <el-input v-model="form.degree" clearable></el-input>
+              </el-form-item>
+
+              <el-form-item  class="bottom_right">
+                <el-button type="primary" @click='insertItem'>提  交</el-button>
+              </el-form-item>
+            </el-form>
+          </div>
+        </el-dialog>
       </el-dialog>
 
     </div>
@@ -93,7 +121,6 @@
 
 <script>
   import floatIcons from '../floatIcons'
-  import {format} from '../../../utils/datetime'
   import list from "./components/logList";
   import linesButton from '@/components/template/hyl/button/linesButton'
   import buttonDialog from '../../../components/template/hyl/button/buttonDialog'
@@ -107,12 +134,14 @@
     },
     data() {
       return {
+        innerVisible: false,
         loading: false,
         edit:false,
         reverse: false,
         activeName: [0],
         familyInfo: [],
         version:'',
+        form: {},
       };
     },
     mounted() {
@@ -121,9 +150,40 @@
     methods : {
       getInitInfo(){
         this.$http.get(this.global.baseUrl + 'UI/api/ui/education/initInfo/' + this.$store.state.user.userId).then((res)=>{
-          this.familyInfo = res.data.data
-          // console.log(res.data.data)
-
+          if (res.data.data != null){
+            this.familyInfo = res.data.data
+          }else {
+            this.familyInfo = []
+            this.$message.warning("您未设置教师受教育信息")
+          }
+        }).catch(err=>{
+          this.$message.error("教师受教育信息获取失败")
+        })
+      },
+      insertItem(){
+        this.form.startTime = this.timestampDate(this.form.startTime)
+        this.form.endTime = this.timestampDate(this.form.endTime)
+        this.$http.post(this.global.baseUrl + 'UI/api/ui/education/insertItem/' + this.$store.state.user.userId,
+        this.form).then(res=>{
+          this.getInitInfo()
+          this.$message.info(res.data.message)
+        })
+      },
+      //编辑
+      handleEdit(index, row) {
+        row.startTime = this.timestampDate(row.startTime)
+        row.endTime = this.timestampDate(row.endTime)
+        this.$http.post(this.global.baseUrl + 'UI/api/ui/education/updateItem',
+          row).then(res=>{
+          this.getInitInfo()
+          this.$message.info(res.data.message)
+        })
+      },
+      //删除
+      handleDelete(index, row) {
+        this.$http.delete(this.global.baseUrl + 'UI/api/ui/education/deleteItem/' + row.id).then(res=>{
+          this.getInitInfo()
+          this.$message.info(res.data.message)
         })
       },
       getOneVersion(){
@@ -144,11 +204,15 @@
         var date = new Date(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
         var Y = date.getFullYear() + '-';
         var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1);
-        /*var D = (date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate()) + ' ';
-        var h = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':';
-        var m = (date.getMinutes() <10 ? '0' + date.getMinutes() : date.getMinutes()) + ':';
-        var s = (date.getSeconds() <10 ? '0' + date.getSeconds() : date.getSeconds());*/
         return Y+M;
+      },
+      //时间格式化
+      timestampDate(timestamp) {
+        var date = new Date(timestamp)//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+        var Y = date.getFullYear() + '-'
+        var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-'
+        var D = (date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate()) + ' '
+        return Y + M + D
       },
       handleClose(done) {
         this.$confirm('确认关闭？')
@@ -160,26 +224,12 @@
       showEdit(){
         this.edit = true
       },
-      handleSelectionChange(val) {
-        this.multipleSelection = val;
-      },
-      showEdit(){
-        this.edit = true
-      },
       editInfo(){
         this.$message.success("修改了教师受教育情况！！")
       },
 
-      //编辑
-      handleEdit(index, row) {
-        alert(row)
-      },
-      //删除
-      handleDelete(index, row) {
-        alert(row,index)
-      },
       handleInsert() {
-        alert(1111)
+        this.innerVisible = true
       },
     }
   }

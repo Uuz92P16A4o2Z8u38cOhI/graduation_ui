@@ -77,7 +77,12 @@ export default {
     },*/
     schoolInfo(){
       this.$http.post(this.global.baseUrl + 'UI/api/ui/basicInfo/querySchoolInfo/' + this.$store.state.user.userId).then(res=>{
-        this.$store.commit('setSchoolIcon', this.global.imgUrl + res.data.data.icon)
+        if (res.data.data != null){
+          this.$store.commit('setSchoolIcon', this.global.imgUrl + res.data.data.icon)
+        }else {
+          this.$message.warning(res.data.message)
+        }
+
       }).catch(err=>{
         console.log(err);
         this.$message.error('学校信息获取失败')

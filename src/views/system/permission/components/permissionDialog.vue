@@ -1,6 +1,6 @@
 <template>
   <el-dialog :visible.sync="isVisible" :title="dialogInfo.title" :close-on-click-modal='false'
-    :close-on-press-escape='false' :modal-append-to-body="false" @close="closeDialog">
+    :close-on-press-escape='false' :modal-append-to-body="false" @close="closeDialog" width="30%">
     <div class="form">
       <el-form ref="form" :model="form" :rules="form_rules" v-loading="loading" label-width="120px" style="margin:10px;width:auto;">
         <el-form-item prop='name' label="名称:">

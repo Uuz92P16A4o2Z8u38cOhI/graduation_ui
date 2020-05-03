@@ -200,7 +200,7 @@ export default {
     },
     submitPasswordForm(formName) {
       this.loading = true
-        this.$refs[formName].validate((valid) => {
+      this.$refs[formName].validate((valid) => {
         if (valid) {
           this.$http.post(this.global.baseUrl + 'SYS/api/sys/user/updatePasswordByEmail', this.pwdForm).then((res)=>{
             console.log(res)

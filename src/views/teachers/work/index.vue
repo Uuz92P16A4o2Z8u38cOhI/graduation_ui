@@ -38,7 +38,7 @@
       </el-row>
 
       <el-dialog title="编辑工作情况" :visible.sync="edit" width="70%" :before-close="handleClose">
-        <el-table ref="workInfo" :data="workInfo"  @selection-change="handleSelectionChange" v-loading="loading" empty-text="暂无数据"
+        <el-table ref="workInfo" :data="workInfo" v-loading="loading" empty-text="暂无数据"
                   :header-cell-style="{'color': 'rgb(17,247,41)','border-bottom': '1px rgb(103, 194, 58) solid','background-color': '#faea54','font-size': '20px'}">
           <el-table-column  label="起讫时间" width="320" align="center">
             <template slot-scope="scope">
@@ -73,18 +73,49 @@
           </el-table-column>
           <el-table-column label="操作" align='center'>
             <template slot-scope="scope">
-              <el-button size="mini" type="primary" icon="el-icon-edit" circle @click="handleEdit(scope.$index, scope.row)"></el-button>
+              <el-button size="mini" type="primary" icon="el-icon-check" circle @click="handleEdit(scope.$index, scope.row)"></el-button>
               <el-button size="mini" type="danger" icon="el-icon-delete" circle @click="handleDelete(scope.$index, scope.row)"></el-button>
             </template>
           </el-table-column>
         </el-table>
         <div style="text-align: center">
           <el-button size="mini" type="danger" icon="el-icon-plus" circle @click="handleInsert" style="float: left"></el-button>
-          <button-dialog @checkedRole="editInfo">
+          <!--<button-dialog @checkedRole="editInfo">
             <template v-slot:title>确定修改教师工作情况?</template>
             <template v-slot:name>保存</template>
-          </button-dialog>
+          </button-dialog>-->
         </div>
+
+        <el-dialog width="30%" title="添加" :visible.sync="innerVisible" append-to-body :before-close="handleClose">
+          <div class="form">
+            <el-form ref="form" :model="form" v-loading="loading" label-width="120px" style="margin:10px;width:auto;">
+              <el-form-item label="起讫时间:">
+                <el-date-picker :disabled="form.check" v-model="form.startTime" type="month" placeholder="开始月份" style="width: 120px !important;">
+                </el-date-picker>
+                至
+                <el-date-picker v-model="form.endTime" type="month" placeholder="结束月份"  style="width: 120px !important;">
+                </el-date-picker>
+              </el-form-item>
+
+              <el-form-item prop="workUnit" label="工作单位:">
+                <el-input v-model="form.workUnit" clearable></el-input>
+              </el-form-item>
+              <el-form-item prop='position' label="职位(职称):">
+                <el-input v-model="form.position" clearable></el-input>
+              </el-form-item>
+              <el-form-item prop='college' label="学院:">
+                <el-input v-model="form.college" clearable></el-input>
+              </el-form-item>
+              <el-form-item prop='subject' label="学科:">
+                <el-input v-model="form.subject" clearable></el-input>
+              </el-form-item>
+
+              <el-form-item  class="bottom_right">
+                <el-button type="primary" @click='insertItem'>提  交</el-button>
+              </el-form-item>
+            </el-form>
+          </div>
+        </el-dialog>
       </el-dialog>
     </div>
     <float-icons padding="10 10 60 10" class="icons-warp">
@@ -110,12 +141,14 @@
     },
     data() {
       return {
+        innerVisible: false,
         loading: false,
         edit:false,
         reverse: false,
         activeName: [1],
         workInfo: [],
         version:'',
+        form:{},
       };
     },
     mounted() {
@@ -124,11 +157,44 @@
     methods : {
       getInitInfo(){
         this.$http.get(this.global.baseUrl + 'UI/api/ui/work/initInfo/' + this.$store.state.user.userId).then((res)=>{
-          this.workInfo = res.data.data
-          // console.log(res.data.data)
-
+          if (res.data.data != null){
+            this.workInfo = res.data.data
+          }else {
+            this.workInfo = []
+            this.$message.warning("您未设置教师工作情况信息")
+          }
+        }).catch(err=>{
+          this.$message.error("教师工作情况信息获取失败")
         })
       },
+      insertItem(){
+        this.form.startTime = this.timestampDate(this.form.startTime)
+        this.form.endTime = this.timestampDate(this.form.endTime)
+        this.$http.post(this.global.baseUrl + 'UI/api/ui/work/insertItem/' + this.$store.state.user.userId,
+          this.form).then(res=>{
+          this.getInitInfo()
+          this.$message.info(res.data.message)
+        })
+      },
+      //编辑
+      handleEdit(index, row) {
+        row.startTime = this.timestampDate(row.startTime)
+        row.endTime = this.timestampDate(row.endTime)
+        this.$http.post(this.global.baseUrl + 'UI/api/ui/work/updateItem',
+          row).then(res=>{
+          this.getInitInfo()
+          this.$message.info(res.data.message)
+        })
+      },
+      //删除
+      handleDelete(index, row) {
+        this.$http.delete(this.global.baseUrl + 'UI/api/ui/work/deleteItem/' + row.id).then(res=>{
+          this.getInitInfo()
+          this.$message.info(res.data.message)
+        })
+      },
+
+
       getOneVersion(){
         this.$http.get(this.global.baseUrl + 'UI/api/ui/work/version/' + this.version.version + '/' + this.$store.state.user.userId).then(res=>{
           this.workInfo = res.data.data
@@ -149,11 +215,15 @@
         var date = new Date(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
         var Y = date.getFullYear() + '-';
         var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) ;
-        /*var D = (date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate()) + ' ';
-        var h = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':';
-        var m = (date.getMinutes() <10 ? '0' + date.getMinutes() : date.getMinutes()) + ':';
-        var s = (date.getSeconds() <10 ? '0' + date.getSeconds() : date.getSeconds());*/
         return Y+M;
+      },
+      //时间格式化
+      timestampDate(timestamp) {
+        var date = new Date(timestamp)//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+        var Y = date.getFullYear() + '-'
+        var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-'
+        var D = (date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate()) + ' '
+        return Y + M + D
       },
       handleClose(done) {
         this.$confirm('确认关闭？')
@@ -165,25 +235,11 @@
       showEdit(){
         this.edit = true
       },
-      handleSelectionChange(val) {
-        this.multipleSelection = val;
-      },
-      showEdit(){
-        this.edit = true
-      },
       editInfo(){
         this.$message.success("修改了教师工作情况！！")
       },
-      //编辑
-      handleEdit(index, row) {
-        alert(row)
-      },
-      //删除
-      handleDelete(index, row) {
-        alert(row,index)
-      },
       handleInsert() {
-        alert(1111)
+        this.innerVisible = true
       },
     }
   }

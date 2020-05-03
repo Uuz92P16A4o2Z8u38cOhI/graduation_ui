@@ -3,8 +3,12 @@
 }
 .login{
   height: 100%;
-  background-image: linear-gradient(-135deg, #c3ecff 0%, #76ffd4 100%);
+  background-image: linear-gradient(-135deg, #c3ecff 20%, #76ffd4 80%);
 }
+/*.login:hover{
+  animation: sum 8s infinite;
+}*/
+
 .title{
   font-size: 32px;
   font-weight: bold;
@@ -25,7 +29,7 @@
 }
 
 .login-box{
-  background-image: linear-gradient(-135deg, #9cf8ba 0%, #efffde 100%);
+  background-image: linear-gradient(-135deg, #d2f8c6 0%, #ecfdff 100%);
   position: absolute;
   top: 50%;
   left: 50%;
@@ -42,12 +46,37 @@
   margin-top: 10px;
   width: 30%;
   height: 45px;
-  background-image: linear-gradient(-135deg, #3bbad6 0%, #3f68af 100%);
+  background-image: linear-gradient(90deg, #03A9F4, #f441a5, #ffeb3b, #03A9F4);
+  background-size: 400%;
   border-radius: 6px;
   font-size: 20px !important;
   color: #000000;
   font-weight: bold;
+  z-index: 100;
 }
+/*.login-btn::before{
+  content: "";
+  position: absolute;
+  left: -5px;
+  top: -5px;
+  right: -5px;
+  bottom: -5px;
+  background-image: linear-gradient(90deg, #03A9F4, #f441a5, #ffeb3b, #03A9F4);
+  background-size: 400%;
+  border-radius: 6px;
+  filter: blur(20px);
+  z-index: 99;
+}*/
+.login-btn:hover{
+  animation: sum 8s infinite;
+}
+
+@keyframes sum {
+  100%{
+    background-position: -400% 0;
+  }
+}
+
 .login-checkbox{
   padding: 0 12px 10px;
 }
@@ -65,7 +94,7 @@
 
 .pwdarea{
   padding: 0;
-  background-image: linear-gradient(-135deg, #9cf8ba 0%, #efffde 100%);
+  background-image: linear-gradient(-135deg, #f8e7e7 0%, #fff9df 100%);
   border: solid #3bbad6;
   border-radius: 30px;
   box-shadow: #3bbad6 3px 6px;

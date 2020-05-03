@@ -1,6 +1,6 @@
 <template>
   <el-dialog :visible.sync="isVisible" :title="dialogInfo.title" :close-on-click-modal='false'
-    :close-on-press-escape='false' :modal-append-to-body="false" @close="closeDialog">
+    :close-on-press-escape='false' :modal-append-to-body="false" @close="closeDialog" width="30%">
     <div class="form">
       <el-form ref="form" :model="form" :rules="form_rules" v-loading="loading" label-width="120px" style="margin:10px;width:auto;">
         <el-form-item prop='username' label="用户名:">
@@ -110,7 +110,7 @@
           this.$emit('closeDialog');
       },
       onSubmit(form){
-          this.loading = true
+        this.loading = true
         this.$refs[form].validate(async vaild =>{
           if (vaild){  //表单验证
             if(this.dialogInfo.type === 'edit'){  //编辑
@@ -160,5 +160,9 @@
 <style scoped>
   .bottom_right{
     text-align: right;
+  }
+
+  .el-dialog{
+    border-radius: 50%;
   }
 </style>

@@ -4,7 +4,7 @@
       <el-col :span="8">
         <el-card shadow="hover" class="mgb20" style="">
           <div class="user-info">
-            <el-image :src="this.$store.state.user.avatar" class="user-avator" alt >
+            <el-image :src="this.$store.state.user.avatar" class="user-avator" alt>
               <div slot="error" class="image-slot">
                 <i class="el-icon-picture-outline" style="font-size: 120px"></i>
               </div>
@@ -82,7 +82,7 @@
             <div style="background: #000000">
             </div>
             <div class="personal-profile">
-                {{info.researchAreas}}
+              {{info.researchAreas}}
               <br/>
               <br/>
             </div>
@@ -93,29 +93,29 @@
 
     <el-dialog title="编辑基础信息" :visible.sync="edit" width="60%" :before-close="handleClose">
       <div class="editForm">
-        <el-form ref="info" :model="info" label-width="120px">
+        <el-form ref="info" :rules="infoRules" :model="info" v-loading="loading" label-width="120px">
           <el-row>
             <el-col :span="8">
-              <el-form-item label="姓名">
+              <el-form-item prop="name" label="姓名">
                 <el-input v-model="info.name"></el-input>
               </el-form-item>
               <el-form-item label="性别">
                 <el-radio-group v-model="info.sex">
-                  <el-radio label="男" value="1" style="color: #22f7ed"></el-radio>
-                  <el-radio label="女" value="0" style="color: #ff54f8"></el-radio>
+                  <el-radio label="1" value="1" style="color: #22f7ed">男</el-radio>
+                  <el-radio label="0" value="0" style="color: #ff54f8">女</el-radio>
                 </el-radio-group>
               </el-form-item>
               <el-form-item label="年龄">
-                <el-input-number v-model="info.age" :min="1"  label="年龄"></el-input-number>
+                <el-input-number v-model="info.age" :min="1" label="年龄"></el-input-number>
               </el-form-item>
               <el-form-item label="出生日期">
-                <el-date-picker v-model="info.birthday" type="date" placeholder="选择日期"></el-date-picker>
+                <el-date-picker v-model="info.birthday" type="date"  placeholder="选择日期"></el-date-picker>
               </el-form-item>
               <el-form-item label="政治面貌">
                 <el-select v-model="info.politicalStatus" placeholder="请选择">
-                  <el-option  label="无" value="0"></el-option>
-                  <el-option  label="团员" value="1"></el-option>
-                  <el-option  label="党员" value="2"></el-option>
+                  <el-option label="无" value="0"></el-option>
+                  <el-option label="团员" value="1"></el-option>
+                  <el-option label="党员" value="2"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="籍贯">
@@ -146,10 +146,10 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="电话">
+              <el-form-item prop="phone" label="电话">
                 <el-input v-model="info.phone"></el-input>
               </el-form-item>
-              <el-form-item label="邮箱">
+              <el-form-item prop="email" label="邮箱">
                 <el-input v-model="info.email"></el-input>
               </el-form-item>
               <el-form-item label="传真">
@@ -164,19 +164,24 @@
               <el-form-item label="微信">
                 <el-input v-model="info.wechat"></el-input>
               </el-form-item>
+              <el-form-item label="博客">
+                <el-input v-model="info.blog"></el-input>
+              </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-form-item label="个人简介">
-              <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容" v-model="info.introduction"></el-input>
+              <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容"
+                        v-model="info.introduction"></el-input>
             </el-form-item>
             <el-form-item label="研究领域">
-              <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容" v-model="info.researchAreas"></el-input>
+              <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容"
+                        v-model="info.researchAreas"></el-input>
             </el-form-item>
           </el-row>
         </el-form>
         <div style="text-align: center">
-          <button-dialog @checkedRole="editInfo">
+          <button-dialog @checkedRole="insertOrUpdate('info')">
             <template v-slot:title>确定修改教师基础信息?</template>
             <template v-slot:name>保存</template>
           </button-dialog>
@@ -195,65 +200,124 @@
   import floatIcons from '../floatIcons'
   import glassLightButton from '../../../components/template/h/glassLightButton'
   import buttonDialog from '../../../components/template/hyl/button/buttonDialog'
+
   export default {
     name: 'basicInformation',
     components: {
       glassLightButton,
       floatIcons,
-      buttonDialog,
+      buttonDialog
     },
     data() {
+      let validateEmail = (rule, value, callback) => {
+        if(value !== ''){
+          let emailRegex = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+          if (!emailRegex.test(value)) {
+            callback(new Error('邮箱格式不正确！'))
+          } else {
+            callback();
+          }
+        }
+
+      };
+      let validatePhone = (rule, value, callback) => {
+        if(value !== ''){
+          let phoneRegex = /^1[34578]\d{9}$/;
+          if (!phoneRegex.test(value)) {
+            callback(new Error('手机号码格式不正确！'))
+          } else {
+            callback();
+          }
+        }
+
+      };
       return {
-        loading:false,
+        loading: false,
         edit: false,
-        info:{},
+        info: {
+          name:'',
+          phone:'',
+          email:''
+        },
+        infoRules: {
+          name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
+          phone: [{ required: true, validator:validatePhone, trigger: 'blur' }],
+          email: [{ required: true, validator:validateEmail, trigger: 'blur' }]
+        }
       }
     },
     mounted() {
       this.init()
     },
-    methods:{
-      init(){
-        this.$http.get(this.global.baseUrl+'UI/api/ui/basicInfo/queryByPeopleId/'+this.$store.state.user.userId).then((res)=>{
+    methods: {
+      init() {
+        this.$http.get(this.global.baseUrl + 'UI/api/ui/basicInfo/queryByPeopleId/' + this.$store.state.user.userId).then((res) => {
           // console.log(res.data)
-          this.info = res.data.data
+          if (res.data.data != null) {
+            this.info = res.data.data
+            // this.info.birthday = new Date(this.info.birthday)
+          } else {
+            this.$message.warning('您未设置教师基础信息')
+          }
+        }).catch(err => {
+          this.$message.error('教师基础信息获取失败')
+        })
+      },
+      insertOrUpdate(info) {
+
+        this.$refs[info].validate(async valid => {
+          if (valid) {  //表单验证
+            this.loading = true
+            this.info.birthday =  this.timestamp2Date(this.info.birthday)
+            this.$http.post(this.global.baseUrl + 'UI/api/ui/basicInfo/insertOrUpdate/' + this.$store.state.user.userId,
+            this.info).then(res => {
+              console.log(res.data)
+
+              this.loading = false
+              this.init()
+            }).catch(err=>{
+              this.loading = false
+            })
+          } else {
+            this.loading = false
+          }
         })
       },
 
 
       //时间格式化
       timestamp2Date(timestamp) {
-        var date = new Date(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
-        var Y = date.getFullYear() + '-';
-        var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
-        var D = (date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate()) + ' ';
-        /*var h = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':';
-        var m = (date.getMinutes() <10 ? '0' + date.getMinutes() : date.getMinutes()) + ':';
-        var s = (date.getSeconds() <10 ? '0' + date.getSeconds() : date.getSeconds());*/
-        return Y+M+D;
+        var date = new Date(timestamp)//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+        var Y = date.getFullYear() + '-'
+        var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-'
+        var D = (date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate()) + ' '
+        return Y + M + D
       },
       handleClose(done) {
         this.$confirm('确认关闭？')
           .then(_ => {
-            done();
+            done()
           })
-          .catch(_ => {});
+          .catch(_ => {
+          })
       },
-      showEdit(){
+      showEdit() {
         this.edit = true
       },
-      editInfo(){
-        this.$message.success("修改了教师基础信息！！")
-      }
+      /*editInfo() {
+        this.$message.success('修改了教师基础信息！！')
+        console.log(this.info)
+      }*/
     }
   }
 </script>
 
 <style scoped>
-  .basicInformation{
+  .basicInformation {
     margin: 10px;
     padding: 4px;
   }
+
   .basicInformation .user-info {
     display: flex;
     align-items: center;
@@ -261,9 +325,11 @@
     border-bottom: 2px solid #ccc;
     margin-bottom: 20px;
   }
-  .basicInformation .info span{
+
+  .basicInformation .info span {
     margin-right: 10px;
   }
+
   .user-avator {
     width: 120px;
     height: 120px;
@@ -296,36 +362,40 @@
     margin-bottom: 20px;
   }
 
-  .header-title{
+  .header-title {
     font-size: 24px;
   }
 
-  .personal-profile{
+  .personal-profile {
     font-size: 20px;
   }
-  .link span{
+
+  .link span {
     font-size: 18px;
     margin-right: 20px;
     font-weight: bold;
   }
-  .link .name span{
+
+  .link .name span {
     font-weight: initial;
     margin-left: 30px;
   }
 
-  .icons-warp{
+  .icons-warp {
     cursor: pointer;
     opacity: 0;
   }
-  .icons-warp:hover{
+
+  .icons-warp:hover {
     opacity: 1;
   }
-  .float i{
+
+  .float i {
     font-size: 40px;
-    background-color: rgba(0,0,0,0);
+    background-color: rgba(0, 0, 0, 0);
   }
 
-  .editForm{
+  .editForm {
 
   }
 
