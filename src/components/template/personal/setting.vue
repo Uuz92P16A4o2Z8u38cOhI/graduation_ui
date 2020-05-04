@@ -44,9 +44,9 @@
               <div class="operating" v-for="item in upDownData">
                 <el-tag effect="dark" type="success">{{item.title}}</el-tag>
 
-                <el-tooltip class="item" effect="light" content="上传excel" placement="top">
+                <!--<el-tooltip class="item" effect="light" content="上传excel" placement="top">
                   <span @click="uploadExcel(item.type)"><line-button>上传</line-button></span>
-                </el-tooltip>
+                </el-tooltip>-->
 
                 <el-tooltip class="item" effect="light" content="下载excel" placement="top">
                   <span @click="downloadExcel(item.type)"><line-button style="color: #0acffe">下载</line-button></span>

@@ -53,27 +53,97 @@
 <!--    -->
     <el-dialog title="编辑教学活动" :visible.sync="edit" width="70%" :before-close="handleClose">
       <el-tabs v-model="activeName1">
-        <el-tab-pane label="教学研究" name="first">
-
+        <el-tab-pane label="教学获奖" name="first">
+          <el-table ref="academicHonorsList" :data="academicHonorsList"   v-loading="loading" empty-text="暂无数据"
+                    :header-cell-style="{'color': 'rgb(247,50,98)','border-bottom': '1px rgb(103, 194, 58) solid','background-color': '#67fab4','font-size': '20px'}">
+            <el-table-column prop="itemName"  label="名称" align="center">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.itemName"></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column prop="itemContent"  label="内容" align="center">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.itemContent"></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" align='center'>
+              <template slot-scope="scope">
+                <el-button size="mini" type="primary" icon="el-icon-edit" circle @click="handleEdit(scope.$index, scope.row)"></el-button>
+                <el-button size="mini" type="danger" icon="el-icon-delete" circle @click="handleDelete(scope.$index, scope.row)"></el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <el-button size="mini" type="danger" icon="el-icon-plus" circle @click="handleInsert(1)" style="float: left"></el-button>
         </el-tab-pane>
-        <el-tab-pane label="教学资源" name="second">
-
+        <el-tab-pane label="科研获奖" name="second">
+          <el-table ref="scientificAwardsList" :data="scientificAwardsList"   v-loading="loading" empty-text="暂无数据"
+                    :header-cell-style="{'color': 'rgb(247,50,98)','border-bottom': '1px rgb(103, 194, 58) solid','background-color': '#67fab4','font-size': '20px'}">
+            <el-table-column prop="itemName"  label="名称" align="center">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.itemName"></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column prop="itemContent"  label="内容" align="center">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.itemContent"></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" align='center'>
+              <template slot-scope="scope">
+                <el-button size="mini" type="primary" icon="el-icon-edit" circle @click="handleEdit(scope.$index, scope.row)"></el-button>
+                <el-button size="mini" type="danger" icon="el-icon-delete" circle @click="handleDelete(scope.$index, scope.row)"></el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <el-button size="mini" type="danger" icon="el-icon-plus" circle @click="handleInsert(2)" style="float: left"></el-button>
         </el-tab-pane>
-        <el-tab-pane label="授课信息" name="third">
-
-        </el-tab-pane>
-        <el-tab-pane label="教学成果" name="fourth">
-
+        <el-tab-pane label="其他获奖" name="third">
+          <el-table ref="otherAwardsList" :data="otherAwardsList"   v-loading="loading" empty-text="暂无数据"
+                    :header-cell-style="{'color': 'rgb(247,50,98)','border-bottom': '1px rgb(103, 194, 58) solid','background-color': '#67fab4','font-size': '20px'}">
+            <el-table-column prop="itemName"  label="名称" align="center">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.itemName"></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column prop="itemContent"  label="内容" align="center">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.itemContent"></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" align='center'>
+              <template slot-scope="scope">
+                <el-button size="mini" type="primary" icon="el-icon-edit" circle @click="handleEdit(scope.$index, scope.row)"></el-button>
+                <el-button size="mini" type="danger" icon="el-icon-delete" circle @click="handleDelete(scope.$index, scope.row)"></el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <el-button size="mini" type="danger" icon="el-icon-plus" circle @click="handleInsert(3)" style="float: left"></el-button>
         </el-tab-pane>
       </el-tabs>
 
-      <div style="text-align: center">
+      <!--<div style="text-align: center">
         <el-button size="mini" type="danger" icon="el-icon-plus" circle @click="handleInsert" style="float: left"></el-button>
         <button-dialog @checkedRole="editInfo">
           <template v-slot:title>确定修改教师教学活动?</template>
           <template v-slot:name>保存</template>
         </button-dialog>
-      </div>
+      </div>-->
+
+      <el-dialog width="30%" title="新增" :visible.sync="itemVisible" append-to-body>
+        <div class="form">
+          <el-form ref="newItem" :model="newItem" v-loading="loading" label-width="120px" >
+            <el-form-item prop="item" label="名称:">
+              <el-input v-model="newItem.itemName" type="textarea" clearable></el-input>
+            </el-form-item>
+            <el-form-item prop="item" label="内容:">
+              <el-input v-model="newItem.itemContent" type="textarea" clearable></el-input>
+            </el-form-item>
+            <el-form-item  class="bottom_right">
+              <el-button type="primary" @click='insertItem'>添  加</el-button>
+            </el-form-item>
+          </el-form>
+        </div>
+      </el-dialog>
     </el-dialog>
 
     <float-icons padding="10 10 60 10" class="icons-warp">
@@ -97,11 +167,14 @@
     },
     data(){
       return {
-        activeName1:'',
+        newItem:{},
+        itemVisible: false,
+        activeName1:'first',
         edit:false,
         loading: false,
 
         activeName: [1],
+        awards:{},
         academicHonorsList: [],
         scientificAwardsList: [],
         otherAwardsList: [],
@@ -113,14 +186,12 @@
       this.getInitInfo()
     },
     methods : {
-      changeReverse(){
-        this.reverse = !this.reverse;
-      },
       getInitInfo(){
         this.$http.post(this.global.baseUrl + 'UI/api/ui/awards/initInfo/' + this.$store.state.user.userId).then(res =>{
           // console.log(res.data.data)
           const infoData = res.data.data
           if (res.data.data != null){
+            this.awards = infoData.awards
             this.academicHonorsList = infoData.academicHonorsList;
             this.scientificAwardsList = infoData.scientificAwardsList;
             this.otherAwardsList = infoData.otherAwardsList;
@@ -144,25 +215,47 @@
       showEdit(){
         this.edit = true
       },
-      handleSelectionChange(val) {
-        this.multipleSelection = val;
-      },
-      showEdit(){
-        this.edit = true
-      },
       editInfo(){
         this.$message.success("修改了教师教学活动！！")
       },
+      insertItem(){
+        this.$http.post(this.global.baseUrl + 'UI/api/ui/awards/insertAwardsItem/' + this.newItem.parentId, this.newItem).then(res=>{
+          this.getInitInfo()
+          this.$message.info(res.data.message)
+        })
+      },
       //编辑
       handleEdit(index, row) {
-        alert(row)
+        this.$http.post(this.global.baseUrl + 'UI/api/ui/awards/updateAwardsItem/',
+          row).then(res=>{
+          this.getInitInfo()
+          this.$message.info(res.data.message)
+        })
       },
       //删除
       handleDelete(index, row) {
-        alert(row,index)
+        this.$http.delete(this.global.baseUrl + 'UI/api/ui/awards/deleteAwardsItem/' + row.id).then(res=>{
+          this.getInitInfo()
+          this.$message.info(res.data.message)
+        })
       },
-      handleInsert() {
-        alert(1111)
+      handleInsert(type) {
+        if (type === 1){
+          this.newItem.parentId = this.awards.academicHonors
+        }
+        if (type === 2){
+          this.newItem.parentId = this.awards.scientificAwards
+        }
+        if (type === 3){
+          this.newItem.parentId = this.awards.otherAwards
+        }if (type === 4){
+          this.newItem.parentId = this.awards.honoraryTitle
+        }
+        if (type === 5){
+          this.newItem.parentId = this.awards.honorWall
+        }
+        this.newItem.type = type
+        this.itemVisible = true
       },
     }
 
