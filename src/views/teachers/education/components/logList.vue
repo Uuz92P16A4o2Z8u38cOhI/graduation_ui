@@ -3,12 +3,12 @@
   <div class="logContainer">
     <el-card class="box-card">
       <div slot="header" class="header-title">
-        <span>版本管理：</span>
+        <span>版本信息：</span>
       </div>
 
       <div class="logArea el-scrollbar">
         <el-scrollbar>
-          <div class="item" v-for="i in versions">
+          <div class="item" v-for="i in versions" v-if="i.version !== 0">
             <p class="timeArea">
               <span class="title">上传时间：</span>
               <span class="title time">{{timestamp2Date(i.uploadTime)}}</span>
@@ -20,7 +20,7 @@
             <div class="operating">
               <span class="title">操作：</span>
               <span @click="view(i)"><line-button><div>查看</div></line-button></span>
-              <span><line-button style="color: #0acffe"><div>下载</div></line-button></span>
+              <!--<span><line-button style="color: #0acffe"><div>下载</div></line-button></span>-->
             </div>
             <el-divider/>
           </div>

@@ -156,7 +156,7 @@
     },
     methods : {
       getInitInfo(){
-        this.$http.get(this.global.baseUrl + 'UI/api/ui/work/initInfo/' + this.$store.state.user.userId).then((res)=>{
+        this.$http.get(this.global.baseUrl + 'UI/api/ui/work/initInfo/'  + this.$store.state.user.userId + '/' + this.$store.state.user.version).then((res)=>{
           if (res.data.data != null){
             this.workInfo = res.data.data
           }else {
@@ -198,7 +198,7 @@
       getOneVersion(){
         this.$http.get(this.global.baseUrl + 'UI/api/ui/work/version/' + this.version.version + '/' + this.$store.state.user.userId).then(res=>{
           this.workInfo = res.data.data
-          console.log(res)
+          // console.log(res)
 
         })
       },

@@ -187,7 +187,7 @@
     },
     methods : {
       getInitInfo(){
-        this.$http.post(this.global.baseUrl + 'UI/api/ui/awards/initInfo/' + this.$store.state.user.userId).then(res =>{
+        this.$http.post(this.global.baseUrl + 'UI/api/ui/awards/initInfo/'  + this.$store.state.user.userId + '/' + this.$store.state.user.version).then(res =>{
           // console.log(res.data.data)
           const infoData = res.data.data
           if (res.data.data != null){

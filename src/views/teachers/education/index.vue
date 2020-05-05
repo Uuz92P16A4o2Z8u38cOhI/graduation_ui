@@ -149,7 +149,7 @@
     },
     methods : {
       getInitInfo(){
-        this.$http.get(this.global.baseUrl + 'UI/api/ui/education/initInfo/' + this.$store.state.user.userId).then((res)=>{
+        this.$http.get(this.global.baseUrl + 'UI/api/ui/education/initInfo/' + this.$store.state.user.userId + '/' + this.$store.state.user.version).then((res)=>{
           if (res.data.data != null){
             this.familyInfo = res.data.data
           }else {

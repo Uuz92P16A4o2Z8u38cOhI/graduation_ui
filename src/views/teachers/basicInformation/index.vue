@@ -251,7 +251,7 @@
     },
     methods: {
       init() {
-        this.$http.get(this.global.baseUrl + 'UI/api/ui/basicInfo/queryByPeopleId/' + this.$store.state.user.userId).then((res) => {
+        this.$http.get(this.global.baseUrl + 'UI/api/ui/basicInfo/queryByPeopleId/' + this.$store.state.user.userId + '/' + this.$store.state.user.version).then((res) => {
           // console.log(res.data)
           if (res.data.data != null) {
             this.info = res.data.data

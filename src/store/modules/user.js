@@ -12,6 +12,7 @@ export default {
       avatar :'',
       loginTime : '',
       nickName: '',
+      version: 0,
     },
     getters: {
 
@@ -43,6 +44,9 @@ export default {
       },
       setNickName(state,NickName){
         state.NickName = NickName;
+      },
+      setVersion(state,version){
+        state.version = version;
       }
     },
     actions: {

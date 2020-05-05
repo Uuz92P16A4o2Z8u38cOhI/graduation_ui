@@ -177,3 +177,10 @@ a {
 .work .el-collapse-item__header{
   font-size: 22px !important;
 }
+
+.version .el-timeline-item__timestamp{
+  font-size: 20px !important;
+}
+.version .el-collapse-item__header{
+  font-size: 20px !important;
+}
