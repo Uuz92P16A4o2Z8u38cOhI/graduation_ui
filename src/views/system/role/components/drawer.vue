@@ -46,7 +46,7 @@
     },
     props:{
       drawer: Boolean,
-      userId: Number,
+      userId: String,
       type: Number,
     },
     data() {

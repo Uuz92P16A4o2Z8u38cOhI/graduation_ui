@@ -64,7 +64,7 @@
     },
     data() {
       return {
-        onUserId : 0,
+        onUserId : '0',
         drawerShow: false,
         loading : true,
         tableData: [],
@@ -108,7 +108,7 @@
       handleRole(index, row){
         this.drawerShow = true
         // console.log(index,row)
-        this.onUserId = parseInt(row.id)
+        this.onUserId = row.id
       },
       //编辑
       handleEdit(index, row) {

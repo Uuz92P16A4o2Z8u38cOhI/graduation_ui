@@ -68,7 +68,7 @@
     data() {
       return {
         onType: 0,
-        onUserId : 0,
+        onUserId : '0',
         drawerShow: false,
         loading : true,
         tableData: [],
@@ -113,8 +113,8 @@
       //查看角色资源
       handleRole(index, row){
         this.drawerShow = true
-        console.log(index,row)
-        this.onUserId = parseInt(row.id)
+        // console.log(index,row)
+        this.onUserId = row.id
         this.onType = parseInt(row.type)
       },
       //编辑

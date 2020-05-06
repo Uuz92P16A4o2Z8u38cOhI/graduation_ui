@@ -36,7 +36,7 @@
     },
     props:{
       drawer: Boolean,
-      userId: Number,
+      userId: String,
     },
     data() {
       return {
@@ -51,6 +51,7 @@
     },
     watch:{
       userId(val){
+        // console.log(val)
         this.initInfo()
       }
     },
