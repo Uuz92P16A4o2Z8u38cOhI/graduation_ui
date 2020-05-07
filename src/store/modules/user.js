@@ -13,6 +13,7 @@ export default {
       loginTime : '',
       nickName: '',
       version: 0,
+      versionName : '',
     },
     getters: {
 
@@ -47,6 +48,9 @@ export default {
       },
       setVersion(state,version){
         state.version = version;
+      },
+      setVersionName(state,versionName){
+        state.versionName = versionName;
       }
     },
     actions: {

@@ -19,16 +19,18 @@
           <el-popover ref="popover-message" placement="bottom-end" trigger="click">
 
           </el-popover>
-        </el-menu-item>
-        <el-menu-item index="4" v-popover:popover-notice>
-          &lt;!&ndash; 系统通知 &ndash;&gt;
-          <el-badge :value="4" :max="99" class="badge">
-            <li style="color:#fff;" class="el-icon-bell"/>
-          </el-badge>
-          <el-popover ref="popover-notice" placement="bottom-end" trigger="click">
-
-          </el-popover>
         </el-menu-item>-->
+        <el-menu-item index="4" v-popover:popover-notice v-if="version !== 0">
+          <!--<el-badge :value="4" :max="99" class="badge">
+            <li style="color:#fff;" class="el-icon-bell"/>
+          </el-badge>-->
+<!--          <li style="color:#fff;" class="el-icon-bell"/>-->
+          <span style="color: red">当前查看版本</span>
+          <span style="color: #ffffff">{{this.versionName}}</span>
+          <el-popover ref="popover-notice" placement="bottom-end" trigger="click">
+            <el-button @click="lastVersion" round>回到最新信息</el-button>
+          </el-popover>
+        </el-menu-item>
         <el-menu-item index="5" v-popover:popover-personal>
           <!-- 用户信息 -->
           <span class="user-info">
@@ -84,7 +86,9 @@ export default {
         this.$message.error('信息初始化失败！')
       })
     },
-
+    lastVersion(){
+      this.$store.commit('setVersion', 0)
+    }
 
 
 
@@ -108,6 +112,8 @@ export default {
       nickName : state => state.user.nickName,
       themeColor : state => state.app.themeColor,
       userId : state => state.user.userId,
+      versionName : state=> state.user.versionName,
+      version : state=> state.user.version,
     })
   }
 }

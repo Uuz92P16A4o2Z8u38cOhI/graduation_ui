@@ -7,7 +7,7 @@
       <div class="block">
         <span style="text-align: center" v-if="this.versions.length === 0">您还没有保存的版本哦！！</span>
         <el-timeline class="timeline">
-          <el-timeline-item timestamp="item.time"  v-for="item in versions" :key="item.id"
+          <el-timeline-item :timestamp="timestamp2Date(item.time)"  v-for="item in versions" :key="item.id"
                             placement="top" size="large" icon="el-icon-star-on" color="#909399">
             <el-card >
               <el-row :gutter="20">
@@ -21,7 +21,7 @@
                 <el-col :span="8" class="col">
                   <div class="operating">
 <!--                    <el-button type="primary" icon="el-icon-edit" @click="edit(item.id)" circle></el-button>-->
-                    <el-button type="success" icon="el-icon-video-camera" @click="shows(item.id)" circle></el-button>
+                    <el-button type="success" icon="el-icon-video-camera" @click="shows(item.id, item.name, item.sign)" circle></el-button>
                   </div>
                 </el-col>
               </el-row>
@@ -34,8 +34,24 @@
 
     </div>
 
-    <el-dialog title="111" :visible.sync="insert" width="30%" :before-close="handleClose">
-
+    <el-dialog title="新增版本" :visible.sync="insert" width="30%" :before-close="handleClose">
+      <div class="form" style="text-align: center">
+        <el-form ref="newItem" :model="newItem" v-loading="loading" label-width="120px" >
+          <el-form-item prop="item" label="版本名称:">
+            <el-input v-model="newItem.name"  clearable></el-input>
+          </el-form-item>
+          <el-form-item prop="item" label="版本号:">
+            <el-input v-model="newItem.sign"  clearable></el-input>
+          </el-form-item>
+          <el-form-item prop="item" label="备注信息:">
+            <el-input v-model="newItem.remarks" type="textarea"  clearable></el-input>
+          </el-form-item>
+          <button-dialog @checkedRole="saveVersion">
+            <template v-slot:title>确定保存此版本？?</template>
+            <template v-slot:name>版本保存</template>
+          </button-dialog>
+        </el-form>
+      </div>
     </el-dialog>
 
     <float-icons padding="10 10 60 10" class="icons-warp">
@@ -47,16 +63,20 @@
 </template>
 
 <script>
+  import buttonDialog from '../../../components/template/hyl/button/buttonDialog'
   import floatIcons from '../../teachers/floatIcons'
   export default {
     name: 'version',
     components:{
-      floatIcons
+      floatIcons,
+      buttonDialog,
     },
     data() {
       return {
+        loading: false,
         insert:false,
         versions: [],
+        newItem: {},
       };
     },
     mounted() {
@@ -65,15 +85,23 @@
     methods:{
       getInitInfo(){
         this.$http.post(this.global.baseUrl + 'UI/api/ui/version/selectAll/' + this.$store.state.user.userId ).then(res=>{
-          console.log(res)
+          // console.log(res)
           this.versions = res.data.data
+        })
+      },
+      saveVersion(){
+        this.$http.post(this.global.baseUrl + 'UI/api/ui/version/save/' + this.$store.state.user.userId,
+        this.newItem).then(res=>{
+          this.$message.info(res.data.message)
+          this.getInitInfo()
         })
       },
       edit(){
 
       },
-      shows(id){
+      shows(id, name, sign){
         this.$store.commit('setVersion', id)
+        this.$store.commit('setVersionName', name + '<' + sign + '>')
       },
       showEdit(){
         this.insert = true
@@ -85,6 +113,18 @@
           })
           .catch(_ => {});
       },
+
+      //时间格式化
+      timestamp2Date(timestamp) {
+        var date = new Date(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+        var Y = date.getFullYear() + '-';
+        var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+        var D = (date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate()) + ' ';
+        var h = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':';
+        var m = (date.getMinutes() <10 ? '0' + date.getMinutes() : date.getMinutes()) + ':';
+        var s = (date.getSeconds() <10 ? '0' + date.getSeconds() : date.getSeconds());
+        return Y+M+D+h+m+s;
+      }
     },
 
   }
