@@ -11,11 +11,13 @@
           <div class="item" v-for="i in versions" v-if="i.version !== 0">
             <p class="timeArea">
               <span class="title">上传时间：</span>
-              <span class="title time">{{timestamp2Date(i.uploadTime)}}</span>
+              <span class="title time">{{timestamp2Date(i.time)}}</span>
             </p>
             <div class="versions">
+              <span class="title">名称：</span>
+              <span class="title time">{{i.name}}</span>
               <span class="title">版本号：</span>
-              <span class="title time">{{i.version}}</span>
+              <span class="title time">{{i.sign}}</span>
             </div>
             <div class="operating">
               <span class="title">操作：</span>
@@ -49,7 +51,7 @@
     methods :{
       //获取所有版本号
       getVersions(){
-        this.$http.get(this.global.baseUrl + 'UI/api/ui/education/allVersion/' + this.$store.state.user.userId).then(res=>{
+        this.$http.get(this.global.baseUrl + 'UI/api/ui/education/allVersion').then(res=>{
           this.versions = res.data.data
         })
       },

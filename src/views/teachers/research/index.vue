@@ -279,7 +279,7 @@
     },
     methods:{
       getInitInfo(){
-        this.$http.post(this.global.baseUrl + 'UI/api/ui/research/initInfo/' + this.$store.state.user.userId + '/' + this.$store.state.user.version).then(res =>{
+        this.$http.post(this.global.baseUrl + 'UI/api/ui/research/initInfo/' + this.$store.state.user.version).then(res =>{
           // console.log(res)
 
           if (res.data.data != null){
@@ -319,7 +319,7 @@
       },
       //编辑
       handleEdit(index, row) {
-        this.$http.post(this.global.baseUrl + 'UI/api/ui/research/updateResearchItem/',
+        this.$http.post(this.global.baseUrl + 'UI/api/ui/research/updateResearchItem',
           row).then(res=>{
           this.getInitInfo()
           this.$message.info(res.data.message)

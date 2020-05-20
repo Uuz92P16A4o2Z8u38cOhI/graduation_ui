@@ -144,7 +144,7 @@ export default {
       this.$http.post(this.global.baseUrl + 'OAUTH/user/login', qs.stringify(this.loginForm),{
         headers:{'Content-Type': "application/x-www-form-urlencoded"}
       }).then((res)=>{
-        console.log(res.data)
+        // console.log(res.data)
         if (res.data.code === 401 || res.data.msg === "登录失败"){
           this.$message.error("用户名或密码错误！")
         }
@@ -176,7 +176,7 @@ export default {
         // window.sessionStorage.setItem('user', this.loginForm.username)
         this.$router.push('/')
       }).catch ((err)=>{
-        console.log(err);
+        // console.log(err);
         this.$router.push("/login")
       })
     },
@@ -192,7 +192,7 @@ export default {
     },
     sendEmail(){
       this.$http.post(this.global.baseUrl + 'FASTDFS/api/fastdfs/email/codeEmail/' + this.pwdForm.email).then(res => {
-        console.log(res)
+        // console.log(res)
         this.$message.success("邮件已发送，请注意查收！")
       }).catch(error=>{
         this.$message.error("验证码发送失败：" + error)
@@ -203,7 +203,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.$http.post(this.global.baseUrl + 'SYS/api/sys/user/updatePasswordByEmail', this.pwdForm).then((res)=>{
-            console.log(res)
+            // console.log(res)
             this.$message.info(res.data.message)
             this.loading = false
           }).catch(err => {

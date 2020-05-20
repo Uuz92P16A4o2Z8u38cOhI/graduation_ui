@@ -8,7 +8,7 @@
             <el-upload
               ref="upload"
               class="avatar-uploader"
-              :action="this.global.baseUrl + 'UI/api/ui/basicInfo/uploadAvatar/' + this.$store.state.user.userId"
+              :action="this.global.baseUrl + 'UI/api/ui/basicInfo/uploadAvatar/'"
               name="dropFile"
               :limit="1"
               :auto-upload="false"
@@ -39,14 +39,14 @@
             <el-button type="primary" size="small" @click="submitUpload">确定上传</el-button>
           </div>
 
-          <div class="upDown">
+          <!--<div class="upDown">
             <el-card style="display: flex">
               <div class="operating" v-for="item in upDownData">
                 <el-tag effect="dark" type="success">{{item.title}}</el-tag>
 
-                <!--<el-tooltip class="item" effect="light" content="上传excel" placement="top">
+                &lt;!&ndash;<el-tooltip class="item" effect="light" content="上传excel" placement="top">
                   <span @click="uploadExcel(item.type)"><line-button>上传</line-button></span>
-                </el-tooltip>-->
+                </el-tooltip>&ndash;&gt;
 
                 <el-tooltip class="item" effect="light" content="下载excel" placement="top">
                   <span @click="downloadExcel(item.type)"><line-button style="color: #0acffe">下载</line-button></span>
@@ -57,7 +57,7 @@
               </div>
 
             </el-card>
-          </div>
+          </div>-->
         </div>
       </el-tab-pane>
       <el-tab-pane label="主题设置" name="theme">
@@ -149,7 +149,7 @@
       },*/
       //上传excel
       uploadExcel(type,dropFile){
-        this.$http.post(this.global.baseUrl + 'UI/api/ui/easyPoi/importExcel/' + type +"/" + this.$store.state.user.userId, {
+        this.$http.post(this.global.baseUrl + 'UI/api/ui/easyPoi/importExcel/' + type, {
           dropFile,
         },{
           headers : {
@@ -161,7 +161,7 @@
       },
       //下载excel
       downloadExcel(type){
-        this.$http.post(this.global.baseUrl + 'UI/api/ui/easyPoi/exportExcel/' + type +"/" + this.$store.state.user.userId,{},{responseType: 'blob'}).then(res=>{
+        this.$http.post(this.global.baseUrl + 'UI/api/ui/easyPoi/exportExcel/' + type +"/" + this.$store.state.user.version,{},{responseType: 'blob'}).then(res=>{
           var blob = new Blob([res.data])
           var downloadElement = document.createElement('a');
           var href = window.URL.createObjectURL(blob); //创建下载的链接
@@ -176,7 +176,7 @@
       },
       //下载模板excel
       downloadModelExcel(type){
-        this.$http.post(this.global.baseUrl + 'UI/api/ui/Poi/exportModelExcel/' + type +"/" + this.$store.state.user.userId,{},{responseType:'blob'}).then(res=>{
+        this.$http.post(this.global.baseUrl + 'UI/api/ui/Poi/exportModelExcel/' + type +"/" + this.$store.state.user.version,{},{responseType:'blob'}).then(res=>{
           var blob = new Blob([res.data])
           console.log(res)
           var downloadElement = document.createElement('a');

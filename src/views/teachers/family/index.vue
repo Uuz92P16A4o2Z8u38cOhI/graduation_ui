@@ -200,6 +200,29 @@
       buttonDialog,
     },
     data(){
+      let validateEmail = (rule, value, callback) => {
+        if(value !== ''){
+          let emailRegex = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+          if (!emailRegex.test(value)) {
+            callback(new Error('邮箱格式不正确！'))
+          } else {
+            callback();
+          }
+        }
+
+      };
+      let validatePhone = (rule, value, callback) => {
+        if(value !== ''){
+          let phoneRegex = /^1[34578]\d{9}$/;
+          if (!phoneRegex.test(value)) {
+            callback(new Error('手机号码格式不正确！'))
+          } else {
+            callback();
+          }
+        }
+
+      };
+
       return{
         innerVisible: false,
         loading: false,
@@ -207,6 +230,11 @@
         familyBase: {},
         members:[],
         newMembers:{},
+
+        infoRules: {
+          phone: [{ required: true, validator:validatePhone, trigger: 'blur' }],
+          email: [{ required: true, validator:validateEmail, trigger: 'blur' }]
+        }
       }
     },
     mounted() {
@@ -214,7 +242,7 @@
     },
     methods:{
       getInitInfo(){
-        this.$http.post(this.global.baseUrl + 'UI/api/ui/family/initInfo/'  + this.$store.state.user.userId + '/' + this.$store.state.user.version).then(res=>{
+        this.$http.post(this.global.baseUrl + 'UI/api/ui/family/initInfo/' + this.$store.state.user.version).then(res=>{
           // console.log(res.data.data)
           if (res.data.data != null){
             this.familyBase = res.data.data.familyBase
@@ -227,18 +255,25 @@
         })
       },
       editInfo(){
-        this.$http.post(this.global.baseUrl + 'UI/api/ui/family/insertOrUpdateBase/' + this.$store.state.user.userId,
+        this.$http.post(this.global.baseUrl + 'UI/api/ui/family/insertOrUpdateBase',
         this.familyBase).then(res=>{
+          this.getInitInfo()
           this.$message.info(res.data.message)
         })
       },
       insertItem(){
+        /*this.$refs[info].validate(async valid => {
+          if (valid) {  //表单验证*/
         this.newMembers.birth = this.timestamp2Date(this.newMembers.birth)
         this.$http.post(this.global.baseUrl + 'UI/api/ui/family/insertItem/' + this.familyBase.id,
           this.newMembers).then(res=>{
           this.getInitInfo()
           this.$message.info(res.data.message)
         })
+        /*} else {
+            this.loading = false
+          }
+        })*/
       },
       //编辑
       handleEdit(index, row) {

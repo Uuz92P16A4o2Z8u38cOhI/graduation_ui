@@ -240,6 +240,7 @@
           email:''
         },
         infoRules: {
+          birthday : [{ required: true, message: '请输入出生日期', trigger: 'blur' }],
           name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
           phone: [{ required: true, validator:validatePhone, trigger: 'blur' }],
           email: [{ required: true, validator:validateEmail, trigger: 'blur' }]
@@ -251,7 +252,7 @@
     },
     methods: {
       init() {
-        this.$http.get(this.global.baseUrl + 'UI/api/ui/basicInfo/queryByPeopleId/' + this.$store.state.user.userId + '/' + this.$store.state.user.version).then((res) => {
+        this.$http.get(this.global.baseUrl + 'UI/api/ui/basicInfo/queryByPeopleId/' + this.$store.state.user.version).then((res) => {
           // console.log(res.data)
           if (res.data.data != null) {
             this.info = res.data.data
@@ -269,7 +270,7 @@
           if (valid) {  //表单验证
             this.loading = true
             this.info.birthday =  this.timestamp2Date(this.info.birthday)
-            this.$http.post(this.global.baseUrl + 'UI/api/ui/basicInfo/insertOrUpdate/' + this.$store.state.user.userId,
+            this.$http.post(this.global.baseUrl + 'UI/api/ui/basicInfo/insertOrUpdate',
             this.info).then(res => {
               console.log(res.data)
 

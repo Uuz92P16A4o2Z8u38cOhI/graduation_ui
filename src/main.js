@@ -22,26 +22,26 @@ axios.interceptors.request.use(config => {
   return config;
 })
 //响应拦截器
-/*axios.interceptors.response.use(response =>{
-  console.log(response)
+axios.interceptors.response.use(response =>{
+  // console.log(response)
   return response
 }, error => {
   if (error && error.response) {
     switch (error.response.status) {
       case 401:
-        router.push({ path: '*', name: 'noError' , component: noError})
+        router.push({ name: 'login' })
         console.log("未认证")
         break;
       case 403:
-        router.push({ name: 'noError' })
+        router.push({ name: 'forbidden' })
         console.log("未授权")
         break;
       case 404:
-        router.push({ name: 'noError' })
-        console.log("为找到该页面")
+        router.push({ name: 'notFound' })
+        console.log("未找到该页面")
         break;
       case 500:
-        router.push({ name: 'noError' })
+        router.push({ name: 'serverError' })
         console.log("服务器错误")
         break;
 
@@ -50,7 +50,7 @@ axios.interceptors.request.use(config => {
     }
   }
   return Promise.reject(error);
-})*/
+})
 
 Vue.use(ElementUI);
 

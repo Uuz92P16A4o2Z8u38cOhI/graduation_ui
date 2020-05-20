@@ -76,7 +76,7 @@ export default {
       this.$emit("myCollapse",this.collapse)
     },*/
     schoolInfo(){
-      this.$http.post(this.global.baseUrl + 'UI/api/ui/basicInfo/querySchoolInfo/' + this.$store.state.user.userId).then(res=>{
+        this.$http.post(this.global.baseUrl + 'UI/api/ui/basicInfo/querySchoolInfo').then(res=>{
         if (res.data.data != null){
           this.$store.commit('setSchoolIcon', this.global.imgUrl + res.data.data.icon)
         }else {
@@ -84,18 +84,18 @@ export default {
         }
 
       }).catch(err=>{
-        console.log(err);
+        // console.log(err);
         this.$message.error('学校信息获取失败')
       })
     },
     getMenu(){
-      this.$http.post(this.global.baseUrl+"SYS/api/sys/menu/menuInfo/"+this.$store.state.user.userId).then((res)=>{
+      this.$http.post(this.global.baseUrl+"SYS/api/sys/menu/menuInfo").then((res)=>{
       /*this.$http.get(this.global.baseUrl+"UI/api/ui/menuTree/menuInfo").then((res)=>{*/
         this.menuList = res.data;
         this.$store.commit('setNavTree', res.data)
         // console.log(res.data);
       }).catch ((err)=>{
-        console.log(err);
+        // console.log(err);
         this.$message.error('菜单请求失败')
       })
     },

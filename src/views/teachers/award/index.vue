@@ -187,7 +187,7 @@
     },
     methods : {
       getInitInfo(){
-        this.$http.post(this.global.baseUrl + 'UI/api/ui/awards/initInfo/'  + this.$store.state.user.userId + '/' + this.$store.state.user.version).then(res =>{
+        this.$http.post(this.global.baseUrl + 'UI/api/ui/awards/initInfo/' + this.$store.state.user.version).then(res =>{
           // console.log(res.data.data)
           const infoData = res.data.data
           if (res.data.data != null){
@@ -226,7 +226,7 @@
       },
       //编辑
       handleEdit(index, row) {
-        this.$http.post(this.global.baseUrl + 'UI/api/ui/awards/updateAwardsItem/',
+        this.$http.post(this.global.baseUrl + 'UI/api/ui/awards/updateAwardsItem',
           row).then(res=>{
           this.getInitInfo()
           this.$message.info(res.data.message)

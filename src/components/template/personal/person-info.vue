@@ -184,15 +184,17 @@
                 password: this.updatePwdDataForm.password,
                 newPassword: this.updatePwdDataForm.newPassword
               }
-              this.$api.user.updatePassword(params).then((res) => {
+              this.$http.put(this.global.baseUrl + 'SYS/api/sys/user/updatePassword', params).then((res) => {
                 this.updatePwdLoading = false
-                if (res.code === 200) {
-                  this.$message({ message: '操作成功', type: 'success' })
-                  this.$refs['updatePwdDataForm'].resetFields()
+                // console.log(res)
+                if (res.data.code === 200) {
+                  this.$message.success(res.data.message)
                   this.logout()
-                } else {
-                  this.$message({ message: '操作失败, ' + res.msg, type: 'error' })
                 }
+                if (res.data.code === 400) {
+                  this.$message.warning(res.data.message)
+                }
+
                 this.updatePwdDialogVisible = false
               })
             })

@@ -160,8 +160,9 @@ a {
 }
 /*-----------------------*/
 .basicInformation .el-form-item__label{
-  font-size: 18px;
+  font-size: 20px;
   line-height: 6px;
+  margin-top: 16px;
 }
 
 .education .el-timeline-item__timestamp{

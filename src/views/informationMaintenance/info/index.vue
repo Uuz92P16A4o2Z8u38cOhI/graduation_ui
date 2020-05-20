@@ -202,7 +202,7 @@
     },
     methods:{
       downloadExcel(type){
-        this.$http.post(this.global.baseUrl + 'UI/api/ui/easyPoi/exportExcel/' + type +"/"  + this.$store.state.user.userId + '/' + this.$store.state.user.version,{},{responseType: 'blob'}).then(res=>{
+        this.$http.post(this.global.baseUrl + 'UI/api/ui/easyPoi/exportExcel/' + type + '/' + this.$store.state.user.version,{},{responseType: 'blob'}).then(res=>{
           var blob = new Blob([res.data])
           var downloadElement = document.createElement('a');
           var href = window.URL.createObjectURL(blob); //创建下载的链接
@@ -217,7 +217,37 @@
       },
       //下载模板excel
       downloadModelExcel(type){
-        this.$http.post(this.global.baseUrl + 'UI/api/ui/Poi/exportModelExcel/' + type +"/" + this.$store.state.user.userId + '/' + this.$store.state.user.version,{},{responseType:'blob'}).then(res=>{
+        this.$http.post(this.global.baseUrl + 'UI/api/ui/Poi/exportModelExcel/' + type +"/"  + this.$store.state.user.version,{},{responseType:'blob'}).then(res=>{
+          var blob = new Blob([res.data])
+          console.log(res)
+          var downloadElement = document.createElement('a');
+          var href = window.URL.createObjectURL(blob); //创建下载的链接
+          downloadElement.href = href;
+          const filename = decodeURI(res.headers['content-disposition'].split(';')[1].split('=')[1])
+          downloadElement.download = filename; //下载后文件名
+          document.body.appendChild(downloadElement);
+          downloadElement.click(); //点击下载
+          document.body.removeChild(downloadElement); //下载完成移除元素
+          window.URL.revokeObjectURL(href); //释放掉blob对象
+        })
+      },
+      downloadword(type){
+        this.$http.post(this.global.baseUrl + 'UI/api/ui/easyPoi/exportModelWord/' + type +"/"  + this.$store.state.user.version,{},{responseType:'blob'}).then(res=>{
+          var blob = new Blob([res.data])
+          console.log(res)
+          var downloadElement = document.createElement('a');
+          var href = window.URL.createObjectURL(blob); //创建下载的链接
+          downloadElement.href = href;
+          const filename = decodeURI(res.headers['content-disposition'].split(';')[1].split('=')[1])
+          downloadElement.download = filename; //下载后文件名
+          document.body.appendChild(downloadElement);
+          downloadElement.click(); //点击下载
+          document.body.removeChild(downloadElement); //下载完成移除元素
+          window.URL.revokeObjectURL(href); //释放掉blob对象
+        })
+      },
+      downloadPDF(type){
+        this.$http.post(this.global.baseUrl + 'UI/api/ui/easyPoi/exportPDF/' + type +"/"  + this.$store.state.user.version,{},{responseType:'blob'}).then(res=>{
           var blob = new Blob([res.data])
           console.log(res)
           var downloadElement = document.createElement('a');

@@ -84,13 +84,13 @@
     },
     methods:{
       getInitInfo(){
-        this.$http.post(this.global.baseUrl + 'UI/api/ui/version/selectAll/' + this.$store.state.user.userId ).then(res=>{
+        this.$http.post(this.global.baseUrl + 'UI/api/ui/version/selectAll').then(res=>{
           // console.log(res)
           this.versions = res.data.data
         })
       },
       saveVersion(){
-        this.$http.post(this.global.baseUrl + 'UI/api/ui/version/save/' + this.$store.state.user.userId,
+        this.$http.post(this.global.baseUrl + 'UI/api/ui/version/save',
         this.newItem).then(res=>{
           this.$message.info(res.data.message)
           this.getInitInfo()

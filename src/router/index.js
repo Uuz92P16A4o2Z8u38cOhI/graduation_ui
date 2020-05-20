@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import Cookies from "js-cookie"
 import login from '@/components/login'
 import index from '@/components/index'
-import noError from '@/components/noError'
+
 // import api from '@/api/api'
 import store from '@/store'
 import { getIFramePath, getIFrameUrl } from '@/utils/iframe'
@@ -32,6 +32,11 @@ import Log from '@/views/system/logging/index'
 //个人信息管理
 import Versions from '@/views/informationMaintenance/versions/index'
 import Info from '@/views/informationMaintenance/info/index'
+//异常页面
+import noError from '@/components/noError'
+import forbidden from '@/views/exception/403'
+import notFound from '@/views/exception/404'
+import serverError from '@/views/exception/500'
 
 Vue.use(Router);
 
@@ -239,10 +244,30 @@ const router = new Router({
       component: login
     },
     {
-      path: '*',
+      path: '/noError',
       name: 'noError',
       component: noError
-    }
+    },
+    {
+      path: '/forbidden',
+      name: 'forbidden',
+      component: forbidden
+    },
+    {
+      path: '/notFound',
+      name: 'notFound',
+      component: notFound
+    },
+    {
+      path: '/serverError',
+      name: 'serverError',
+      component: serverError
+    },
+    {
+      path: '*',
+      name: 'notFound',
+      component: notFound
+    },
   ]
 })
 

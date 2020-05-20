@@ -149,7 +149,7 @@
     },
     methods : {
       getInitInfo(){
-        this.$http.get(this.global.baseUrl + 'UI/api/ui/education/initInfo/' + this.$store.state.user.userId + '/' + this.$store.state.user.version).then((res)=>{
+        this.$http.get(this.global.baseUrl + 'UI/api/ui/education/initInfo/' + this.$store.state.user.version).then((res)=>{
           if (res.data.data != null){
             this.familyInfo = res.data.data
           }else {
@@ -163,7 +163,7 @@
       insertItem(){
         this.form.startTime = this.timestampDate(this.form.startTime)
         this.form.endTime = this.timestampDate(this.form.endTime)
-        this.$http.post(this.global.baseUrl + 'UI/api/ui/education/insertItem/' + this.$store.state.user.userId,
+        this.$http.post(this.global.baseUrl + 'UI/api/ui/education/insertItem',
         this.form).then(res=>{
           this.getInitInfo()
           this.$message.info(res.data.message)
@@ -187,7 +187,7 @@
         })
       },
       getOneVersion(){
-        this.$http.get(this.global.baseUrl + 'UI/api/ui/education/version/' + this.version.version + '/' + this.$store.state.user.userId).then(res=>{
+        this.$http.get(this.global.baseUrl + 'UI/api/ui/education/version/' + this.version.version).then(res=>{
           this.familyInfo = res.data.data
           // console.log(res)
 
