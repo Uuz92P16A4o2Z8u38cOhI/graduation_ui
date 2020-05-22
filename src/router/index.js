@@ -23,6 +23,7 @@ import Unit from '@/views/organization/teachingUnit/index.vue'
 import services from '@/views/services/index'
 import eureka from '@/views/services/eureka/index'
 import swaggerUi from '@/views/services/swaggerUi/index'
+import rabbitmq from '@/views/services/rabbitMQ/index'
 //系统管理页面
 import User from '@/views/system/user/index'
 import Role from '@/views/system/role/index'
@@ -226,6 +227,14 @@ const router = new Router({
           component: eureka,
           meta:{
             icon: 'iconfont icon-Eureka',
+          }
+        },
+        {
+          path: 'rabbitmq',
+          name: 'rabbitmq',
+          component: rabbitmq,
+          meta:{
+            icon: 'iconfont icon-rabbitmq',
           }
         },
         {

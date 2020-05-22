@@ -8,14 +8,15 @@
             <el-upload
               ref="upload"
               class="avatar-uploader"
-              :action="this.global.baseUrl + 'UI/api/ui/basicInfo/uploadAvatar/'"
+              :action="this.global.baseUrl + 'UI/api/ui/basicInfo/uploadAvatar'"
               name="dropFile"
               :limit="1"
               :auto-upload="false"
               :show-file-list="false"
               :on-preview="handlePictureCardPreview"
               :on-success="handleAvatarSuccess"
-              :before-upload="beforeAvatarUpload">
+              :before-upload="beforeAvatarUpload"
+              :headers="headers">
               <img v-if="imageUrl" :src="imageUrl" class="avatar" >
               <i v-else class="el-icon-plus avatar-uploader-icon"/>
               <div slot="file" slot-scope="{file}">
@@ -71,6 +72,7 @@
 <script>
   import lineButton from '@/components/template/hyl/button/lineButton'
   import { mapState } from 'vuex'
+  import Cookies from "js-cookie"
   export default {
     name: 'setting',
     components:{
@@ -87,6 +89,7 @@
           {title : "家庭情况", type : "Family"},{title : "教学活动", type : "Teaching"},{title : "科研活动", type : "Research"},{title : "获奖信息", type : "Awards"}],
 
         color: '',
+        headers: {Authorization : 'Bearer ' + Cookies.get('access_token')}
       };
     },
     watch:{
